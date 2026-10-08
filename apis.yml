@@ -1,23 +1,353 @@
 aid: cloro-dev
 name: cloro
-description: 'cloro is a company surfaced via the API Evangelist harvest backlog (source: monid-connectors)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'cloro is one API for Google Search and AI answer engines: a REST surface at api.cloro.dev that submits a prompt to ChatGPT, Gemini, Perplexity, Microsoft Copilot, Grok, Google AI Mode, Google Search, Google AI Overview and Google News from a chosen country (and US state) and returns the engine''s answer as structured JSON with parsed text, markdown, cited sources, brand entities, shopping cards and ads. Sync monitor endpoints answer in-line; async tasks and batches of up to 500 run in the background with polling or signed webhooks. Credit-based subscription billing, a free tier of 500 monthly credits, a hosted MCP server at mcp.cloro.dev with OAuth, official Python and TypeScript SDKs, n8n, Zapier and LangChain integrations.'
 url: https://raw.githubusercontent.com/api-evangelist/cloro-dev/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:monid-connectors
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-07 (local-v5; was harvest)
 specificationVersion: '0.20'
 created: '2026-10-07'
 modified: '2026-10-07'
 tags:
 - Company
-apis: []
+- Search
+- AI
+- Web Scraping
+- SERP
+- Generative Engine Optimization
+- SEO
+- Brand Monitoring
+- Market Research
+- Data Extraction
+- MCP
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+image: https://cloro.dev/opengraph.jpg
 common:
+- type: AgenticAccess
+  url: agentic-access/cloro-dev-agentic-access.yml
+- type: RateLimits
+  url: rate-limits/cloro-dev-rate-limits.yml
+- type: Plans
+  url: plans/cloro-dev-plans-pricing.yml
+- type: Spectral
+  url: rules/cloro-dev-rules.yml
+- type: JSONLD
+  url: json-ld/cloro-dev-context.jsonld
+- type: Vocabulary
+  url: vocabulary/cloro-dev-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Webhooks
+  url: asyncapi/cloro-dev-webhooks.yml
+- type: DataModel
+  url: data-model/cloro-dev-data-model.yml
+- type: ChangeLog
+  url: changelog/cloro-dev-changelog.yml
+- type: Idempotency
+  url: conventions/cloro-dev-conventions.yml
+- type: Conventions
+  url: conventions/cloro-dev-conventions.yml
+- type: Security
+  url: security/cloro-dev-vulnerability-disclosure.yml
+- type: OAuthScopes
+  url: scopes/cloro-dev-scopes.yml
+- type: Deprecation
+  url: https://cloro.dev/docs/guides/versioning
+- type: Lifecycle
+  url: lifecycle/cloro-dev-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/cloro-dev-problem-types.yml
+- type: Conformance
+  url: conformance/cloro-dev-conformance.yml
+- type: Overlay
+  url: overlays/cloro-dev-openapi-overlay.yaml
+- type: LLMsTxt
+  url: llms/cloro-dev-llms.txt
+- type: LLMsTxt
+  url: llms/cloro-dev-docs-llms.txt
+- type: AgentCard
+  url: a2a/cloro-dev-a2a.yml
+- type: ToolCrosswalk
+  url: mcp/cloro-dev-tool-crosswalk.yml
+- type: MCPServer
+  url: mcp/cloro-dev-mcp.yml
+- type: SecurityTxt
+  url: well-known/cloro-dev-security.txt
+- type: WellKnown
+  url: well-known/cloro-dev-well-known.yml
+- type: Hosts
+  url: hosts/cloro-dev-hosts.yml
+- type: Vendors
+  url: vendors/cloro-dev-vendors.yml
+- type: SDKs
+  url: packages/cloro-dev-packages.yml
+- type: Packages
+  url: packages/cloro-dev-packages.yml
+- type: Newsroom
+  url: https://cloro.dev/perplexity/media/
+- type: Authentication
+  url: authentication/cloro-dev-authentication.yml
+- type: VulnerabilityDisclosure
+  url: security/cloro-dev-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/cloro-dev-domain-security.yml
 - type: Website
   url: https://cloro.dev
+- type: DeveloperPortal
+  url: https://dashboard.cloro.dev
+- type: Documentation
+  url: https://cloro.dev/docs
+- type: APIReference
+  url: https://cloro.dev/docs/api-reference/introduction
+- type: GettingStarted
+  url: https://cloro.dev/docs/introduction/quickstart
+- type: ChangeLog
+  url: https://cloro.dev/docs/changelog
+- type: Pricing
+  url: https://cloro.dev/pricing/
+- type: Blog
+  url: https://cloro.dev/blog/
+- type: GitHubOrganization
+  url: https://github.com/cloro-dev
+- type: SignUp
+  url: https://dashboard.cloro.dev/sign-up
+- type: TermsOfService
+  url: https://cloro.dev/terms/
+- type: PrivacyPolicy
+  url: https://cloro.dev/privacy/
+- type: StatusPage
+  url: https://status.cloro.dev
+- type: Support
+  url: https://cloro.dev/contact/
+- type: About
+  url: https://cloro.dev/about/
+- type: LLMsTxt
+  url: https://cloro.dev/llms.txt
+- type: Integrations
+  url: https://cloro.dev/integrations/
+- type: SDK
+  url: https://github.com/cloro-dev/cloro-python
+- type: SDK
+  url: https://github.com/cloro-dev/cloro-node
+apis:
+- name: cloro MCP server
+  description: >-
+    Hosted Model Context Protocol server (Streamable HTTP) wrapping the sync monitor endpoints of api.cloro.dev
+    as ten tools: scrape_chatgpt, scrape_gemini, scrape_copilot, scrape_perplexity, scrape_grok, scrape_google_ai_mode,
+    scrape_google, scrape_google_news, list_countries and list_states. initialize and tools/list answer
+    anonymously; tools/call needs a cloro API key (bearer or in the URL path) or an OAuth token from clerk.cloro.dev,
+    advertised through /.well-known/oauth-protected-resource. The same server runs locally over stdio
+    from the open-source cloro-dev/mcp-server repository.
+  humanURL: https://cloro.dev/docs/integrations/mcp
+  baseURL: https://mcp.cloro.dev/mcp
+  tags:
+  - MCP
+  - AI
+  - Agents
+  properties:
+  - type: Documentation
+    url: https://cloro.dev/docs/integrations/mcp
+  - type: SourceCode
+    url: https://github.com/cloro-dev/mcp-server
+  aid: cloro-dev:cloro-mcp-server
+  image: https://cloro.dev/opengraph.jpg
+- aid: cloro-dev:cloro-dev-async-api
+  name: cloro Async API
+  description: The Async API from cloro — 5 operation(s) for async.
+  humanURL: https://cloro.dev/docs/api-reference/introduction
+  baseURL: https://api.cloro.dev
+  tags:
+  - Async
+  properties:
+  - type: OpenAPI
+    url: openapi/cloro-dev-async-api-openapi.yml
+  - type: Documentation
+    url: https://cloro.dev/docs
+  - type: APIReference
+    url: https://cloro.dev/docs/api-reference/introduction
+  - type: GettingStarted
+    url: https://cloro.dev/docs/introduction/quickstart
+  - type: ChangeLog
+    url: https://cloro.dev/docs/changelog
+  - type: RateLimits
+    url: https://cloro.dev/docs/guides/concurrency
+  - type: Authentication
+    url: https://cloro.dev/docs/guides/authentication
+  - type: Webhooks
+    url: https://cloro.dev/docs/guides/webhooks
+  - type: Versioning
+    url: https://cloro.dev/docs/guides/versioning
+  - type: JSONSchema
+    url: json-schema/cloro-dev-google-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-chat-gptmonitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-ai-mode-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-copilot-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-gemini-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-perplexity-monitor-response-schema.json
+- aid: cloro-dev:cloro-dev-countries-api
+  name: cloro Countries API
+  description: The Countries API from cloro — 1 operation(s) for countries.
+  humanURL: https://cloro.dev/docs/api-reference/introduction
+  baseURL: https://api.cloro.dev
+  tags:
+  - Countries
+  properties:
+  - type: OpenAPI
+    url: openapi/cloro-dev-countries-api-openapi.yml
+  - type: Documentation
+    url: https://cloro.dev/docs
+  - type: APIReference
+    url: https://cloro.dev/docs/api-reference/introduction
+  - type: GettingStarted
+    url: https://cloro.dev/docs/introduction/quickstart
+  - type: ChangeLog
+    url: https://cloro.dev/docs/changelog
+  - type: RateLimits
+    url: https://cloro.dev/docs/guides/concurrency
+  - type: Authentication
+    url: https://cloro.dev/docs/guides/authentication
+  - type: Webhooks
+    url: https://cloro.dev/docs/guides/webhooks
+  - type: Versioning
+    url: https://cloro.dev/docs/guides/versioning
+  - type: JSONSchema
+    url: json-schema/cloro-dev-google-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-chat-gptmonitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-ai-mode-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-copilot-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-gemini-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-perplexity-monitor-response-schema.json
+- aid: cloro-dev:cloro-dev-credits-api
+  name: cloro Credits API
+  description: The Credits API from cloro — 1 operation(s) for credits.
+  humanURL: https://cloro.dev/docs/api-reference/introduction
+  baseURL: https://api.cloro.dev
+  tags:
+  - Credits
+  properties:
+  - type: OpenAPI
+    url: openapi/cloro-dev-credits-api-openapi.yml
+  - type: Documentation
+    url: https://cloro.dev/docs
+  - type: APIReference
+    url: https://cloro.dev/docs/api-reference/introduction
+  - type: GettingStarted
+    url: https://cloro.dev/docs/introduction/quickstart
+  - type: ChangeLog
+    url: https://cloro.dev/docs/changelog
+  - type: RateLimits
+    url: https://cloro.dev/docs/guides/concurrency
+  - type: Authentication
+    url: https://cloro.dev/docs/guides/authentication
+  - type: Webhooks
+    url: https://cloro.dev/docs/guides/webhooks
+  - type: Versioning
+    url: https://cloro.dev/docs/guides/versioning
+  - type: JSONSchema
+    url: json-schema/cloro-dev-google-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-chat-gptmonitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-ai-mode-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-copilot-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-gemini-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-perplexity-monitor-response-schema.json
+- aid: cloro-dev:cloro-dev-monitor-api
+  name: cloro Monitor API
+  description: The Monitor API from cloro — 9 operation(s) for monitor.
+  humanURL: https://cloro.dev/docs/api-reference/introduction
+  baseURL: https://api.cloro.dev
+  tags:
+  - Monitor
+  properties:
+  - type: OpenAPI
+    url: openapi/cloro-dev-monitor-api-openapi.yml
+  - type: Documentation
+    url: https://cloro.dev/docs
+  - type: APIReference
+    url: https://cloro.dev/docs/api-reference/introduction
+  - type: GettingStarted
+    url: https://cloro.dev/docs/introduction/quickstart
+  - type: ChangeLog
+    url: https://cloro.dev/docs/changelog
+  - type: RateLimits
+    url: https://cloro.dev/docs/guides/concurrency
+  - type: Authentication
+    url: https://cloro.dev/docs/guides/authentication
+  - type: Webhooks
+    url: https://cloro.dev/docs/guides/webhooks
+  - type: Versioning
+    url: https://cloro.dev/docs/guides/versioning
+  - type: JSONSchema
+    url: json-schema/cloro-dev-google-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-chat-gptmonitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-ai-mode-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-copilot-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-gemini-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-perplexity-monitor-response-schema.json
+- aid: cloro-dev:cloro-dev-states-api
+  name: cloro States API
+  description: The States API from cloro — 1 operation(s) for states.
+  humanURL: https://cloro.dev/docs/api-reference/introduction
+  baseURL: https://api.cloro.dev
+  tags:
+  - States
+  properties:
+  - type: OpenAPI
+    url: openapi/cloro-dev-states-api-openapi.yml
+  - type: Documentation
+    url: https://cloro.dev/docs
+  - type: APIReference
+    url: https://cloro.dev/docs/api-reference/introduction
+  - type: GettingStarted
+    url: https://cloro.dev/docs/introduction/quickstart
+  - type: ChangeLog
+    url: https://cloro.dev/docs/changelog
+  - type: RateLimits
+    url: https://cloro.dev/docs/guides/concurrency
+  - type: Authentication
+    url: https://cloro.dev/docs/guides/authentication
+  - type: Webhooks
+    url: https://cloro.dev/docs/guides/webhooks
+  - type: Versioning
+    url: https://cloro.dev/docs/guides/versioning
+  - type: JSONSchema
+    url: json-schema/cloro-dev-google-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-chat-gptmonitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-ai-mode-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-copilot-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-gemini-monitor-response-schema.json
+  - type: JSONSchema
+    url: json-schema/cloro-dev-perplexity-monitor-response-schema.json
+x-enrichment:
+  date: '2026-10-07'
+  status: enriched
+  artifacts_added: 50
+  pass: local-v5

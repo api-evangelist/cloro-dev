@@ -1,0 +1,147 @@
+generated: '2026-10-07'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 9
+  own: 8
+  other_domain: 0
+  platform: 1
+  roles:
+  - api
+  - docs
+  - other
+  - portal
+  - source
+  - status
+  - website
+hosts:
+- host: api.cloro.dev
+  found_by:
+  - apis[]
+  - contract-discovery
+  types: []
+  serves:
+  - api
+  registrable_domain: cloro.dev
+  role: api
+  relation: own
+- host: clerk.cloro.dev
+  found_by:
+  - vendor-detect
+  types: []
+  serves:
+  - identity
+  vendor: clerk
+  registrable_domain: cloro.dev
+  role: other
+  relation: own
+- host: cloro.dev
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Deprecation
+  - Newsroom
+  - Website
+  - Documentation
+  - APIReference
+  - GettingStarted
+  - ChangeLog
+  - Pricing
+  - Blog
+  - TermsOfService
+  - PrivacyPolicy
+  - Support
+  - About
+  - LLMsTxt
+  - Integrations
+  serves:
+  - docs
+  - spec
+  - cdn
+  vendor: cloudflare
+  registrable_domain: cloro.dev
+  role: website
+  relation: own
+- host: dashboard.cloro.dev
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types:
+  - DeveloperPortal
+  - SignUp
+  serves: []
+  registrable_domain: cloro.dev
+  role: portal
+  relation: own
+- host: docs.cloro.dev
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  - well-known
+  types: []
+  serves: []
+  title: Welcome to cloro - cloro
+  status: 200
+  registrable_domain: cloro.dev
+  role: docs
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  - SDK
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: mcp.cloro.dev
+  found_by:
+  - apis[]
+  - docs-index
+  types: []
+  serves:
+  - api
+  - docs
+  registrable_domain: cloro.dev
+  role: other
+  relation: own
+- host: shop.cloro.dev
+  found_by:
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: cloro.dev
+  role: other
+  relation: own
+- host: status.cloro.dev
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - StatusPage
+  serves:
+  - status-page
+  vendor: betterstack
+  registrable_domain: cloro.dev
+  role: status
+  relation: own

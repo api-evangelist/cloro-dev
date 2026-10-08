@@ -1,0 +1,32 @@
+generated: '2026-10-07'
+method: probed
+source: https://mcp.cloro.dev/.well-known/oauth-protected-resource (HTTP 200, 2026-10-07); https://clerk.cloro.dev/.well-known/oauth-authorization-server (HTTP 200, 2026-10-07); https://cloro.dev/docs/integrations/mcp
+docs: https://cloro.dev/docs/integrations/mcp
+applies_to: cloro MCP server (https://mcp.cloro.dev/mcp) only. The REST API at api.cloro.dev uses a bearer API key with no OAuth and no per-key scopes ("per-key scopes are not available, so a client cannot request a narrower permission" - openapi/cloro-dev-openapi.yml bearerAuth description).
+resource: https://mcp.cloro.dev/mcp
+authorization_servers:
+- https://clerk.cloro.dev
+authorization_server_metadata:
+  issuer: https://clerk.cloro.dev
+  authorization_endpoint: https://clerk.cloro.dev/oauth/authorize
+  token_endpoint: https://clerk.cloro.dev/oauth/token
+  revocation_endpoint: https://clerk.cloro.dev/oauth/token/revoke
+  device_authorization_endpoint: https://clerk.cloro.dev/oauth/device_authorization
+  jwks_uri: https://clerk.cloro.dev/.well-known/jwks.json
+  grant_types_supported: [authorization_code, refresh_token, 'urn:ietf:params:oauth:grant-type:device_code']
+  code_challenge_methods_supported: [S256]
+  token_endpoint_auth_methods_supported: [client_secret_basic, none, client_secret_post]
+  client_id_metadata_document_supported: true
+scopes:
+- name: profile
+  description: OpenID Connect profile claims (name, given_name, family_name, picture, preferred_username) for the signed-in cloro user. Listed in scopes_supported of the protected-resource document.
+- name: email
+  description: The signed-in user's email and email_verified claims. Listed in scopes_supported of the protected-resource document.
+- name: user:org:read
+  description: Read the user's organization membership (org_id claim) so the MCP server can bill tool calls to the organization selected at sign-in ("select the organization whose credits pay for the calls"). Listed in scopes_supported of both the protected-resource and the authorization-server documents.
+authorization_server_only_scopes:
+- openid
+- public_metadata
+- private_metadata
+- offline_access
+note: Scope descriptions are derived from the Clerk authorization-server metadata (claims_supported) and the provider's MCP page; cloro publishes no separate scopes reference. Tokens are verified by the MCP server against the issuer's JWKS; the API key path (Authorization Bearer or key-in-URL) needs no scopes.

@@ -1,0 +1,119 @@
+generated: '2026-10-07'
+method: searched
+source: https://cloro.dev/docs/guides/making-requests/async; https://cloro.dev/docs/guides/webhooks; https://cloro.dev/docs/guides/error-handling;
+  https://cloro.dev/docs/guides/concurrency; https://cloro.dev/docs/guides/versioning; https://cloro.dev/docs/guides/authentication; https://cloro.dev/docs/guides/billing;
+  openapi/cloro-dev-openapi.yml (all markdown twins read 2026-10-07)
+authentication:
+  style: bearer API key
+  header: 'Authorization: Bearer <key>'
+  scopes: none (one key grants every endpoint)
+  docs: https://cloro.dev/docs/guides/authentication
+  artifact: authentication/cloro-dev-authentication.yml
+idempotency:
+  coverage: partial
+  scope:
+  - createAsyncTask
+  - createBatchAsyncTasks
+  mechanism: request header / body token declared in the OpenAPI
+  header: idempotencyKey
+  field: idempotencyKey
+  retention: a key stays bound to its task until the task record is deleted (finished tasks are deleted about 24 hours after you create them),
+    whether it ended COMPLETED or FAILED
+  docs: https://cloro.dev/docs/guides/making-requests/async
+  note: 'Sync monitor POSTs (monitorChatgpt, monitorGemini, monitorGrok, monitorGoogle, resolveGoogleGoto, monitorGoogleNews, monitorCopilot,
+    monitorPerplexity, monitorAiMode) carry no idempotency mechanism: a retry after a dropped connection is a new, separately billed request if
+    it succeeds. DELETE /v1/async/queue is idempotent by nature.'
+  evidence: idempotencyKey on 1 of 12 mutating operations
+  verified: derived
+reversibility:
+  grade: documented
+  summary: 'The only write that can be taken back is a queued async task: DELETE /v1/async/queue (clearAsyncQueue) discards tasks still QUEUED.
+    Nothing cancels a PROCESSING task or a running sync attempt, and credits charged for a delivered result are not refunded.'
+  surfaces:
+  - write: createAsyncTask / createBatchAsyncTasks
+    reversal: clearAsyncQueue
+    binding: DELETE /v1/async/queue
+    window: while the task is still QUEUED; a task that is PROCESSING is not stopped
+    docs: https://cloro.dev/docs/api-reference/endpoint/clear-async-queue
+    grade: documented
+  - write: monitor* sync requests
+    reversal: null
+    window: null
+    note: Closing the connection yields a 499 that is free, "but closing the connection doesn't stop an attempt that is already running" and a
+      completed attempt is billed.
+    docs: https://cloro.dev/docs/guides/billing
+    grade: none
+  - write: credits consumed
+    reversal: null
+    note: '"Cancel subscription: Service and your remaining credits last until the end of the current billing cycle, but no refunds are issued
+      for unused credits." Credits are only charged on success: 200 sync / COMPLETED async; errors and FAILED tasks cost nothing.'
+    docs: https://cloro.dev/docs/guides/billing
+    grade: none
+  dry_run_mode: none (no dry-run or validate-only flag is documented; the dashboard Playground sends real, credit-consuming requests)
+pagination:
+  style: none
+  note: 'No list endpoint pages: GET /v1/countries and /v1/states return complete lists; GET /v1/async/status returns counts. Google Search results
+    paginate upstream via the request (each extra page costs +2 credits), not via a cursor on the API.'
+versioning:
+  style: url-path
+  current: /v1/
+  deprecation_headers:
+  - Deprecation (RFC 9745)
+  - Sunset (RFC 8594)
+  - Link; rel="deprecation"
+  minimum_notice: six months between Deprecation and Sunset
+  docs: https://cloro.dev/docs/guides/versioning
+  artifact: lifecycle/cloro-dev-lifecycle.yml
+error_envelope:
+  shape: '{"success": false, "error": {"code", "message", "details?", "timestamp"}}'
+  success_shape: '{"success": true, "result": {...}}'
+  code_field: error.code
+  partial_success: POST /v1/async/task/batch returns 200 with per-task success/error objects in results[]
+  docs: https://cloro.dev/docs/guides/error-handling
+  artifact: errors/cloro-dev-problem-types.yml
+rate_limit_signaling:
+  headers:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-Concurrency-Limit
+  - X-Concurrency-Current
+  - X-Concurrency-Remaining
+  exhaustion_status: 429
+  codes:
+  - RATE_LIMIT_EXCEEDED
+  - CONCURRENCY_LIMIT_EXCEEDED
+  - QUEUE_LIMIT_EXCEEDED
+  retry_after: not sent on 429; sent on 503
+  docs: https://cloro.dev/docs/guides/concurrency
+  artifact: rate-limits/cloro-dev-rate-limits.yml
+request_tracing:
+  headers:
+  - X-Latency-Ms (server time from arrival to start of response)
+  request_id: every monitor request is logged to the dashboard with a request id; no request-id response header is documented
+  async_correlation: task.id and task.idempotencyKey appear in every webhook payload; X-Cloro-Webhook-Id = <task-id>-<attempt>
+metadata:
+  credits:
+  - X-Credits-Remaining
+  - X-Credits-Charged
+  note: carried on successful (200) sync monitor responses only; GET /v1/credits for async-only workloads
+field_expansion:
+  style: include object
+  note: Monitor requests take an optional include object (markdown, rawResponse, searchQueries, shoppingCards, ads, aioverview ...) to add heavier
+    payload fields; leave it unset for the leanest response.
+async:
+  states:
+  - QUEUED
+  - PROCESSING
+  - COMPLETED
+  - FAILED
+  priority: priority 1-10, higher runs first, default 1
+  batch_max: 500
+  queue_max: 100000
+  retention: finished tasks are deleted about 24 hours after creation; HTML URLs in a result expire after 24 hours
+  webhooks: asyncapi/cloro-dev-webhooks.yml
+timeouts:
+  sync_client_timeout: at least 5 minutes (300 s)
+  server_retry_window: no new attempt after 5 minutes; up to 5 attempts
+country_codes:
+  format: UPPERCASE ISO 3166-1 alpha-2
+  discovery: GET /v1/countries?model=<provider>; GET /v1/states?country=US

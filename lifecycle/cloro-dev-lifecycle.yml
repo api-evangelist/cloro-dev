@@ -1,0 +1,34 @@
+generated: '2026-10-07'
+method: searched
+source: 'https://cloro.dev/docs/guides/versioning (markdown twin read 2026-10-07); https://status.cloro.dev (HTTP 200, Better Stack status page); openapi/cloro-dev-openapi.yml (no operation carries deprecated=true)'
+versioning:
+  scheme: url-path
+  current: v1
+  statement: The version is in the URL path. Every endpoint lives under /v1/, and there is no version header or query parameter to set.
+  additive_inside_version:
+  - new endpoints
+  - new optional request fields
+  - new fields in a response body
+  never_inside_version:
+  - the meaning or type of an existing field
+  - an existing field becoming required, or disappearing
+  - an error code string for a given failure
+  - the path of an existing endpoint
+  client_obligation: ignore response fields you do not recognize
+  docs: https://cloro.dev/docs/guides/versioning
+deprecation:
+  policy: A deprecated endpoint announces itself in its own responses with Deprecation (RFC 9745), Sunset (RFC 8594) and Link rel="deprecation" headers; a change of meaning gets a new version path (/v2/) and existing paths are not repurposed.
+  minimum_notice: a minimum of six months between the Deprecation date and the Sunset date on any generally available endpoint
+  headers:
+  - Deprecation
+  - Sunset
+  - Link; rel="deprecation"
+  rfc: [RFC 9745, RFC 8594]
+  currently_deprecated: Nothing is deprecated today, so no live endpoint carries these headers.
+  docs: https://cloro.dev/docs/guides/versioning
+status_page: https://status.cloro.dev
+status_page_platform: Better Stack
+sla: null
+sla_note: No SLA is published. Retries are server-side (up to 5 attempts; a sync request starts no new attempt after 5 minutes).
+deprecated_operations: []
+changelog: https://cloro.dev/docs/changelog

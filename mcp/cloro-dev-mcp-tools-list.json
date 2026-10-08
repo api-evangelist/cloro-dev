@@ -1,0 +1,747 @@
+{
+  "result": {
+    "tools": [
+      {
+        "name": "scrape_chatgpt",
+        "title": "Scrape ChatGPT",
+        "description": "Submit a prompt to ChatGPT from a chosen country (and optionally US state) and return the full answer: text, cited sources, and optionally markdown, search queries, shopping results, and ads. Use this to see how ChatGPT answers a prompt and which brands/sources it mentions.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "description": "The prompt to submit to ChatGPT.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "country": {
+              "description": "ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. \"US\"). Use list_countries to see supported codes per model.",
+              "type": "string"
+            },
+            "include": {
+              "description": "Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine's unprocessed response payload), searchQueries (the web searches ChatGPT issued while answering), ads and shopping (sponsored and product results; these render only on the desktop UI, so pair them with legacy: true). Leave unset for the leanest response.",
+              "type": "object",
+              "properties": {
+                "markdown": {
+                  "type": "boolean"
+                },
+                "rawResponse": {
+                  "type": "boolean"
+                },
+                "searchQueries": {
+                  "type": "boolean"
+                },
+                "html": {
+                  "type": "boolean"
+                },
+                "ads": {
+                  "type": "boolean"
+                },
+                "shopping": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "legacy": {
+              "description": "Serve ChatGPT's desktop UI instead of the default mobile-web UI. Needed for include.ads and include.shopping, which only render on desktop. Defaults to false.",
+              "type": "boolean"
+            },
+            "disableWebSearch": {
+              "type": "boolean"
+            },
+            "state": {
+              "description": "Optional state code for state-level targeting (e.g. \"CA\" when country is \"US\"). Only some countries support this \u2014 call list_states for the supported countries and their codes.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "prompt",
+            "country"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "scrape_gemini",
+        "title": "Scrape Google Gemini",
+        "description": "Submit a prompt to Google Gemini from a chosen country (and optionally US state) and return the answer with cited sources. Use this to see how Google Gemini answers a prompt and which brands/sources it mentions.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "description": "The prompt to submit to Google Gemini.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "country": {
+              "description": "ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. \"US\"). Use list_countries to see supported codes per model.",
+              "type": "string"
+            },
+            "include": {
+              "description": "Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine's unprocessed response payload). Leave unset for the leanest response.",
+              "type": "object",
+              "properties": {
+                "html": {
+                  "type": "boolean"
+                },
+                "markdown": {
+                  "type": "boolean"
+                },
+                "rawResponse": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "state": {
+              "description": "Optional state code for state-level targeting (e.g. \"CA\" when country is \"US\"). Only some countries support this \u2014 call list_states for the supported countries and their codes.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "prompt",
+            "country"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "scrape_copilot",
+        "title": "Scrape Microsoft Copilot",
+        "description": "Submit a prompt to Microsoft Copilot from a chosen country (and optionally US state) and return the answer with cited sources. Use this to see how Microsoft Copilot answers a prompt and which brands/sources it mentions.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "description": "The prompt to submit to Microsoft Copilot.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "country": {
+              "description": "ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. \"US\"). Use list_countries to see supported codes per model.",
+              "type": "string"
+            },
+            "include": {
+              "description": "Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine's unprocessed response payload). Leave unset for the leanest response.",
+              "type": "object",
+              "properties": {
+                "markdown": {
+                  "type": "boolean"
+                },
+                "html": {
+                  "type": "boolean"
+                },
+                "rawResponse": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "state": {
+              "description": "Optional state code for state-level targeting (e.g. \"CA\" when country is \"US\"). Only some countries support this \u2014 call list_states for the supported countries and their codes.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "prompt",
+            "country"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "scrape_perplexity",
+        "title": "Scrape Perplexity",
+        "description": "Submit a prompt to Perplexity from a chosen country (and optionally US state) and return the answer with cited sources. Use this to see how Perplexity answers a prompt and which brands/sources it mentions.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "description": "The prompt to submit to Perplexity.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "country": {
+              "description": "ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. \"US\"). Use list_countries to see supported codes per model.",
+              "type": "string"
+            },
+            "include": {
+              "description": "Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine's unprocessed response payload). Leave unset for the leanest response.",
+              "type": "object",
+              "properties": {
+                "markdown": {
+                  "type": "boolean"
+                },
+                "html": {
+                  "type": "boolean"
+                },
+                "rawResponse": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "state": {
+              "description": "Optional state code for state-level targeting (e.g. \"CA\" when country is \"US\"). Only some countries support this \u2014 call list_states for the supported countries and their codes.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "prompt",
+            "country"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "scrape_grok",
+        "title": "Scrape Grok",
+        "description": "Submit a prompt to Grok (xAI) from a chosen country (and optionally US state) and return the answer with cited sources. Use this to see how Grok (xAI) answers a prompt and which brands/sources it mentions.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "description": "The prompt to submit to Grok (xAI).",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "country": {
+              "description": "ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. \"US\"). Use list_countries to see supported codes per model.",
+              "type": "string"
+            },
+            "include": {
+              "description": "Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine's unprocessed response payload). Leave unset for the leanest response.",
+              "type": "object",
+              "properties": {
+                "markdown": {
+                  "type": "boolean"
+                },
+                "html": {
+                  "type": "boolean"
+                },
+                "rawResponse": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "state": {
+              "description": "Optional state code for state-level targeting (e.g. \"CA\" when country is \"US\"). Only some countries support this \u2014 call list_states for the supported countries and their codes.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "prompt",
+            "country"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "scrape_google_ai_mode",
+        "title": "Scrape Google AI Mode",
+        "description": "Submit a prompt to Google AI Mode from a chosen country and return the AI answer with cited sources. Supports location or UULE targeting and desktop/mobile emulation.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "description": "The prompt to submit to Google AI Mode.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "country": {
+              "description": "ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. \"US\"). Use list_countries to see supported codes per model. Deprecated \u2014 use gl instead; country is kept for compatibility and must not disagree with gl.",
+              "type": "string"
+            },
+            "gl": {
+              "description": "ISO 3166-1 alpha-2 code for the result geography, sent to Google as gl (e.g. \"us\"). Use list_countries to see supported codes per model.",
+              "type": "string"
+            },
+            "hl": {
+              "description": "Optional Google interface-language code, sent as hl (e.g. \"de\", \"pt-br\"). Defaults to the language derived from gl \u2014 set it when the geography's dominant language is not the one you want.",
+              "type": "string"
+            },
+            "location": {
+              "description": "Optional location name to target search results (e.g. \"Austin, Texas, United States\"). Mutually exclusive with uule.",
+              "type": "string"
+            },
+            "uule": {
+              "description": "Optional Google UULE location parameter. Mutually exclusive with location.",
+              "type": "string"
+            },
+            "device": {
+              "description": "Device type to emulate. Defaults to desktop.",
+              "default": "desktop",
+              "type": "string",
+              "enum": [
+                "desktop",
+                "mobile"
+              ]
+            },
+            "include": {
+              "description": "Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine's unprocessed response payload). Leave unset for the leanest response.",
+              "type": "object",
+              "properties": {
+                "markdown": {
+                  "type": "boolean"
+                },
+                "html": {
+                  "type": "boolean"
+                },
+                "expandProducts": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "required": [
+            "prompt"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "scrape_google",
+        "title": "Scrape Google Search",
+        "description": "Run a Google search from a chosen country and return organic results, with optional AI Overview extraction (include.aioverview) and People-Also-Ask AI answers (include.paaAioverview). Two modes: structured (query + country, with optional location/uule/pages) or url (a complete google.com/search URL that owns query, location, and pagination). Supports desktop, mobile, iOS, and Android emulation and multi-page results.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "The search query. Required unless url is provided.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "url": {
+              "description": "A complete google.com/search URL to fetch instead of building one from structured fields. When set, query/location/uule/pages must be omitted (the URL owns them); gl and hl are read from the URL's gl/hl parameters; an explicit gl or hl must agree with the URL's copy.",
+              "type": "string"
+            },
+            "country": {
+              "description": "ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. \"US\"). Use list_countries to see supported codes per model. Deprecated \u2014 use gl instead; country is kept for compatibility and must not disagree with gl.",
+              "type": "string"
+            },
+            "gl": {
+              "description": "ISO 3166-1 alpha-2 code for the result geography, sent to Google as gl (e.g. \"us\"). Use list_countries to see supported codes per model. Required in query mode; in url mode it is read from the URL's gl parameter unless supplied here, and an explicit value wins.",
+              "type": "string"
+            },
+            "hl": {
+              "description": "Optional Google interface-language code, sent as hl (e.g. \"de\", \"pt-br\"). Defaults to the language derived from gl \u2014 set it when the geography's dominant language is not the one you want. In url mode it is read from the URL's hl parameter unless supplied here, and an explicit value wins.",
+              "type": "string"
+            },
+            "location": {
+              "description": "Optional location name to target search results (e.g. \"Austin, Texas, United States\"). Mutually exclusive with uule.",
+              "type": "string"
+            },
+            "uule": {
+              "description": "Optional Google UULE location parameter. Mutually exclusive with location.",
+              "type": "string"
+            },
+            "device": {
+              "description": "Device to emulate: desktop, mobile, ios (Safari on iPhone), or android (Chrome on Android). mobile is an alias for android. Defaults to desktop.",
+              "default": "desktop",
+              "type": "string",
+              "enum": [
+                "desktop",
+                "mobile",
+                "ios",
+                "android"
+              ]
+            },
+            "pages": {
+              "description": "Number of result pages to fetch (1-10). Defaults to 1.",
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 10
+            },
+            "include": {
+              "description": "Optional flags. Set aioverview: true to extract Google's AI Overview (or { markdown: true } for markdown), paaAioverview: true to hydrate AI answers in People Also Ask. Leave unset for organic results only.",
+              "type": "object",
+              "properties": {
+                "html": {
+                  "type": "boolean"
+                },
+                "aioverview": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "markdown": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "paaAioverview": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "scrape_google_news",
+        "title": "Scrape Google News",
+        "description": "Run a Google News search from a chosen country and return news results. Supports desktop, mobile, iOS, and Android emulation and multi-page results.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "The search query.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "country": {
+              "description": "ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. \"US\"). Use list_countries to see supported codes per model. Deprecated \u2014 use gl instead; country is kept for compatibility and must not disagree with gl.",
+              "type": "string"
+            },
+            "gl": {
+              "description": "ISO 3166-1 alpha-2 code for the result geography, sent to Google as gl (e.g. \"us\"). Use list_countries to see supported codes per model.",
+              "type": "string"
+            },
+            "hl": {
+              "description": "Optional Google interface-language code, sent as hl (e.g. \"de\", \"pt-br\"). Defaults to the language derived from gl \u2014 set it when the geography's dominant language is not the one you want.",
+              "type": "string"
+            },
+            "device": {
+              "description": "Device to emulate: desktop, mobile, ios (Safari on iPhone), or android (Chrome on Android). mobile is an alias for android. Defaults to desktop.",
+              "default": "desktop",
+              "type": "string",
+              "enum": [
+                "desktop",
+                "mobile",
+                "ios",
+                "android"
+              ]
+            },
+            "pages": {
+              "description": "Number of result pages to fetch (1-10). Defaults to 1.",
+              "default": 1,
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 10
+            },
+            "include": {
+              "description": "Optional flag, off by default: html (the result page HTML). Leave unset for the leanest response.",
+              "type": "object",
+              "properties": {
+                "html": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "required": [
+            "query"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "list_countries",
+        "title": "List supported countries",
+        "description": "List the ISO 3166-1 alpha-2 country codes supported for geo-targeting. Pass a model to get the codes available for that specific engine (some engines block certain countries).",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "model": {
+              "description": "Optionally filter to countries supported by a specific engine.",
+              "type": "string",
+              "enum": [
+                "aimode",
+                "aioverview",
+                "chatgpt",
+                "copilot",
+                "gemini",
+                "google",
+                "grok",
+                "perplexity"
+              ]
+            }
+          }
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        },
+        "outputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "countries": {
+              "description": "ISO 3166-1 alpha-2 country codes.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "countries"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "list_states",
+        "title": "List states for a country",
+        "description": "List the state codes available for state-level geo-targeting in a country (used as the \"state\" parameter on the scrape tools). Only countries with state-level targeting are accepted.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "country": {
+              "description": "ISO 3166-1 alpha-2 country code to list states for. Only countries with state-level targeting are supported.",
+              "type": "string",
+              "enum": [
+                "US"
+              ]
+            }
+          },
+          "required": [
+            "country"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "profile",
+                "email",
+                "user:org:read"
+              ]
+            }
+          ]
+        },
+        "outputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "states": {
+              "description": "States available for state-level targeting.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code",
+                  "name"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "states"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 1
+}

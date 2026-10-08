@@ -1,0 +1,340 @@
+generated: '2026-10-07'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/cloro-dev-openapi.yml
+vocabulary:
+  name: cloro Domain Vocabulary
+  description: 'Terms declared by cloro''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-07'
+  terms:
+  - term: AsyncTaskSummary
+    definition: Common task summary fields shared across async task responses.
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/AsyncTaskSummary
+  - term: AsyncTaskCredits
+    definition: Credit information for an async task.
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/AsyncTaskCredits
+  - term: AsyncTaskCreateResponse
+    definition: 'Object declared by the contract with fields: success, task, credits.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/AsyncTaskCreateResponse
+  - term: TaskStatusResponse
+    definition: 'Object declared by the contract with fields: task, credits, webhook, response.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/TaskStatusResponse
+  - term: AsyncStatusResponse
+    definition: 'Object declared by the contract with fields: queuedTasks, processingTasks, priorityBreakdown, concurrency.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/AsyncStatusResponse
+  - term: CreditsResponse
+    definition: 'Object declared by the contract with fields: remaining, perCycle, cycleResetsAt.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/CreditsResponse
+  - term: ClearQueueResponse
+    definition: 'Object declared by the contract with fields: success, cleared.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ClearQueueResponse
+  - term: BatchTaskRequest
+    definition: 'Object declared by the contract with fields: taskType, payload, priority, idempotencyKey, webhook.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/BatchTaskRequest
+  - term: BatchTaskResponse
+    definition: 'Object declared by the contract with fields: success, summary, results.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/BatchTaskResponse
+  - term: BatchTaskSuccessResult
+    definition: 'Object declared by the contract with fields: success, index, task, credits.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/BatchTaskSuccessResult
+  - term: BatchTaskFailureResult
+    definition: 'Object declared by the contract with fields: success, index, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/BatchTaskFailureResult
+  - term: QueueLimitError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/QueueLimitError
+  - term: ChatGPTMonitorRequest
+    definition: 'Object declared by the contract with fields: prompt, country, include, legacy, disableWebSearch, state.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ChatGPTMonitorRequest
+  - term: GeminiMonitorRequest
+    definition: 'Object declared by the contract with fields: prompt, country, include, state.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GeminiMonitorRequest
+  - term: GeminiMonitorResponse
+    definition: 'Object declared by the contract with fields: success, result.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GeminiMonitorResponse
+  - term: GrokMonitorRequest
+    definition: 'Object declared by the contract with fields: prompt, country, include, state.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GrokMonitorRequest
+  - term: GrokMonitorResponse
+    definition: 'Object declared by the contract with fields: success, result.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GrokMonitorResponse
+  - term: ChatGPTMonitorResponse
+    definition: 'Object declared by the contract with fields: success, result.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ChatGPTMonitorResponse
+  - term: Error
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/Error
+  - term: ValidationError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ValidationError
+  - term: AuthenticationError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/AuthenticationError
+  - term: ForbiddenError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ForbiddenError
+  - term: NotFoundError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/NotFoundError
+  - term: IdempotencyConflictError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/IdempotencyConflictError
+  - term: ConcurrentLimitError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ConcurrentLimitError
+  - term: CanceledError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/CanceledError
+  - term: InternalError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/InternalError
+  - term: ExternalServiceError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ExternalServiceError
+  - term: GoogleMonitorRequest
+    definition: 'Object declared by the contract with fields: query, url, country, gl, hl, location, uule, device, pages, include.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GoogleMonitorRequest
+  - term: GoogleMonitorResponse
+    definition: 'Object declared by the contract with fields: success, result.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GoogleMonitorResponse
+  - term: GoogleGotoRequest
+    definition: 'Object declared by the contract with fields: url.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GoogleGotoRequest
+  - term: GoogleGotoResponse
+    definition: 'Object declared by the contract with fields: url.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GoogleGotoResponse
+  - term: GoogleNewsMonitorRequest
+    definition: 'Object declared by the contract with fields: query, country, gl, hl, device, pages, include.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GoogleNewsMonitorRequest
+  - term: GoogleNewsMonitorResponse
+    definition: 'Object declared by the contract with fields: success, result.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GoogleNewsMonitorResponse
+  - term: CopilotMonitorRequest
+    definition: 'Object declared by the contract with fields: prompt, country, include, state.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/CopilotMonitorRequest
+  - term: CopilotMonitorResponse
+    definition: 'Object declared by the contract with fields: success, result.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/CopilotMonitorResponse
+  - term: PerplexityMonitorRequest
+    definition: 'Object declared by the contract with fields: prompt, country, include, state.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/PerplexityMonitorRequest
+  - term: PerplexityMonitorResponse
+    definition: 'Object declared by the contract with fields: success, result.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/PerplexityMonitorResponse
+  - term: AiModeMonitorRequest
+    definition: 'Object declared by the contract with fields: prompt, country, gl, hl, location, uule, device, include.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/AiModeMonitorRequest
+  - term: AiModeMonitorResponse
+    definition: 'Object declared by the contract with fields: success, result.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/AiModeMonitorResponse
+  - term: MediaItem
+    definition: Media content (video or image) found in response
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/MediaItem
+  - term: HotelItem
+    definition: Hotel listing with detailed information
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/HotelItem
+  - term: PlaceItem
+    definition: General place or location information
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/PlaceItem
+  - term: ShoppingCard
+    definition: Shopping product card with detailed product information
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ShoppingCard
+  - term: ImagePosition
+    definition: Pixel offset for image positioning within a slot
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ImagePosition
+  - term: SlotPlacement
+    definition: Percent-based placement of a showcase slot within its container
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/SlotPlacement
+  - term: ShowcaseSlot
+    definition: Single visual slot inside a product showcase
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ShowcaseSlot
+  - term: ShowcaseImage
+    definition: Image rendered as the hero of a product showcase
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ShowcaseImage
+  - term: ShowcaseBackground
+    definition: Background styling for a product showcase
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ShowcaseBackground
+  - term: ShowcaseMetadata
+    definition: Visual showcase metadata attached to a shopping product (image, background, and per-slot placement).
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ShowcaseMetadata
+  - term: ShoppingProduct
+    definition: Individual product information
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ShoppingProduct
+  - term: ShoppingOffer
+    definition: Shopping offer with pricing details from a specific merchant
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ShoppingOffer
+  - term: PriceDetails
+    definition: Detailed price breakdown for an offer
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/PriceDetails
+  - term: OfferTag
+    definition: Promotional tag on an offer
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/OfferTag
+  - term: RatingGroupedCitation
+    definition: Rating source information with supporting websites
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/RatingGroupedCitation
+  - term: InlineProduct
+    definition: Inline product reference that appeared in the response text, including pricing and offers
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/InlineProduct
+  - term: StateParameter
+    definition: 'State code for sub-country geo-targeting (e.g., "CA"). Only valid with country "US". Paid add-on: +2 credits, on top of the base
+      cost and any other add-on ([pricing](/guides/providers#state-level-targeting)).'
+    tags:
+    - Enumeration
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/StateParameter
+  - term: CountryCode
+    definition: ISO 3166-1 alpha-2 country code.
+    tags:
+    - Enumeration
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/CountryCode
+  - term: GlParameter
+    definition: Alternative to `country`, using Google's own parameter name for the result geography. Same ISO 3166-1 alpha-2 codes, accepted
+      in either case (`us` or `US`), and must be a country the endpoint supports — see `GET /v1/countries`. Provide `country` or `gl`; sending
+      both with different values is a `400`.
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GlParameter
+  - term: HlParameter
+    definition: Interface language, as Google's own `hl` parameter (e.g. `en`, `de`, `pt-BR`). Free-form and case-insensitive — Google owns the
+      list of codes. Overrides the language cloro derives from the country, so the interface language and the result geography can differ.
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/HlParameter
+  - term: RateLimitError
+    definition: 'Object declared by the contract with fields: success, error.'
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/RateLimitError
+  - term: GooglePlaceBase
+    definition: Fields shared by the place and map entries of a Google AI answer
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GooglePlaceBase
+  - term: GooglePlace
+    definition: Place card from a Google AI answer
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GooglePlace
+  - term: GoogleMapPlace
+    definition: Place card from a Google AI answer that Google geo-tagged
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/GoogleMapPlace
+  - term: ProductResult
+    definition: One product cluster and its merchant offers. Only `title` is guaranteed; anything Google's panel lacks is omitted, never sent
+      as `null`.
+    tags:
+    - Object
+    source: openapi/cloro-dev-openapi.yml#/components/schemas/ProductResult

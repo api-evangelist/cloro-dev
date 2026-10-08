@@ -1,0 +1,38 @@
+generated: '2026-10-07'
+method: generated
+source: Packaged Agent Skills generated from openapi/cloro-dev-openapi.yml and the provider guides; every operationId verified in the spec. The provider also publishes its own skill at https://cloro.dev/docs/.well-known/agent-skills/cloro/skill.md (referenced from its A2A agent card), saved verbatim under skills/_original/cloro-skill.md.
+provider_published_skill:
+  url: https://cloro.dev/docs/.well-known/agent-skills/cloro/skill.md
+  file: skills/_original/cloro-skill.md
+  status: 200
+skills:
+- file: cloro-dev-monitor-ai-answer.md
+  name: Monitor an AI answer engine for a prompt
+  api: openapi/cloro-dev-openapi.yml
+  operations:
+  - getCountries
+  - getStates
+  - monitorChatgpt
+  - monitorPerplexity
+  - monitorGemini
+  - monitorCopilot
+  - monitorAiMode
+  - getCredits
+- file: cloro-dev-track-prompts-async.md
+  name: Track many prompts across engines with async tasks and webhooks
+  api: openapi/cloro-dev-openapi.yml
+  operations:
+  - createBatchAsyncTasks
+  - createAsyncTask
+  - getTaskStatus
+  - getAsyncStatus
+  - clearAsyncQueue
+  - getCredits
+- file: cloro-dev-google-serp-and-ai-overview.md
+  name: Pull Google Search results, AI Overview and Google News for a query
+  api: openapi/cloro-dev-openapi.yml
+  operations:
+  - getCountries
+  - monitorGoogle
+  - monitorGoogleNews
+  - resolveGoogleGoto

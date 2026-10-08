@@ -1,0 +1,65 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://api.cloro.dev/v1",
+      "service-desc": [
+        {
+          "href": "https://cloro.dev/docs/api-reference/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://cloro.dev/docs",
+          "type": "text/html"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://cloro.dev/auth.md",
+          "type": "text/markdown",
+          "title": "Authentication, versioning, rate limits, and error model"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://status.cloro.dev",
+          "type": "text/html"
+        }
+      ],
+      "terms-of-service": [
+        {
+          "href": "https://cloro.dev/terms/",
+          "type": "text/html"
+        }
+      ],
+      "privacy-policy": [
+        {
+          "href": "https://cloro.dev/privacy/",
+          "type": "text/html"
+        }
+      ]
+    },
+    {
+      "anchor": "https://mcp.cloro.dev/mcp",
+      "service-doc": [
+        {
+          "href": "https://cloro.dev/docs/integrations/mcp",
+          "type": "text/html"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://cloro.dev/.well-known/mcp/server-card.json",
+          "type": "application/json",
+          "title": "MCP server card"
+        },
+        {
+          "href": "https://mcp.cloro.dev/.well-known/oauth-protected-resource",
+          "type": "application/json",
+          "title": "RFC 9728 protected resource metadata"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,445 @@
+generated: '2026-10-07'
+method: probed
+status: live
+source: https://mcp.cloro.dev/mcp (POST initialize + tools/list, 2026-10-07, unauthenticated, HTTP 200 text/event-stream); https://cloro.dev/docs/integrations/mcp; https://github.com/cloro-dev/mcp-server
+name: cloro MCP server
+description: cloro's hosted Model Context Protocol server. A thin wrapper over api.cloro.dev exposing the sync monitor endpoints as tools; each request forwards the caller's own credential so the API enforces authentication, credit billing, rate limiting and concurrency limits. Tool input schemas are the same schemas the API validates with.
+server:
+  name: cloro
+  version: 0.2.0
+  protocolVersion: '2025-06-18'
+  capabilities:
+    tools:
+      listChanged: true
+  transport: streamable-http
+  source: initialize response from https://mcp.cloro.dev/mcp on 2026-10-07
+deployment:
+  mode: both
+  endpoint: https://mcp.cloro.dev/mcp
+  install: git clone https://github.com/cloro-dev/mcp-server && npm install && npm run build && MCP_TRANSPORT=stdio CLORO_API_KEY=your_key node dist/index.js
+  package: https://github.com/cloro-dev/mcp-server
+  auth: oauth
+  verified: probed
+  note: 'Remote: initialize and tools/list answered HTTP 200 without a credential on 2026-10-07 (serverInfo cloro 0.2.0, protocolVersion 2025-06-18); the docs state the first tools/call without a credential returns 401 with a WWW-Authenticate pointing at /.well-known/oauth-protected-resource/mcp. Local stdio: the open-source repository (package.json name @cloro/mcp-server 0.2.0, bin cloro-mcp) runs over stdio with MCP_TRANSPORT=stdio; it is NOT published to npm (registry.npmjs.org/@cloro/mcp-server returned 404 on 2026-10-07), so local use means cloning and building the repository. GET https://mcp.cloro.dev/mcp returns 405 "This server is stateless - send POST requests only".'
+auth:
+  modes:
+  - oauth
+  - api-key
+  oauth:
+    protected_resource_metadata: https://mcp.cloro.dev/.well-known/oauth-protected-resource
+    authorization_servers:
+    - https://clerk.cloro.dev
+    authorization_server_metadata: https://clerk.cloro.dev/.well-known/oauth-authorization-server
+    scopes_supported:
+    - profile
+    - email
+    - user:org:read
+    pkce: S256
+    grant_types:
+    - authorization_code
+    - refresh_token
+    - urn:ietf:params:oauth:grant-type:device_code
+    note: 'Claude connector flow: add https://mcp.cloro.dev/mcp as a custom connector with "Sign in when needed"; Claude Code: claude mcp add --transport http cloro https://mcp.cloro.dev/mcp then /mcp to sign in.'
+  api_key:
+    header: 'Authorization: Bearer YOUR_CLORO_API_KEY'
+    url_path_form: https://mcp.cloro.dev/YOUR_CLORO_API_KEY/mcp
+    note: For clients that cannot set headers the key goes in the URL path (documented by the provider).
+clients:
+  claude: Customize -> Connectors -> Add custom connector -> https://mcp.cloro.dev/mcp
+  claude_code: claude mcp add --transport http cloro https://mcp.cloro.dev/mcp
+  cursor_and_others:
+    mcpServers:
+      cloro:
+        type: http
+        url: https://mcp.cloro.dev/YOUR_CLORO_API_KEY/mcp
+tool_count: 10
+tools:
+- name: scrape_chatgpt
+  title: Scrape ChatGPT
+  description: 'Submit a prompt to ChatGPT from a chosen country (and optionally US state) and return the full answer: text, cited sources, and optionally markdown, search queries, shopping results, and ads. Use this to see how ChatGPT answers a prompt and which brands/sources it mentions.'
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      prompt:
+        description: The prompt to submit to ChatGPT.
+        type: string
+        minLength: 1
+        maxLength: 10000
+      country:
+        description: ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. "US"). Use list_countries to see supported codes per model.
+        type: string
+      include:
+        description: 'Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine''s unprocessed response payload), searchQueries (the web searches ChatGPT issued while answering), ads and shopping (sponsored and product results; these render only on the desktop UI, so pair them with legacy: true). Leave unset for the leanest response.'
+        type: object
+        properties:
+          markdown:
+            type: boolean
+          rawResponse:
+            type: boolean
+          searchQueries:
+            type: boolean
+          html:
+            type: boolean
+          ads:
+            type: boolean
+          shopping:
+            type: boolean
+      legacy:
+        description: Serve ChatGPT's desktop UI instead of the default mobile-web UI. Needed for include.ads and include.shopping, which only render on desktop. Defaults to false.
+        type: boolean
+      disableWebSearch:
+        type: boolean
+      state:
+        description: Optional state code for state-level targeting (e.g. "CA" when country is "US"). Only some countries support this — call list_states for the supported countries and their codes.
+        type: string
+    required:
+    - prompt
+    - country
+  rest:
+    operationId: monitorChatgpt
+    method: POST
+    path: /v1/monitor/chatgpt
+- name: scrape_gemini
+  title: Scrape Google Gemini
+  description: Submit a prompt to Google Gemini from a chosen country (and optionally US state) and return the answer with cited sources. Use this to see how Google Gemini answers a prompt and which brands/sources it mentions.
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      prompt:
+        description: The prompt to submit to Google Gemini.
+        type: string
+        minLength: 1
+        maxLength: 10000
+      country:
+        description: ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. "US"). Use list_countries to see supported codes per model.
+        type: string
+      include:
+        description: 'Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine''s unprocessed response payload). Leave unset for the leanest response.'
+        type: object
+        properties:
+          html:
+            type: boolean
+          markdown:
+            type: boolean
+          rawResponse:
+            type: boolean
+      state:
+        description: Optional state code for state-level targeting (e.g. "CA" when country is "US"). Only some countries support this — call list_states for the supported countries and their codes.
+        type: string
+    required:
+    - prompt
+    - country
+  rest:
+    operationId: monitorGemini
+    method: POST
+    path: /v1/monitor/gemini
+- name: scrape_copilot
+  title: Scrape Microsoft Copilot
+  description: Submit a prompt to Microsoft Copilot from a chosen country (and optionally US state) and return the answer with cited sources. Use this to see how Microsoft Copilot answers a prompt and which brands/sources it mentions.
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      prompt:
+        description: The prompt to submit to Microsoft Copilot.
+        type: string
+        minLength: 1
+        maxLength: 10000
+      country:
+        description: ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. "US"). Use list_countries to see supported codes per model.
+        type: string
+      include:
+        description: 'Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine''s unprocessed response payload). Leave unset for the leanest response.'
+        type: object
+        properties:
+          markdown:
+            type: boolean
+          html:
+            type: boolean
+          rawResponse:
+            type: boolean
+      state:
+        description: Optional state code for state-level targeting (e.g. "CA" when country is "US"). Only some countries support this — call list_states for the supported countries and their codes.
+        type: string
+    required:
+    - prompt
+    - country
+  rest:
+    operationId: monitorCopilot
+    method: POST
+    path: /v1/monitor/copilot
+- name: scrape_perplexity
+  title: Scrape Perplexity
+  description: Submit a prompt to Perplexity from a chosen country (and optionally US state) and return the answer with cited sources. Use this to see how Perplexity answers a prompt and which brands/sources it mentions.
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      prompt:
+        description: The prompt to submit to Perplexity.
+        type: string
+        minLength: 1
+        maxLength: 10000
+      country:
+        description: ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. "US"). Use list_countries to see supported codes per model.
+        type: string
+      include:
+        description: 'Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine''s unprocessed response payload). Leave unset for the leanest response.'
+        type: object
+        properties:
+          markdown:
+            type: boolean
+          html:
+            type: boolean
+          rawResponse:
+            type: boolean
+      state:
+        description: Optional state code for state-level targeting (e.g. "CA" when country is "US"). Only some countries support this — call list_states for the supported countries and their codes.
+        type: string
+    required:
+    - prompt
+    - country
+  rest:
+    operationId: monitorPerplexity
+    method: POST
+    path: /v1/monitor/perplexity
+- name: scrape_grok
+  title: Scrape Grok
+  description: Submit a prompt to Grok (xAI) from a chosen country (and optionally US state) and return the answer with cited sources. Use this to see how Grok (xAI) answers a prompt and which brands/sources it mentions.
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      prompt:
+        description: The prompt to submit to Grok (xAI).
+        type: string
+        minLength: 1
+        maxLength: 10000
+      country:
+        description: ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. "US"). Use list_countries to see supported codes per model.
+        type: string
+      include:
+        description: 'Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine''s unprocessed response payload). Leave unset for the leanest response.'
+        type: object
+        properties:
+          markdown:
+            type: boolean
+          html:
+            type: boolean
+          rawResponse:
+            type: boolean
+      state:
+        description: Optional state code for state-level targeting (e.g. "CA" when country is "US"). Only some countries support this — call list_states for the supported countries and their codes.
+        type: string
+    required:
+    - prompt
+    - country
+  rest:
+    operationId: monitorGrok
+    method: POST
+    path: /v1/monitor/grok
+- name: scrape_google_ai_mode
+  title: Scrape Google AI Mode
+  description: Submit a prompt to Google AI Mode from a chosen country and return the AI answer with cited sources. Supports location or UULE targeting and desktop/mobile emulation.
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      prompt:
+        description: The prompt to submit to Google AI Mode.
+        type: string
+        minLength: 1
+        maxLength: 10000
+      country:
+        description: ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. "US"). Use list_countries to see supported codes per model. Deprecated — use gl instead; country is kept for compatibility and must not disagree with gl.
+        type: string
+      gl:
+        description: ISO 3166-1 alpha-2 code for the result geography, sent to Google as gl (e.g. "us"). Use list_countries to see supported codes per model.
+        type: string
+      hl:
+        description: Optional Google interface-language code, sent as hl (e.g. "de", "pt-br"). Defaults to the language derived from gl — set it when the geography's dominant language is not the one you want.
+        type: string
+      location:
+        description: Optional location name to target search results (e.g. "Austin, Texas, United States"). Mutually exclusive with uule.
+        type: string
+      uule:
+        description: Optional Google UULE location parameter. Mutually exclusive with location.
+        type: string
+      device:
+        description: Device type to emulate. Defaults to desktop.
+        default: desktop
+        type: string
+        enum:
+        - desktop
+        - mobile
+      include:
+        description: 'Optional flags for heavier payload fields, each off by default: markdown (the answer rendered as markdown), html (the answer page HTML), rawResponse (the engine''s unprocessed response payload). Leave unset for the leanest response.'
+        type: object
+        properties:
+          markdown:
+            type: boolean
+          html:
+            type: boolean
+          expandProducts:
+            type: boolean
+    required:
+    - prompt
+  rest:
+    operationId: monitorAiMode
+    method: POST
+    path: /v1/monitor/aimode
+- name: scrape_google
+  title: Scrape Google Search
+  description: 'Run a Google search from a chosen country and return organic results, with optional AI Overview extraction (include.aioverview) and People-Also-Ask AI answers (include.paaAioverview). Two modes: structured (query + country, with optional location/uule/pages) or url (a complete google.com/search URL that owns query, location, and pagination). Supports desktop, mobile, iOS, and Android emulation and multi-page results.'
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      query:
+        description: The search query. Required unless url is provided.
+        type: string
+        minLength: 1
+        maxLength: 10000
+      url:
+        description: A complete google.com/search URL to fetch instead of building one from structured fields. When set, query/location/uule/pages must be omitted (the URL owns them); gl and hl are read from the URL's gl/hl parameters; an explicit gl or hl must agree with the URL's copy.
+        type: string
+      country:
+        description: ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. "US"). Use list_countries to see supported codes per model. Deprecated — use gl instead; country is kept for compatibility and must not disagree with gl.
+        type: string
+      gl:
+        description: ISO 3166-1 alpha-2 code for the result geography, sent to Google as gl (e.g. "us"). Use list_countries to see supported codes per model. Required in query mode; in url mode it is read from the URL's gl parameter unless supplied here, and an explicit value wins.
+        type: string
+      hl:
+        description: Optional Google interface-language code, sent as hl (e.g. "de", "pt-br"). Defaults to the language derived from gl — set it when the geography's dominant language is not the one you want. In url mode it is read from the URL's hl parameter unless supplied here, and an explicit value wins.
+        type: string
+      location:
+        description: Optional location name to target search results (e.g. "Austin, Texas, United States"). Mutually exclusive with uule.
+        type: string
+      uule:
+        description: Optional Google UULE location parameter. Mutually exclusive with location.
+        type: string
+      device:
+        description: 'Device to emulate: desktop, mobile, ios (Safari on iPhone), or android (Chrome on Android). mobile is an alias for android. Defaults to desktop.'
+        default: desktop
+        type: string
+        enum:
+        - desktop
+        - mobile
+        - ios
+        - android
+      pages:
+        description: Number of result pages to fetch (1-10). Defaults to 1.
+        type: number
+        exclusiveMinimum: 0
+        maximum: 10
+      include:
+        description: 'Optional flags. Set aioverview: true to extract Google''s AI Overview (or { markdown: true } for markdown), paaAioverview: true to hydrate AI answers in People Also Ask. Leave unset for organic results only.'
+        type: object
+        properties:
+          html:
+            type: boolean
+          aioverview:
+            anyOf:
+            - type: boolean
+            - type: object
+              properties:
+                markdown:
+                  type: boolean
+          paaAioverview:
+            type: boolean
+  rest:
+    operationId: monitorGoogle
+    method: POST
+    path: /v1/monitor/google
+- name: scrape_google_news
+  title: Scrape Google News
+  description: Run a Google News search from a chosen country and return news results. Supports desktop, mobile, iOS, and Android emulation and multi-page results.
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      query:
+        description: The search query.
+        type: string
+        minLength: 1
+        maxLength: 10000
+      country:
+        description: ISO 3166-1 alpha-2 country code to geo-target the request from (e.g. "US"). Use list_countries to see supported codes per model. Deprecated — use gl instead; country is kept for compatibility and must not disagree with gl.
+        type: string
+      gl:
+        description: ISO 3166-1 alpha-2 code for the result geography, sent to Google as gl (e.g. "us"). Use list_countries to see supported codes per model.
+        type: string
+      hl:
+        description: Optional Google interface-language code, sent as hl (e.g. "de", "pt-br"). Defaults to the language derived from gl — set it when the geography's dominant language is not the one you want.
+        type: string
+      device:
+        description: 'Device to emulate: desktop, mobile, ios (Safari on iPhone), or android (Chrome on Android). mobile is an alias for android. Defaults to desktop.'
+        default: desktop
+        type: string
+        enum:
+        - desktop
+        - mobile
+        - ios
+        - android
+      pages:
+        description: Number of result pages to fetch (1-10). Defaults to 1.
+        default: 1
+        type: number
+        exclusiveMinimum: 0
+        maximum: 10
+      include:
+        description: 'Optional flag, off by default: html (the result page HTML). Leave unset for the leanest response.'
+        type: object
+        properties:
+          html:
+            type: boolean
+    required:
+    - query
+  rest:
+    operationId: monitorGoogleNews
+    method: POST
+    path: /v1/monitor/google/news
+- name: list_countries
+  title: List supported countries
+  description: List the ISO 3166-1 alpha-2 country codes supported for geo-targeting. Pass a model to get the codes available for that specific engine (some engines block certain countries).
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      model:
+        description: Optionally filter to countries supported by a specific engine.
+        type: string
+        enum:
+        - aimode
+        - aioverview
+        - chatgpt
+        - copilot
+        - gemini
+        - google
+        - grok
+        - perplexity
+  rest:
+    operationId: getCountries
+    method: GET
+    path: /v1/countries
+- name: list_states
+  title: List states for a country
+  description: List the state codes available for state-level geo-targeting in a country (used as the "state" parameter on the scrape tools). Only countries with state-level targeting are accepted.
+  inputSchema:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      country:
+        description: ISO 3166-1 alpha-2 country code to list states for. Only countries with state-level targeting are supported.
+        type: string
+        enum:
+        - US
+    required:
+    - country
+  rest:
+    operationId: getStates
+    method: GET
+    path: /v1/states
+billing_note: Each scrape tool call is a sync request billed at the provider credit rate plus the +2 sync surcharge and counts against plan concurrency; the client timeout in the reference server is 320 seconds. Grok is registered but temporarily unavailable (provider has blocked anonymous access).

@@ -1,0 +1,118 @@
+generated: '2026-10-07'
+method: derived
+source: mcp/cloro-dev-mcp.yml (live tools/list from https://mcp.cloro.dev/mcp) bound to openapi/cloro-dev-openapi.yml using the tool->endpoint table at https://cloro.dev/docs/integrations/mcp
+surfaces:
+  openapi:
+    path: openapi/cloro-dev-openapi.yml
+    url: https://cloro.dev/docs/api-reference/openapi.json
+    operations: 17
+    gated: false
+  mcp:
+    url: https://mcp.cloro.dev/mcp
+    tools: 10
+    gated: tools/call only (initialize and tools/list answer anonymously)
+    auth: oauth (clerk.cloro.dev) or cloro API key
+  graphql:
+    url: https://api.cloro.dev/v1/graphql
+    status: 401
+    note: Answered 401 to the pre-flight probe with and without a body (opaque); not documented by the provider; nothing derived from it.
+crosswalk:
+- tool: scrape_chatgpt
+  category: monitor
+  rest:
+  - monitorChatgpt
+  binding: POST /v1/monitor/chatgpt
+  confidence: high
+  note: Provider-published tool/endpoint table on https://cloro.dev/docs/integrations/mcp; live inputSchema from tools/list matches the operation requestBody (prompt, country, state, include).
+- tool: scrape_gemini
+  category: monitor
+  rest:
+  - monitorGemini
+  binding: POST /v1/monitor/gemini
+  confidence: high
+  note: Provider-published tool/endpoint table on https://cloro.dev/docs/integrations/mcp; live inputSchema from tools/list matches the operation requestBody (prompt, country, state, include).
+- tool: scrape_copilot
+  category: monitor
+  rest:
+  - monitorCopilot
+  binding: POST /v1/monitor/copilot
+  confidence: high
+  note: Provider-published tool/endpoint table on https://cloro.dev/docs/integrations/mcp; live inputSchema from tools/list matches the operation requestBody (prompt, country, state, include).
+- tool: scrape_perplexity
+  category: monitor
+  rest:
+  - monitorPerplexity
+  binding: POST /v1/monitor/perplexity
+  confidence: high
+  note: Provider-published tool/endpoint table on https://cloro.dev/docs/integrations/mcp; live inputSchema from tools/list matches the operation requestBody (prompt, country, state, include).
+- tool: scrape_grok
+  category: monitor
+  rest:
+  - monitorGrok
+  binding: POST /v1/monitor/grok
+  confidence: high
+  note: Provider-published tool/endpoint table on https://cloro.dev/docs/integrations/mcp; live inputSchema from tools/list matches the operation requestBody (prompt, country, state, include).
+- tool: scrape_google_ai_mode
+  category: monitor
+  rest:
+  - monitorAiMode
+  binding: POST /v1/monitor/aimode
+  confidence: high
+  note: Provider-published tool/endpoint table on https://cloro.dev/docs/integrations/mcp; live inputSchema from tools/list matches the operation requestBody (prompt, country, state, include).
+- tool: scrape_google
+  category: monitor
+  rest:
+  - monitorGoogle
+  binding: POST /v1/monitor/google
+  confidence: high
+  note: Provider-published tool/endpoint table on https://cloro.dev/docs/integrations/mcp; live inputSchema from tools/list matches the operation requestBody (prompt, country, state, include).
+- tool: scrape_google_news
+  category: monitor
+  rest:
+  - monitorGoogleNews
+  binding: POST /v1/monitor/google/news
+  confidence: high
+  note: Provider-published tool/endpoint table on https://cloro.dev/docs/integrations/mcp; live inputSchema from tools/list matches the operation requestBody (prompt, country, state, include).
+- tool: list_countries
+  category: utility
+  rest:
+  - getCountries
+  binding: GET /v1/countries
+  confidence: high
+  note: Provider-published tool/endpoint table; live inputSchema matches the query parameters (model / country).
+- tool: list_states
+  category: utility
+  rest:
+  - getStates
+  binding: GET /v1/states
+  confidence: high
+  note: Provider-published tool/endpoint table; live inputSchema matches the query parameters (model / country).
+mcp_only: []
+rest_only:
+- operationId: resolveGoogleGoto
+  binding: POST /v1/monitor/google/goto
+  reason: async task / queue / account endpoint; the MCP server wraps only the sync monitor and lookup endpoints and the provider directs large batches to the async API directly
+- operationId: createAsyncTask
+  binding: POST /v1/async/task
+  reason: async task / queue / account endpoint; the MCP server wraps only the sync monitor and lookup endpoints and the provider directs large batches to the async API directly
+- operationId: createBatchAsyncTasks
+  binding: POST /v1/async/task/batch
+  reason: async task / queue / account endpoint; the MCP server wraps only the sync monitor and lookup endpoints and the provider directs large batches to the async API directly
+- operationId: getTaskStatus
+  binding: GET /v1/async/task/{taskId}
+  reason: async task / queue / account endpoint; the MCP server wraps only the sync monitor and lookup endpoints and the provider directs large batches to the async API directly
+- operationId: getAsyncStatus
+  binding: GET /v1/async/status
+  reason: async task / queue / account endpoint; the MCP server wraps only the sync monitor and lookup endpoints and the provider directs large batches to the async API directly
+- operationId: clearAsyncQueue
+  binding: DELETE /v1/async/queue
+  reason: async task / queue / account endpoint; the MCP server wraps only the sync monitor and lookup endpoints and the provider directs large batches to the async API directly
+- operationId: getCredits
+  binding: GET /v1/credits
+  reason: async task / queue / account endpoint; the MCP server wraps only the sync monitor and lookup endpoints and the provider directs large batches to the async API directly
+coverage:
+  tools: 10
+  tools_mapped: 10
+  operations: 17
+  operations_with_tool: 10
+  operations_without_tool: 7

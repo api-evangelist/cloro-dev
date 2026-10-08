@@ -1,0 +1,59 @@
+generated: '2026-10-07'
+method: searched
+source: https://cloro.dev/docs/integrations/python; https://cloro.dev/docs/integrations/typescript; https://github.com/cloro-dev (18 public repositories); registry metadata read 2026-10-07 from pypi.org/pypi/<pkg>/json and registry.npmjs.org/<pkg>
+packages:
+- name: cloro
+  registry: pypi
+  url: https://pypi.org/project/cloro/
+  language: python
+  official: true
+  version: 0.1.2
+  published: '2026-10-07'
+  install: pip install cloro
+  repository: https://github.com/cloro-dev/cloro-python
+  docs: https://cloro.dev/docs/integrations/python
+  note: Official Python SDK (PyPI summary "Official Python SDK for the cloro API"); project_urls point at cloro.dev and cloro-dev/cloro-python.
+- name: '@cloro-dev/cloro'
+  registry: npm
+  url: https://www.npmjs.com/package/@cloro-dev/cloro
+  language: typescript
+  official: true
+  version: 0.1.2
+  published: '2026-10-07'
+  install: npm install @cloro-dev/cloro
+  repository: https://github.com/cloro-dev/cloro-node
+  docs: https://cloro.dev/docs/integrations/typescript
+  note: Official TypeScript/Node SDK; ships ESM and CommonJS builds with bundled type declarations.
+- name: langchain-cloro
+  registry: pypi
+  url: https://pypi.org/project/langchain-cloro/
+  language: python
+  official: true
+  version: 0.2.4
+  published: '2026-10-07'
+  install: pip install langchain-cloro
+  repository: https://github.com/cloro-dev/langchain-cloro
+  docs: https://cloro.dev/integrations/
+  note: LangChain tool package published from the cloro-dev GitHub organization; project_urls point at cloro.dev/docs.
+- name: n8n-nodes-cloro
+  registry: npm
+  url: https://www.npmjs.com/package/n8n-nodes-cloro
+  language: typescript
+  official: true
+  version: 0.2.3
+  published: '2026-10-07'
+  install: npm install n8n-nodes-cloro
+  repository: https://github.com/cloro-dev/n8n-nodes-cloro
+  docs: https://cloro.dev/docs/integrations/n8n
+  note: n8n community node published from the cloro-dev GitHub organization.
+- name: '@cloro/mcp-server'
+  registry: github
+  url: https://github.com/cloro-dev/mcp-server
+  language: typescript
+  official: true
+  version: 0.2.0
+  published: null
+  install: git clone https://github.com/cloro-dev/mcp-server && npm install && npm run build
+  repository: https://github.com/cloro-dev/mcp-server
+  docs: https://cloro.dev/docs/integrations/mcp
+  note: Source of the hosted MCP server (package.json name @cloro/mcp-server, version 0.2.0, bin cloro-mcp). NOT published to npm - registry.npmjs.org/@cloro/mcp-server and /cloro-mcp both returned 404 on 2026-10-07 - so version comes from package.json on the main branch and there is no registry publish date.

@@ -1,0 +1,6 @@
+# cloro vulnerability disclosure policy (RFC 9116).
+
+Contact: mailto:security@cloro.dev
+Expires: 2027-07-31T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://cloro.dev/.well-known/security.txt

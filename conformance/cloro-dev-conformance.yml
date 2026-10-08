@@ -1,0 +1,80 @@
+generated: '2026-10-07'
+method: searched
+source: openapi/cloro-dev-openapi.yml (derived rows by derive-conformance.py); searched/probed rows added 2026-10-07 from the provider docs and live well-known probes (each row cites its evidence)
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: the document declares 3.1.0
+- id: oauth2
+  conforms: false
+  evidence: 'securitySchemes: bearerAuth (http)'
+- id: rfc9457
+  conforms: false
+  evidence: no response declares application/problem+json
+- id: idempotency
+  conforms: true
+  evidence: idempotencyKey declared on 1 of 12 mutating operations (partial)
+- id: ratelimit-headers
+  conforms: true
+  evidence: responses declare X-RateLimit-Limit, X-RateLimit-Remaining
+- id: rfc8594
+  name: Sunset HTTP header
+  conforms: true
+  method: searched
+  evidence: https://cloro.dev/docs/guides/versioning - "Sunset | When the endpoint stops responding (RFC 8594)"; minimum six months between Deprecation and Sunset. Nothing is deprecated today so no live response carries it.
+- id: rfc9745
+  name: Deprecation HTTP header
+  conforms: true
+  method: searched
+  evidence: https://cloro.dev/docs/guides/versioning - "Deprecation | When the deprecation took effect (RFC 9745)", with Link rel="deprecation" to the replacement docs.
+- id: rfc9728
+  name: OAuth 2.0 Protected Resource Metadata (MCP server)
+  conforms: true
+  method: probed
+  evidence: 'https://mcp.cloro.dev/.well-known/oauth-protected-resource HTTP 200 application/json on 2026-10-07: resource https://mcp.cloro.dev/mcp, authorization_servers [https://clerk.cloro.dev], scopes_supported [profile, email, user:org:read], bearer_methods_supported [header]. Saved at well-known/cloro-dev-mcp-oauth-protected-resource.json.'
+- id: rfc8414
+  name: OAuth 2.0 Authorization Server Metadata (MCP authorization server)
+  conforms: true
+  method: probed
+  evidence: 'https://clerk.cloro.dev/.well-known/oauth-authorization-server HTTP 200 on 2026-10-07: issuer https://clerk.cloro.dev, authorization_code + refresh_token + device_code grants, code_challenge_methods_supported [S256]. Applies to the MCP server only; the REST API uses bearer API keys.'
+- id: oauth2-pkce
+  name: OAuth 2.1 authorization code with PKCE (MCP server)
+  conforms: true
+  method: probed
+  evidence: clerk.cloro.dev metadata advertises code_challenge_methods_supported [S256] and token_endpoint_auth_methods_supported includes none (public clients); https://cloro.dev/docs/integrations/mcp documents the sign-in flow for Claude and Claude Code.
+- id: mcp
+  name: Model Context Protocol 2025-06-18 (Streamable HTTP)
+  conforms: true
+  method: probed
+  evidence: POST https://mcp.cloro.dev/mcp initialize returned protocolVersion 2025-06-18, serverInfo cloro 0.2.0; tools/list returned 10 tools with JSON Schema inputSchema (mcp/cloro-dev-mcp-tools-list.json).
+- id: mcp-server-card
+  name: MCP server card (SEP-1649 draft)
+  conforms: true
+  method: probed
+  evidence: https://cloro.dev/.well-known/mcp/server-card.json served HTTP 200 (well-known/cloro-dev-mcp-server-card.json); the document itself notes the schema is still in flux.
+- id: a2a
+  name: A2A agent card
+  conforms: true
+  method: probed
+  evidence: https://docs.cloro.dev/.well-known/agent-card.json HTTP 200, protocolVersion 0.3, HTTP+JSON transport, one skill pointing at https://cloro.dev/docs/.well-known/agent-skills/cloro/skill.md; graded conformant by harvest-agent-card.py (a2a/cloro-dev-a2a.yml).
+- id: rfc9116
+  name: security.txt
+  conforms: true
+  method: probed
+  evidence: https://cloro.dev/.well-known/security.txt HTTP 200 with Contact mailto:security@cloro.dev (well-known/cloro-dev-security.txt).
+- id: rfc9727
+  name: API catalog (/.well-known/api-catalog linkset)
+  conforms: true
+  method: probed
+  evidence: 'https://cloro.dev/.well-known/api-catalog HTTP 200: a linkset anchored at https://api.cloro.dev/v1 with service-desc https://cloro.dev/docs/api-reference/openapi.json (application/vnd.oai.openapi+json;version=3.1) and service-doc https://cloro.dev/docs (well-known/cloro-dev-api-catalog.json).'
+- id: llms-txt
+  name: llms.txt
+  conforms: true
+  method: probed
+  evidence: https://cloro.dev/llms.txt HTTP 200 (66,707 bytes, 266 pages indexed) and https://cloro.dev/docs/llms.txt HTTP 200; every docs page also serves a markdown twin at <page>.md.
+- id: webhook-hmac-signing
+  name: HMAC-SHA256 signed webhooks with timestamp
+  conforms: true
+  method: searched
+  evidence: https://cloro.dev/docs/guides/webhooks - X-Cloro-Signature v1=<hex HMAC-SHA256>, X-Cloro-Timestamp, X-Cloro-Webhook-Id; opt-in per organization with a whsec_ secret.
+note: 'Derived from the provider''s own OpenAPI only: what the contract declares. Claims the contract cannot carry (PCI DSS, SOC 2, FAPI, ISO 20022) come from the documentation reader and are merged below when found.'

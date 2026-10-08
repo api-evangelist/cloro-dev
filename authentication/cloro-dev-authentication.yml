@@ -1,0 +1,49 @@
+generated: '2026-10-07'
+method: searched
+source: openapi/cloro-dev-openapi.yml (securitySchemes.bearerAuth); https://cloro.dev/docs/guides/authentication (markdown twin read 2026-10-07); https://cloro.dev/docs/integrations/mcp; https://mcp.cloro.dev/.well-known/oauth-protected-resource (HTTP 200)
+docs: https://cloro.dev/docs/guides/authentication
+summary:
+  types:
+  - http
+  - oauth2
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  applies_to: REST API (https://api.cloro.dev) and the MCP server when used with an API key
+  description: cloro API key as a bearer token. One key grants every endpoint in this spec; per-key scopes are not available, so a client cannot request a narrower permission. Keys are created and revoked in the [dashboard](https://dashboard.cloro.dev/api-keys).
+  header: 'Authorization: Bearer <key>'
+  key_management:
+    create: https://dashboard.cloro.dev/api-keys
+    shown_once: true
+    naming: optional human-readable name up to 64 characters
+    rotation: No rotate action - create a new key and invalidate the old one; an invalidated key can keep working for up to a minute.
+    test_keys: There are no separate test keys or sandbox - every key calls the production API and draws from the organization's single credit balance.
+  errors:
+    status: 401
+    codes: [MISSING_API_KEY, INVALID_API_KEY_FORMAT, INVALID_OR_EXPIRED_API_KEY]
+    note: a lowercase "bearer" prefix counts as no key
+  sources:
+  - openapi/cloro-dev-openapi.yml
+  - https://cloro.dev/docs/guides/authentication
+- name: mcpOAuth
+  type: oauth2
+  applies_to: MCP server only (https://mcp.cloro.dev/mcp)
+  description: OAuth 2.1 authorization-code flow with PKCE (S256) against https://clerk.cloro.dev, advertised through RFC 9728 protected-resource metadata at https://mcp.cloro.dev/.well-known/oauth-protected-resource; the MCP server verifies tokens against the issuer's JWKS. In Claude the user signs in in the browser and selects the organization whose credits pay for the calls; no API key is pasted.
+  flows:
+    authorizationCode:
+      authorizationUrl: https://clerk.cloro.dev/oauth/authorize
+      tokenUrl: https://clerk.cloro.dev/oauth/token
+      refreshUrl: https://clerk.cloro.dev/oauth/token
+      scopes:
+        profile: user profile claims
+        email: user email claims
+        user:org:read: organization membership used for billing
+    deviceCode:
+      deviceAuthorizationUrl: https://clerk.cloro.dev/oauth/device_authorization
+      tokenUrl: https://clerk.cloro.dev/oauth/token
+  pkce: S256
+  sources:
+  - https://cloro.dev/docs/integrations/mcp
+  - https://mcp.cloro.dev/.well-known/oauth-protected-resource
+  - https://clerk.cloro.dev/.well-known/oauth-authorization-server

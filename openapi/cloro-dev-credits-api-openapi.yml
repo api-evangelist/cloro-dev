@@ -1,0 +1,193 @@
+openapi: 3.2.0
+info:
+  title: Cloro Dev Credits API
+  version: 1.0.0
+  contact:
+    name: cloro support
+    email: support@cloro.dev
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://cloro.dev/terms/
+  description: 'Operations tagged Credits across 2 of this provider''s published API definitions: cloro-dev-openapi.json, cloro-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.cloro.dev
+  description: Production server
+security:
+- bearerAuth: []
+tags:
+- name: Credits
+paths:
+  /v1/credits:
+    get:
+      summary: Get credit balance
+      description: Read your organization's current credit balance and billing cycle. Lets you observe your balance programmatically — including from async-only workloads — without making a sync /v1/monitor/* request just to inspect the X-Credits-Remaining header. The balance is cached and can lag by up to 60 seconds. Queued async tasks are re-checked against your live balance when the scheduler picks them up.
+      operationId: getCredits
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Current credit balance and billing cycle.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditsResponse'
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+        '401':
+          description: Unauthorized - Authentication error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '429':
+          description: Too Many Requests - API key rate limit exceeded
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      tags:
+      - Credits
+    servers:
+    - url: https://api.cloro.dev
+      description: Production server
+components:
+  headers:
+    XRateLimitRemaining:
+      description: Requests left in the current window.
+      schema:
+        type: integer
+        example: 997
+    XLatencyMs:
+      description: Milliseconds the API spent on the request, from arrival to the start of the response. Excludes network transit.
+      schema:
+        type: integer
+        example: 3420
+    XRequestId:
+      description: Unique ID for this request. Support uses it to find your request.
+      schema:
+        type: string
+        format: uuid
+        example: b0864943-5d45-4796-bc64-f052661256f0
+    XRateLimitLimit:
+      description: Requests allowed in the current window.
+      schema:
+        type: integer
+        example: 1000
+  schemas:
+    CreditsResponse:
+      type: object
+      required:
+      - remaining
+      - perCycle
+      - cycleResetsAt
+      properties:
+        remaining:
+          type: integer
+          description: Credits currently remaining for your organization.
+          example: 48210
+        perCycle:
+          type:
+          - integer
+          - 'null'
+          description: Credits granted per billing cycle. Null for free-tier organizations with no active subscription.
+          example: 1562500
+        cycleResetsAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the current billing cycle ends and credits reset. Null for free-tier organizations with no active subscription.
+          example: '2026-08-10T17:35:27.000Z'
+    AuthenticationError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+              - MISSING_API_KEY
+              - INVALID_API_KEY_FORMAT
+              - INVALID_OR_EXPIRED_API_KEY
+              example: MISSING_API_KEY
+            message:
+              type: string
+              example: Missing or invalid API key
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+    InternalError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: INTERNAL_SERVER_ERROR
+            message:
+              type: string
+              description: For example `Maximum retries exceeded` when every attempt failed, or `Internal server error` for an unexpected failure.
+              example: Maximum retries exceeded
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+    RateLimitError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: RATE_LIMIT_EXCEEDED
+            message:
+              type: string
+              example: API key rate limit exceeded
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: cloro API key as a bearer token. One key grants every endpoint in this spec; per-key scopes are not available, so a client cannot request a narrower permission. Keys are created and revoked in the [dashboard](https://dashboard.cloro.dev/api-keys).
+x-refined-from:
+- cloro-dev-openapi.json
+- cloro-dev-openapi.yml

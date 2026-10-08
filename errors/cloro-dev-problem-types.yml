@@ -1,0 +1,87 @@
+generated: '2026-10-07'
+method: searched
+source: https://cloro.dev/docs/guides/error-handling (markdown twin https://cloro.dev/docs/guides/error-handling.md, read 2026-10-07); live unauthenticated probes of https://api.cloro.dev/ (404 RESOURCE_NOT_FOUND) and https://api.cloro.dev/v1/openapi.json (401 MISSING_API_KEY) on 2026-10-07
+format: custom
+envelope:
+  shape: '{"success": false, "error": {"code": "<STRING>", "message": "<human text>", "details": {...optional...}, "timestamp": "<ISO 8601>"}}'
+  code_field: error.code
+  message_field: error.message
+  details_field: error.details
+  note: '"error is always an object. Branch on error.code; message is for a human reading a log, and details appears only when there is extra context. When a request body fails validation, details lists each failing field." Live 404 body observed: {"success":false,"error":{"code":"RESOURCE_NOT_FOUND","message":"Route not found","details":{"id":"/"},"timestamp":"..."}}. No Retry-After is sent on any 429; a 503 carries Retry-After.'
+problems:
+- status: 400
+  title: Bad Request
+  type: VALIDATION_ERROR
+  description: Request validation failed; details lists each failing field. prompt must be 1-10,000 characters; country must be an UPPERCASE ISO 3166-1 alpha-2 code the provider serves; include.* flags must be booleans.
+  remediation: Fix the listed fields and resend. Do not retry unchanged.
+- status: 401
+  title: Unauthorized
+  type: MISSING_API_KEY
+  description: No API key provided in request (also returned for a lowercase "bearer" prefix).
+  remediation: 'Send exactly "Authorization: Bearer <key>".'
+- status: 401
+  title: Unauthorized
+  type: INVALID_API_KEY_FORMAT
+  description: API key format is incorrect.
+  remediation: Copy the key from the dashboard again.
+- status: 401
+  title: Unauthorized
+  type: INVALID_OR_EXPIRED_API_KEY
+  description: API key is unknown or was invalidated in the dashboard (an invalidated key can keep working for up to a minute).
+  remediation: Create a new key in the dashboard and update the integration.
+- status: 403
+  title: Forbidden
+  type: INSUFFICIENT_CREDITS
+  description: The only 403 an API key gets; keys have no per-key permissions. Balance does not cover the request (sync) or the task's creditsToCharge (async submit).
+  remediation: Check X-Credits-Remaining or GET /v1/credits; upgrade the plan or wait for the next billing cycle.
+- status: 404
+  title: Not Found
+  type: RESOURCE_NOT_FOUND
+  description: Unknown route or task.
+  remediation: Check the path and the taskId; finished tasks are deleted about 24 hours after creation.
+- status: 409
+  title: Conflict
+  type: RESOURCE_ALREADY_EXISTS
+  description: An async task with this idempotencyKey already exists.
+  remediation: Treat as success for the original submission; look the task up by its stored taskId. Use a new key to retry a failed task.
+- status: 429
+  title: Too Many Requests
+  type: RATE_LIMIT_EXCEEDED
+  description: Requests per second to one endpoint, per API key (1,000 RPS). Clears within a second. No details and no Retry-After.
+  remediation: Back off exponentially; watch X-RateLimit-Remaining.
+- status: 429
+  title: Too Many Requests
+  type: CONCURRENCY_LIMIT_EXCEEDED
+  description: Your plan's concurrency slots (sync monitor requests) are all in use. Clears when a slot frees up.
+  remediation: Queue on your side or use the async API rather than retrying; watch X-Concurrency-Remaining.
+- status: 429
+  title: Too Many Requests
+  type: QUEUE_LIMIT_EXCEEDED
+  description: Queued async tasks per organization (100,000 QUEUED) exceeded; carries details.limit. A batch that would overflow the queue is rejected whole.
+  remediation: Wait for queued tasks to start processing; contact support to raise the limit.
+- status: 499
+  title: Client Closed Request
+  type: null
+  description: Request was canceled by the client. Free, but an attempt already running is not stopped.
+  remediation: Give sync requests a client timeout of at least 300 s.
+- status: 500
+  title: Internal Server Error
+  type: null
+  description: Usually every automatic attempt failed ("Maximum retries exceeded") or the 5-minute retry window ran out ("Maximum timeout (5 minutes) exceeded").
+  remediation: Back off exponentially; check https://status.cloro.dev.
+- status: 502
+  title: Bad Gateway
+  type: null
+  description: Link resolution (POST /v1/monitor/google/goto) when the resolve request to Google fails or Google answers without a redirect.
+  remediation: Back off exponentially and retry.
+- status: 503
+  title: Service Unavailable
+  type: null
+  description: Carries Retry-After.
+  remediation: Wait the Retry-After seconds.
+batch_partial_success:
+  note: POST /v1/async/task/batch uses a partial success model - individual tasks can fail with per-task error codes (VALIDATION_ERROR, RESOURCE_ALREADY_EXISTS, INSUFFICIENT_CREDITS) inside a 200 response.
+  docs: https://cloro.dev/docs/api-reference/endpoint/create-batch-tasks
+retries:
+  server_side: Up to 5 attempts automatically, sync and async alike; a sync request starts no new attempt after 5 minutes.
+  docs: https://cloro.dev/docs/guides/error-handling#retries-and-cancellation

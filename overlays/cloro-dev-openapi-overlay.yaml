@@ -1,0 +1,380 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for the cloro API
+  version: '2026-10-07'
+  description: 'Enhancements layered over openapi/cloro-dev-openapi.yml by API Evangelist: tags per operation group (the source has none), the documented rate-limit and credit headers on monitor responses, the status page and changelog as external docs, and links to the sibling artifacts. The original contract is never mutated.'
+extends: ../openapi/_original/cloro-dev-openapi.yml
+x-generated: '2026-10-07'
+x-method: generated
+actions:
+- target: $.info
+  update:
+    x-apievangelist:
+      profile: https://apis.io/providers/cloro-dev
+      artifacts:
+        conventions: conventions/cloro-dev-conventions.yml
+        rate-limits: rate-limits/cloro-dev-rate-limits.yml
+        errors: errors/cloro-dev-problem-types.yml
+        webhooks: asyncapi/cloro-dev-webhooks.yml
+        mcp: mcp/cloro-dev-mcp.yml
+        lifecycle: lifecycle/cloro-dev-lifecycle.yml
+- target: $
+  update:
+    externalDocs:
+      description: cloro changelog
+      url: https://cloro.dev/docs/changelog
+    tags:
+    - name: Monitor
+      description: Synchronous AI-answer and search extraction endpoints under /v1/monitor
+    - name: Async
+      description: 'Background task queue: submit, batch, status, clear'
+    - name: Utility
+      description: Countries, states and credit balance
+- target: $.paths['/v1/monitor/chatgpt'].post
+  update:
+    tags:
+    - Monitor
+- target: $.paths['/v1/monitor/gemini'].post
+  update:
+    tags:
+    - Monitor
+- target: $.paths['/v1/monitor/grok'].post
+  update:
+    tags:
+    - Monitor
+- target: $.paths['/v1/monitor/google'].post
+  update:
+    tags:
+    - Monitor
+- target: $.paths['/v1/monitor/google/goto'].post
+  update:
+    tags:
+    - Monitor
+- target: $.paths['/v1/monitor/google/news'].post
+  update:
+    tags:
+    - Monitor
+- target: $.paths['/v1/monitor/copilot'].post
+  update:
+    tags:
+    - Monitor
+- target: $.paths['/v1/monitor/perplexity'].post
+  update:
+    tags:
+    - Monitor
+- target: $.paths['/v1/monitor/aimode'].post
+  update:
+    tags:
+    - Monitor
+- target: $.paths['/v1/countries'].get
+  update:
+    tags:
+    - Utility
+- target: $.paths['/v1/async/task'].post
+  update:
+    tags:
+    - Async
+- target: $.paths['/v1/async/task/batch'].post
+  update:
+    tags:
+    - Async
+- target: $.paths['/v1/async/task/{taskId}'].get
+  update:
+    tags:
+    - Async
+- target: $.paths['/v1/async/status'].get
+  update:
+    tags:
+    - Async
+- target: $.paths['/v1/async/queue'].delete
+  update:
+    tags:
+    - Async
+- target: $.paths['/v1/credits'].get
+  update:
+    tags:
+    - Utility
+- target: $.paths['/v1/states'].get
+  update:
+    tags:
+    - Utility
+- target: $.paths['/v1/monitor/chatgpt'].post.responses['200']
+  update:
+    headers:
+      X-RateLimit-Limit:
+        description: Maximum requests per second allowed (1,000) - https://cloro.dev/docs/guides/concurrency
+        schema:
+          type: integer
+      X-RateLimit-Remaining:
+        description: Remaining requests available in this second
+        schema:
+          type: integer
+      X-Concurrency-Limit:
+        description: Total concurrent requests allowed by your plan
+        schema:
+          type: integer
+      X-Concurrency-Current:
+        description: Number of requests currently processing
+        schema:
+          type: integer
+      X-Concurrency-Remaining:
+        description: Available concurrent slots when request was received
+        schema:
+          type: integer
+      X-Credits-Remaining:
+        description: Credits remaining in your account
+        schema:
+          type: integer
+      X-Credits-Charged:
+        description: Credits charged for this request
+        schema:
+          type: integer
+      X-Latency-Ms:
+        description: Milliseconds the API spent on the request
+        schema:
+          type: integer
+- target: $.paths['/v1/monitor/gemini'].post.responses['200']
+  update:
+    headers:
+      X-RateLimit-Limit:
+        description: Maximum requests per second allowed (1,000) - https://cloro.dev/docs/guides/concurrency
+        schema:
+          type: integer
+      X-RateLimit-Remaining:
+        description: Remaining requests available in this second
+        schema:
+          type: integer
+      X-Concurrency-Limit:
+        description: Total concurrent requests allowed by your plan
+        schema:
+          type: integer
+      X-Concurrency-Current:
+        description: Number of requests currently processing
+        schema:
+          type: integer
+      X-Concurrency-Remaining:
+        description: Available concurrent slots when request was received
+        schema:
+          type: integer
+      X-Credits-Remaining:
+        description: Credits remaining in your account
+        schema:
+          type: integer
+      X-Credits-Charged:
+        description: Credits charged for this request
+        schema:
+          type: integer
+      X-Latency-Ms:
+        description: Milliseconds the API spent on the request
+        schema:
+          type: integer
+- target: $.paths['/v1/monitor/grok'].post.responses['200']
+  update:
+    headers:
+      X-RateLimit-Limit:
+        description: Maximum requests per second allowed (1,000) - https://cloro.dev/docs/guides/concurrency
+        schema:
+          type: integer
+      X-RateLimit-Remaining:
+        description: Remaining requests available in this second
+        schema:
+          type: integer
+      X-Concurrency-Limit:
+        description: Total concurrent requests allowed by your plan
+        schema:
+          type: integer
+      X-Concurrency-Current:
+        description: Number of requests currently processing
+        schema:
+          type: integer
+      X-Concurrency-Remaining:
+        description: Available concurrent slots when request was received
+        schema:
+          type: integer
+      X-Credits-Remaining:
+        description: Credits remaining in your account
+        schema:
+          type: integer
+      X-Credits-Charged:
+        description: Credits charged for this request
+        schema:
+          type: integer
+      X-Latency-Ms:
+        description: Milliseconds the API spent on the request
+        schema:
+          type: integer
+- target: $.paths['/v1/monitor/google'].post.responses['200']
+  update:
+    headers:
+      X-RateLimit-Limit:
+        description: Maximum requests per second allowed (1,000) - https://cloro.dev/docs/guides/concurrency
+        schema:
+          type: integer
+      X-RateLimit-Remaining:
+        description: Remaining requests available in this second
+        schema:
+          type: integer
+      X-Concurrency-Limit:
+        description: Total concurrent requests allowed by your plan
+        schema:
+          type: integer
+      X-Concurrency-Current:
+        description: Number of requests currently processing
+        schema:
+          type: integer
+      X-Concurrency-Remaining:
+        description: Available concurrent slots when request was received
+        schema:
+          type: integer
+      X-Credits-Remaining:
+        description: Credits remaining in your account
+        schema:
+          type: integer
+      X-Credits-Charged:
+        description: Credits charged for this request
+        schema:
+          type: integer
+      X-Latency-Ms:
+        description: Milliseconds the API spent on the request
+        schema:
+          type: integer
+- target: $.paths['/v1/monitor/google/news'].post.responses['200']
+  update:
+    headers:
+      X-RateLimit-Limit:
+        description: Maximum requests per second allowed (1,000) - https://cloro.dev/docs/guides/concurrency
+        schema:
+          type: integer
+      X-RateLimit-Remaining:
+        description: Remaining requests available in this second
+        schema:
+          type: integer
+      X-Concurrency-Limit:
+        description: Total concurrent requests allowed by your plan
+        schema:
+          type: integer
+      X-Concurrency-Current:
+        description: Number of requests currently processing
+        schema:
+          type: integer
+      X-Concurrency-Remaining:
+        description: Available concurrent slots when request was received
+        schema:
+          type: integer
+      X-Credits-Remaining:
+        description: Credits remaining in your account
+        schema:
+          type: integer
+      X-Credits-Charged:
+        description: Credits charged for this request
+        schema:
+          type: integer
+      X-Latency-Ms:
+        description: Milliseconds the API spent on the request
+        schema:
+          type: integer
+- target: $.paths['/v1/monitor/copilot'].post.responses['200']
+  update:
+    headers:
+      X-RateLimit-Limit:
+        description: Maximum requests per second allowed (1,000) - https://cloro.dev/docs/guides/concurrency
+        schema:
+          type: integer
+      X-RateLimit-Remaining:
+        description: Remaining requests available in this second
+        schema:
+          type: integer
+      X-Concurrency-Limit:
+        description: Total concurrent requests allowed by your plan
+        schema:
+          type: integer
+      X-Concurrency-Current:
+        description: Number of requests currently processing
+        schema:
+          type: integer
+      X-Concurrency-Remaining:
+        description: Available concurrent slots when request was received
+        schema:
+          type: integer
+      X-Credits-Remaining:
+        description: Credits remaining in your account
+        schema:
+          type: integer
+      X-Credits-Charged:
+        description: Credits charged for this request
+        schema:
+          type: integer
+      X-Latency-Ms:
+        description: Milliseconds the API spent on the request
+        schema:
+          type: integer
+- target: $.paths['/v1/monitor/perplexity'].post.responses['200']
+  update:
+    headers:
+      X-RateLimit-Limit:
+        description: Maximum requests per second allowed (1,000) - https://cloro.dev/docs/guides/concurrency
+        schema:
+          type: integer
+      X-RateLimit-Remaining:
+        description: Remaining requests available in this second
+        schema:
+          type: integer
+      X-Concurrency-Limit:
+        description: Total concurrent requests allowed by your plan
+        schema:
+          type: integer
+      X-Concurrency-Current:
+        description: Number of requests currently processing
+        schema:
+          type: integer
+      X-Concurrency-Remaining:
+        description: Available concurrent slots when request was received
+        schema:
+          type: integer
+      X-Credits-Remaining:
+        description: Credits remaining in your account
+        schema:
+          type: integer
+      X-Credits-Charged:
+        description: Credits charged for this request
+        schema:
+          type: integer
+      X-Latency-Ms:
+        description: Milliseconds the API spent on the request
+        schema:
+          type: integer
+- target: $.paths['/v1/monitor/aimode'].post.responses['200']
+  update:
+    headers:
+      X-RateLimit-Limit:
+        description: Maximum requests per second allowed (1,000) - https://cloro.dev/docs/guides/concurrency
+        schema:
+          type: integer
+      X-RateLimit-Remaining:
+        description: Remaining requests available in this second
+        schema:
+          type: integer
+      X-Concurrency-Limit:
+        description: Total concurrent requests allowed by your plan
+        schema:
+          type: integer
+      X-Concurrency-Current:
+        description: Number of requests currently processing
+        schema:
+          type: integer
+      X-Concurrency-Remaining:
+        description: Available concurrent slots when request was received
+        schema:
+          type: integer
+      X-Credits-Remaining:
+        description: Credits remaining in your account
+        schema:
+          type: integer
+      X-Credits-Charged:
+        description: Credits charged for this request
+        schema:
+          type: integer
+      X-Latency-Ms:
+        description: Milliseconds the API spent on the request
+        schema:
+          type: integer

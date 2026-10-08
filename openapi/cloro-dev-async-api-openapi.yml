@@ -1,0 +1,971 @@
+openapi: 3.2.0
+info:
+  title: Cloro Dev Async API
+  version: 1.0.0
+  contact:
+    name: cloro support
+    email: support@cloro.dev
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://cloro.dev/terms/
+  description: 'Operations tagged Async across 2 of this provider''s published API definitions: cloro-dev-openapi.json, cloro-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.cloro.dev
+  description: Production server
+security:
+- bearerAuth: []
+tags:
+- name: Async
+paths:
+  /v1/async/task:
+    post:
+      summary: Create async task
+      description: Submit an asynchronous task for background processing. Returns a task ID that you can use to poll for results or receive via webhook.
+      operationId: createAsyncTask
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchTaskRequest'
+            example:
+              taskType: CHATGPT
+              priority: 5
+              idempotencyKey: your-custom-identifier-123
+              webhook:
+                url: https://your-app.com/webhook-handler
+              payload:
+                prompt: What is the weather in New York?
+                country: US
+      responses:
+        '200':
+          description: Task created successfully. Returns task ID and initial status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncTaskCreateResponse'
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+        '400':
+          description: Bad Request - Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized - Authentication error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '403':
+          description: Forbidden - The credit balance does not cover this task's cost
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '409':
+          description: Conflict - Task with this idempotencyKey already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdempotencyConflictError'
+        '429':
+          description: Queue Limit Exceeded - Organization has reached maximum queued tasks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueLimitError'
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      tags:
+      - Async
+    servers:
+    - url: https://api.cloro.dev
+      description: Production server
+  /v1/async/task/batch:
+    post:
+      summary: Create batch async tasks
+      description: Submit up to 500 async tasks in one request. Each task is validated independently, so one invalid task does not block the rest. Returns per-task results.
+      operationId: createBatchAsyncTasks
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              maxItems: 500
+              description: Array of task objects to create.
+              items:
+                $ref: '#/components/schemas/BatchTaskRequest'
+            example:
+            - taskType: CHATGPT
+              priority: 5
+              idempotencyKey: batch-chatgpt-001
+              webhook:
+                url: https://your-app.com/webhook-handler
+              payload:
+                prompt: What do you know about Acme Corp?
+                country: US
+            - taskType: PERPLEXITY
+              priority: 3
+              idempotencyKey: batch-perplexity-001
+              payload:
+                prompt: Latest news about Acme Corp
+                country: US
+      responses:
+        '200':
+          description: Batch processed. Check the summary and individual results for per-task success or failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchTaskResponse'
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+        '400':
+          description: Bad Request - The body is not an array of 1-500 task objects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized - Authentication error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '429':
+          description: Queue Limit Exceeded - The entire batch is rejected because it would exceed your organization's queue capacity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueLimitError'
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      tags:
+      - Async
+    servers:
+    - url: https://api.cloro.dev
+      description: Production server
+  /v1/async/task/{taskId}:
+    get:
+      summary: Get async task status
+      description: Poll the status and result of an asynchronous task by ID. Returns the task state and, once complete, the full structured result payload.
+      operationId: getTaskStatus
+      parameters:
+      - name: taskId
+        in: path
+        required: true
+        description: The ID of the task to fetch.
+        schema:
+          type: string
+          format: uuid
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response with the task status and result if completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStatusResponse'
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+        '401':
+          description: Unauthorized - Authentication error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '404':
+          description: Not Found - Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        '429':
+          description: Too Many Requests - API key rate limit exceeded
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      tags:
+      - Async
+    servers:
+    - url: https://api.cloro.dev
+      description: Production server
+  /v1/async/status:
+    get:
+      summary: Get async queue status
+      description: Get organization-wide async queue metrics including queued and processing task counts, and concurrency usage.
+      operationId: getAsyncStatus
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response with queue metrics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncStatusResponse'
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+        '401':
+          description: Unauthorized - Authentication error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '429':
+          description: Too Many Requests - API key rate limit exceeded
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      tags:
+      - Async
+    servers:
+    - url: https://api.cloro.dev
+      description: Production server
+  /v1/async/queue:
+    delete:
+      summary: Clear queued async tasks
+      description: 'Deletes every task still in the `QUEUED` state for the authenticated organization, letting you drain a pending backlog in one call instead of opening a support request. Tasks that are already `PROCESSING` are in-flight on a worker and are left untouched, as are `COMPLETED` and `FAILED` tasks. Queued tasks have not been charged, so clearing them does not affect your credit balance. The call is safe to repeat — if the queue is already empty it simply returns `cleared: 0`.'
+      operationId: clearAsyncQueue
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Queue cleared. Returns the number of queued tasks that were removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearQueueResponse'
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+        '401':
+          description: Unauthorized - Authentication error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '429':
+          description: Too Many Requests - API key rate limit exceeded
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/XRateLimitLimit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/XRateLimitRemaining'
+            X-Request-ID:
+              $ref: '#/components/headers/XRequestId'
+            X-Latency-Ms:
+              $ref: '#/components/headers/XLatencyMs'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      tags:
+      - Async
+    servers:
+    - url: https://api.cloro.dev
+      description: Production server
+components:
+  schemas:
+    TaskStatusResponse:
+      type: object
+      required:
+      - task
+      - credits
+      properties:
+        task:
+          $ref: '#/components/schemas/AsyncTaskSummary'
+        credits:
+          $ref: '#/components/schemas/AsyncTaskCredits'
+        webhook:
+          type: object
+          description: Webhook delivery status. Present on `COMPLETED` and `FAILED` tasks created with a `webhook.url`.
+          required:
+          - url
+          - deliveredAt
+          - delivered
+          properties:
+            url:
+              type: string
+              format: uri
+              description: The `webhook.url` you set when creating the task.
+              example: https://your-app.com/webhook-handler
+            deliveredAt:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              description: When your endpoint acknowledged the webhook with a `2xx`. Null until then.
+              example: '2025-11-10T15:00:05.000Z'
+            delivered:
+              type: boolean
+              description: Whether your endpoint has acknowledged the webhook with a `2xx`.
+              example: true
+        response:
+          type: object
+          description: 'Present only when the task is `COMPLETED` or `FAILED`. For a `COMPLETED` task it is the provider''s result; for a `FAILED` task it is the error, `{ "error": { "code", "message", "details" } }`, with `details` only when there is extra context.'
+    RateLimitError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: RATE_LIMIT_EXCEEDED
+            message:
+              type: string
+              example: API key rate limit exceeded
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+    InternalError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: INTERNAL_SERVER_ERROR
+            message:
+              type: string
+              description: For example `Maximum retries exceeded` when every attempt failed, or `Internal server error` for an unexpected failure.
+              example: Maximum retries exceeded
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+    AsyncTaskCredits:
+      type: object
+      required:
+      - creditsToCharge
+      - creditsCharged
+      description: Credit information for an async task.
+      properties:
+        creditsToCharge:
+          type: number
+          description: Estimated cost, computed when the task is submitted. Nothing is reserved or deducted then; credits are deducted only when the task completes.
+          example: 5
+        creditsCharged:
+          type:
+          - number
+          - 'null'
+          description: 'Credits actually charged: null until the task finishes, then the amount billed for `COMPLETED`, or `0` for `FAILED` (failed tasks are never charged). Equals `creditsToCharge`, except that AI Mode with `include.expandProducts` adds +1 credit per product cluster returned.'
+          example: null
+    AsyncTaskCreateResponse:
+      type: object
+      required:
+      - success
+      - task
+      - credits
+      properties:
+        success:
+          type: boolean
+          example: true
+        task:
+          $ref: '#/components/schemas/AsyncTaskSummary'
+        credits:
+          $ref: '#/components/schemas/AsyncTaskCredits'
+    BatchTaskFailureResult:
+      type: object
+      required:
+      - success
+      - index
+      - error
+      properties:
+        success:
+          type: boolean
+          enum:
+          - false
+          description: Indicates this task failed.
+          example: false
+        index:
+          type: integer
+          description: The zero-based position of this task in the original request array.
+          example: 2
+        error:
+          type: object
+          required:
+          - code
+          - message
+          - timestamp
+          properties:
+            code:
+              type: string
+              description: Error code identifying the failure reason.
+              enum:
+              - VALIDATION_ERROR
+              - RESOURCE_ALREADY_EXISTS
+              - INSUFFICIENT_CREDITS
+              example: VALIDATION_ERROR
+            message:
+              type: string
+              description: Human-readable error message.
+              example: Invalid task at index 2
+            details:
+              type: object
+              description: Additional context about the error, such as field-level validation failures.
+              example:
+                errors:
+                - field: payload.country
+                  message: 'Invalid input: expected string, received undefined'
+            timestamp:
+              type: string
+              format: date-time
+              description: Timestamp when the error occurred.
+              example: '2026-04-09T15:00:00.000Z'
+    BatchTaskResponse:
+      type: object
+      required:
+      - success
+      - summary
+      - results
+      properties:
+        success:
+          type: boolean
+          description: Always true for a successfully processed batch (individual tasks may still fail).
+          example: true
+        summary:
+          type: object
+          required:
+          - total
+          - succeeded
+          - failed
+          description: Aggregate counts for the batch.
+          properties:
+            total:
+              type: integer
+              description: Total number of tasks submitted in the batch.
+              example: 3
+            succeeded:
+              type: integer
+              description: Number of tasks successfully created.
+              example: 2
+            failed:
+              type: integer
+              description: Number of tasks that failed validation or processing.
+              example: 1
+        results:
+          type: array
+          description: Per-task results preserving the original input order by index.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/BatchTaskSuccessResult'
+            - $ref: '#/components/schemas/BatchTaskFailureResult'
+            discriminator:
+              propertyName: success
+              mapping:
+                'true': '#/components/schemas/BatchTaskSuccessResult'
+                'false': '#/components/schemas/BatchTaskFailureResult'
+    BatchTaskSuccessResult:
+      type: object
+      required:
+      - success
+      - index
+      - task
+      - credits
+      properties:
+        success:
+          type: boolean
+          enum:
+          - true
+          description: Indicates this task was created successfully.
+          example: true
+        index:
+          type: integer
+          description: The zero-based position of this task in the original request array.
+          example: 0
+        task:
+          allOf:
+          - $ref: '#/components/schemas/AsyncTaskSummary'
+          - type: object
+            properties:
+              status:
+                type: string
+                enum:
+                - QUEUED
+                description: Initial status of a newly created task.
+                example: QUEUED
+        credits:
+          $ref: '#/components/schemas/AsyncTaskCredits'
+    BatchTaskRequest:
+      type: object
+      required:
+      - taskType
+      - payload
+      properties:
+        taskType:
+          type: string
+          enum:
+          - AIMODE
+          - GOOGLE
+          - GOOGLE_NEWS
+          - GEMINI
+          - CHATGPT
+          - COPILOT
+          - PERPLEXITY
+          - GROK
+          description: The AI provider to use for this task.
+          example: CHATGPT
+        payload:
+          type: object
+          description: The provider's request body, validated against the same schema as its sync endpoint (for example `ChatGPTMonitorRequest`). That makes `country` required here too, or `gl` on the Google endpoints.
+          example:
+            prompt: What do you know about Acme Corp?
+            country: US
+        priority:
+          type: integer
+          description: Task priority level (1-10). Higher numbers are processed first. Defaults to 1.
+          minimum: 1
+          maximum: 10
+          default: 1
+          example: 5
+        idempotencyKey:
+          type: string
+          description: Unique string to prevent duplicate task creation. Must be unique across your account.
+          example: batch-chatgpt-001
+        webhook:
+          type: object
+          description: Webhook configuration for task completion notification.
+          properties:
+            url:
+              type: string
+              format: uri
+              description: URL to receive the webhook POST request when the task completes.
+              example: https://your-app.com/webhook-handler
+          required:
+          - url
+          additionalProperties: false
+      additionalProperties: false
+    ValidationError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: VALIDATION_ERROR
+            message:
+              type: string
+              example: Request validation failed
+            details:
+              type: array
+              description: One entry per invalid field. Sent on request-body validation errors.
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    example: prompt
+                  message:
+                    type: string
+                    example: Prompt cannot be empty
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+    NotFoundError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: RESOURCE_NOT_FOUND
+            message:
+              type: string
+              example: Route not found
+            details:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: /v1/invalid-endpoint
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+    QueueLimitError:
+      type: object
+      required:
+      - success
+      - error
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          required:
+          - code
+          - message
+          - timestamp
+          properties:
+            code:
+              type: string
+              enum:
+              - QUEUE_LIMIT_EXCEEDED
+              example: QUEUE_LIMIT_EXCEEDED
+            message:
+              type: string
+              example: Queue limit exceeded. Maximum 100000 queued tasks allowed per organization
+            details:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  description: Maximum number of `QUEUED` tasks your organization can hold.
+                  example: 100000
+            timestamp:
+              type: string
+              format: date-time
+              example: '2026-04-09T15:00:00.000Z'
+    AsyncTaskSummary:
+      type: object
+      required:
+      - id
+      - taskType
+      - status
+      - priority
+      - createdAt
+      description: Common task summary fields shared across async task responses.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique task identifier.
+          example: b27a21e1-7c39-4aa2-a347-23e828c426f9
+        taskType:
+          type: string
+          enum:
+          - AIMODE
+          - GOOGLE
+          - GOOGLE_NEWS
+          - GEMINI
+          - CHATGPT
+          - COPILOT
+          - PERPLEXITY
+          - GROK
+          description: The AI provider for this task.
+          example: CHATGPT
+        status:
+          type: string
+          enum:
+          - QUEUED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          description: Current task status.
+          example: QUEUED
+        priority:
+          type: integer
+          description: Task priority level (1-10). Higher numbers are processed first. Defaults to 1.
+          minimum: 1
+          maximum: 10
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the task was created.
+          example: '2026-04-09T15:00:00.000Z'
+        latencyMs:
+          type:
+          - integer
+          - 'null'
+          description: Processing time in milliseconds, from first pickup to the final outcome. Excludes the initial queue wait, but on a retried task covers every attempt including the backoff between them. Null while the task is `QUEUED` or `PROCESSING`, and on a task that failed before processing started.
+          example: null
+        idempotencyKey:
+          type:
+          - string
+          - 'null'
+          description: The idempotency key if one was provided.
+          example: batch-chatgpt-001
+    AsyncStatusResponse:
+      type: object
+      required:
+      - queuedTasks
+      - processingTasks
+      - priorityBreakdown
+      properties:
+        queuedTasks:
+          type: integer
+          description: Number of tasks currently queued for this organization (status `QUEUED`).
+          example: 3
+        processingTasks:
+          type: integer
+          description: Number of tasks currently being processed for this organization (status `PROCESSING`).
+          example: 2
+        priorityBreakdown:
+          type: array
+          description: Queued task counts per priority level, ordered by priority descending. Only includes priority levels that have queued tasks.
+          items:
+            type: object
+            required:
+            - priority
+            - count
+            properties:
+              priority:
+                type: integer
+                description: The priority level (1-10).
+                minimum: 1
+                maximum: 10
+                example: 5
+              count:
+                type: integer
+                description: Number of queued tasks at this priority level.
+                example: 2
+        concurrency:
+          type:
+          - object
+          - 'null'
+          description: Current concurrency usage. Null if unable to retrieve concurrency information.
+          properties:
+            used:
+              type: integer
+              description: Number of concurrent slots currently in use.
+              example: 2
+            max:
+              type: integer
+              description: Maximum allowed concurrent tasks for this organization, set by your plan.
+              example: 5
+    ClearQueueResponse:
+      type: object
+      required:
+      - success
+      - cleared
+      properties:
+        success:
+          type: boolean
+          description: Indicates the queue was cleared successfully.
+          example: true
+        cleared:
+          type: integer
+          description: Number of queued tasks that were removed.
+          example: 42
+    ForbiddenError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+              - INSUFFICIENT_CREDITS
+              example: INSUFFICIENT_CREDITS
+            message:
+              type: string
+              example: Insufficient credits
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+    IdempotencyConflictError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+              - RESOURCE_ALREADY_EXISTS
+              example: RESOURCE_ALREADY_EXISTS
+            message:
+              type: string
+              example: Task already exists
+            details:
+              type: object
+              properties:
+                field:
+                  type: string
+                  example: idempotencyKey
+                value:
+                  type: string
+                  example: your-custom-identifier-123
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+    AuthenticationError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+              - MISSING_API_KEY
+              - INVALID_API_KEY_FORMAT
+              - INVALID_OR_EXPIRED_API_KEY
+              example: MISSING_API_KEY
+            message:
+              type: string
+              example: Missing or invalid API key
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+  headers:
+    XRateLimitLimit:
+      description: Requests allowed in the current window.
+      schema:
+        type: integer
+        example: 1000
+    XRateLimitRemaining:
+      description: Requests left in the current window.
+      schema:
+        type: integer
+        example: 997
+    XLatencyMs:
+      description: Milliseconds the API spent on the request, from arrival to the start of the response. Excludes network transit.
+      schema:
+        type: integer
+        example: 3420
+    XRequestId:
+      description: Unique ID for this request. Support uses it to find your request.
+      schema:
+        type: string
+        format: uuid
+        example: b0864943-5d45-4796-bc64-f052661256f0
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: cloro API key as a bearer token. One key grants every endpoint in this spec; per-key scopes are not available, so a client cannot request a narrower permission. Keys are created and revoked in the [dashboard](https://dashboard.cloro.dev/api-keys).
+x-refined-from:
+- cloro-dev-openapi.json
+- cloro-dev-openapi.yml

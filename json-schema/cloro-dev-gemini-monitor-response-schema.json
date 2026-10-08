@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/cloro-dev/main/json-schema/cloro-dev-gemini-monitor-response-schema.json",
+  "title": "GeminiMonitorResponse",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/cloro-dev-openapi.yml#/components/schemas/GeminiMonitorResponse",
+  "required": [
+    "success",
+    "result"
+  ],
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "result": {
+      "description": "Gemini response data",
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Gemini's response text"
+        },
+        "markdown": {
+          "type": "string",
+          "description": "Gemini's response in Markdown format"
+        },
+        "html": {
+          "type": "string",
+          "description": "A URL to the full HTML of the response. Expires 24 hours after generation."
+        },
+        "sources": {
+          "type": "array",
+          "description": "Sources cited by Gemini",
+          "items": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "integer",
+                "description": "Position of the source in the list"
+              },
+              "label": {
+                "type": "string",
+                "description": "Label or title of the source"
+              },
+              "url": {
+                "type": "string",
+                "description": "URL of the source"
+              },
+              "description": {
+                "type": "string",
+                "description": "Description or snippet of the source"
+              }
+            }
+          }
+        },
+        "citationPills": {
+          "type": "array",
+          "description": "Inline citation pills extracted from the Gemini answer. Each entry is one (pill, source) pair: when a chip cites N sources (Gemini's `+N` analog or section-summary chips), the array contains N entries sharing the same `citationPillId` but with per-source `label`, `url`, and `domain`. Group by `citationPillId` to recover the pill-level structure. `label` is always present on the wire; it can be an empty string when the rail has no title for a source. Omitted from `result` when the answer carries no pills.",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "citationPillId",
+              "url",
+              "domain",
+              "position"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Per-source title from the sources rail (for example `\"Quantum computing — Wikipedia\"`). Always present on the wire; may be an empty string when the rail has no title for this source — consumers should read `domain` / `url` for source identity in that case."
+              },
+              "citationPillId": {
+                "type": "integer",
+                "description": "1-based ordinal shared by all entries from the same chip. Group by `citationPillId` to reconstruct the visible chip; the per-source `label` differs across entries within a chip."
+              },
+              "url": {
+                "type": "string",
+                "description": "Direct URL of the cited source."
+              },
+              "domain": {
+                "type": "string",
+                "description": "Host extracted from `url`, for grouping and display."
+              },
+              "description": {
+                "type": "string",
+                "description": "Source description from the sources rail when Gemini ships one. Omitted when absent."
+              },
+              "position": {
+                "type": "integer",
+                "description": "1-based position of this source in the sibling `result.sources` array."
+              }
+            }
+          }
+        },
+        "places": {
+          "type": "array",
+          "description": "Place cards returned for lodging and local answers",
+          "items": {
+            "type": "object",
+            "required": [
+              "index",
+              "title",
+              "link"
+            ],
+            "properties": {
+              "index": {
+                "type": "integer",
+                "description": "Position index of the place in the results"
+              },
+              "title": {
+                "type": "string",
+                "description": "Place name"
+              },
+              "link": {
+                "type": "string",
+                "format": "uri",
+                "description": "Google URL for the place"
+              },
+              "thumbnail": {
+                "type": "string",
+                "format": "uri",
+                "description": "Place photo URL"
+              },
+              "rating": {
+                "type": "number",
+                "description": "Star rating (0-5)"
+              },
+              "reviews": {
+                "type": "integer",
+                "description": "Number of reviews"
+              },
+              "type": {
+                "type": "string",
+                "description": "Place type or category"
+              },
+              "description": {
+                "type": "string",
+                "description": "Short description of the place"
+              },
+              "price": {
+                "type": "string",
+                "description": "Nightly price as Gemini displays it"
+              }
+            }
+          }
+        },
+        "shoppingCards": {
+          "type": "array",
+          "description": "Product cards Gemini shows on shopping answers, in display order. Field names follow AI Mode's `shoppingCards`. Omitted from `result` when the answer carries no product cards.",
+          "items": {
+            "type": "object",
+            "required": [
+              "position",
+              "title",
+              "productLink",
+              "productId"
+            ],
+            "properties": {
+              "position": {
+                "type": "integer",
+                "description": "1-indexed rank across the `shoppingCards` array, in display order"
+              },
+              "title": {
+                "type": "string",
+                "description": "Product title"
+              },
+              "productLink": {
+                "type": "string",
+                "format": "uri",
+                "description": "Google Shopping URL for the product"
+              },
+              "productId": {
+                "type": "string",
+                "description": "Google Shopping product ID"
+              },
+              "price": {
+                "type": "object",
+                "description": "Current price. For a range, `value` is the lowest price. For an installment offer, only `raw` is present",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Numeric price. Absent for an installment offer"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "Currency symbol or code as displayed. Absent for an installment offer"
+                  },
+                  "raw": {
+                    "type": "string",
+                    "description": "Price text as Gemini displays it"
+                  }
+                }
+              },
+              "oldPrice": {
+                "type": "object",
+                "description": "Price before a discount, same shape as `price`. Absent when there is no discount",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Numeric price"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "Currency symbol or code as displayed"
+                  },
+                  "raw": {
+                    "type": "string",
+                    "description": "Price text as Gemini displays it"
+                  }
+                }
+              },
+              "store": {
+                "type": "string",
+                "description": "Store that sells the product at `price`"
+              },
+              "storeLink": {
+                "type": "string",
+                "format": "uri",
+                "description": "Direct URL of the product on the store's site"
+              },
+              "storeCount": {
+                "type": "integer",
+                "description": "Number of stores that sell the product. Gemini shows \"& more\" after the store name when it is above 1"
+              },
+              "shipping": {
+                "type": "string",
+                "description": "Shipping cost as Gemini displays it"
+              },
+              "deliveryTime": {
+                "type": "string",
+                "description": "Delivery time as Gemini displays it"
+              },
+              "rating": {
+                "type": "number",
+                "description": "Product rating (0-5). Absent for a product with no reviews"
+              },
+              "reviews": {
+                "type": "integer",
+                "description": "Number of reviews"
+              },
+              "brand": {
+                "type": "string",
+                "description": "Product brand"
+              },
+              "description": {
+                "type": "string",
+                "description": "Product description"
+              },
+              "thumbnail": {
+                "type": "string",
+                "format": "uri",
+                "description": "Image URL that the card shows"
+              },
+              "images": {
+                "type": "array",
+                "description": "All product image URLs. The first one is `thumbnail`",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "catalogId": {
+                "type": "string",
+                "description": "Google Shopping catalog ID"
+              },
+              "gpcId": {
+                "type": "string",
+                "description": "Google Shopping product cluster ID"
+              }
+            }
+          }
+        },
+        "rawResponse": {
+          "type": "array",
+          "description": "Raw upstream provider stream captured during the request. Each item is one chunk from the provider's wire protocol (SSE event, batchexecute frame, etc.). Format is provider-specific, undocumented, and may change without notice — use it for debugging or to access data not yet surfaced in the structured fields above.",
+          "items": {}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+generated: '2026-10-07'
+method: searched
+source: https://cloro.dev/docs/guides/webhooks (markdown twin read 2026-10-07); https://cloro.dev/docs/guides/making-requests/async
+name: cloro async task webhooks
+docs: https://cloro.dev/docs/guides/webhooks
+asyncapi_published: false
+note: 'cloro publishes no AsyncAPI document and the OpenAPI declares no webhooks: or callbacks:; this catalog is read from the webhooks guide. One event family: an async task reaching a terminal state.'
+subscription:
+  mechanism: 'per-task opt-in: include webhook.url when creating the async task (POST /v1/async/task or /v1/async/task/batch)'
+  operations:
+  - createAsyncTask
+  - createBatchAsyncTasks
+  dashboard: https://dashboard.cloro.dev/webhooks (signing secret, rotate, disable)
+events:
+- name: task.completed
+  trigger: async task reaches COMPLETED
+  payload: what GET /v1/async/task/{taskId} returns for the finished task, minus its webhook block
+  fields:
+  - task.id
+  - task.idempotencyKey
+  - task.status
+  - task.latencyMs
+  - task.creditsCharged
+  - response
+- name: task.failed
+  trigger: async task reaches FAILED
+  payload: same shape; response carries the error; creditsCharged 0
+delivery:
+  method: POST
+  content_type: application/json
+  acknowledge: any 2xx
+  ordering: completion order, not submission order
+  retries:
+    attempts: 5
+    backoff: 'exponential: ~2, ~4, ~8, ~16 minutes after a failed attempt'
+    failure: non-2xx, TLS errors, timeouts
+  deduplicate_on: task.id (X-Cloro-Webhook-Id is unique per attempt)
+  correlation: task.idempotencyKey echoes the key supplied at submission
+signature:
+  opt_in: per organization, enabled from the dashboard
+  secret_prefix: whsec_
+  shown_once: true
+  algorithm: HMAC-SHA256, hex-encoded, over the exact raw request body bytes with the timestamp inside the signed payload
+  headers:
+    X-Cloro-Timestamp: Unix timestamp (seconds) when cloro signed the delivery
+    X-Cloro-Signature: v1=<hex HMAC-SHA256>
+    X-Cloro-Webhook-Id: <task-id>-<attempt>
+  replay_tolerance: samples reject anything signed more than 5 minutes ago
+  comparison: constant-time (timingSafeEqual / compare_digest / hmac.Equal)
+  rotation: rotate or disable from the dashboard at any time; rotating invalidates the old secret immediately
+ip_allowlist: null

@@ -1,0 +1,444 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/cloro-dev/main/json-schema/cloro-dev-perplexity-monitor-response-schema.json",
+  "title": "PerplexityMonitorResponse",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/cloro-dev-openapi.yml#/components/schemas/PerplexityMonitorResponse",
+  "required": [
+    "success",
+    "result"
+  ],
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "result": {
+      "description": "Perplexity response data",
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Perplexity's response text"
+        },
+        "html": {
+          "type": "string",
+          "format": "uri",
+          "description": "A URL to the full HTML of the response."
+        },
+        "sources": {
+          "type": "array",
+          "description": "Array of sources referenced in the response",
+          "items": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "number",
+                "description": "The position index of the source in the response"
+              },
+              "url": {
+                "type": "string",
+                "description": "The URL of the source"
+              },
+              "label": {
+                "type": "string",
+                "description": "The display label for the source"
+              },
+              "description": {
+                "type": "string",
+                "description": "A description of the source content"
+              }
+            }
+          }
+        },
+        "citationPills": {
+          "type": "array",
+          "description": "Inline citation pills extracted from the Perplexity answer. Each entry is one (pill, source) pair: when a pill cites N sources (Perplexity's `[1][2][3]` bracketed groups), the array contains N entries sharing the same `citationPillId` but carrying per-source `label`, `url`, and `domain`. Group by `citationPillId` to recover the pill-level structure. Omitted from `result` when the answer carries no pills.",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "citationPillId",
+              "url",
+              "domain",
+              "position"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Per-source title from the sources rail (e.g. `\"Best Programming Laptops 2026 — TechCrunch\"`). Always present; may be an empty string when the rail has no title for this source — read `domain` / `url` for source identity in that case. Entries grouped under the same `citationPillId` carry different per-source labels."
+              },
+              "citationPillId": {
+                "type": "integer",
+                "description": "1-based ordinal shared by all entries from the same chip. Group by `citationPillId` to reconstruct the visible chip; the per-source `label` differs across entries within a chip."
+              },
+              "url": {
+                "type": "string",
+                "description": "Direct URL of the cited source."
+              },
+              "domain": {
+                "type": "string",
+                "description": "Host extracted from `url`, for grouping and display."
+              },
+              "description": {
+                "type": "string",
+                "description": "Source description from the sources rail when Perplexity ships one. Omitted when absent."
+              },
+              "position": {
+                "type": "integer",
+                "description": "1-based position of this source in the sibling `result.sources` array."
+              }
+            }
+          }
+        },
+        "markdown": {
+          "type": "string",
+          "description": "Perplexity's response formatted in Markdown (included when include.markdown is true)"
+        },
+        "related_queries": {
+          "type": "array",
+          "description": "Suggested follow-up search queries",
+          "items": {
+            "type": "string"
+          }
+        },
+        "videos": {
+          "type": "array",
+          "description": "Video content found in response",
+          "items": {
+            "$ref": "#/$defs/MediaItem"
+          }
+        },
+        "images": {
+          "type": "array",
+          "description": "Image content found in response",
+          "items": {
+            "$ref": "#/$defs/MediaItem"
+          }
+        },
+        "hotels": {
+          "type": "array",
+          "description": "Hotel listings (when travel intent detected)",
+          "items": {
+            "$ref": "#/$defs/HotelItem"
+          }
+        },
+        "places": {
+          "type": "array",
+          "description": "General places and locations",
+          "items": {
+            "$ref": "#/$defs/PlaceItem"
+          }
+        },
+        "shopping_cards": {
+          "type": "array",
+          "description": "Shopping product cards with detailed product information (when shopping intent detected)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tags": {
+                "type": "array",
+                "description": "Optional category tags for the shopping card",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "products": {
+                "type": "array",
+                "description": "Array of product objects",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "Product name"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "Product identifier"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "Product page URL"
+                    },
+                    "price": {
+                      "type": "string",
+                      "description": "Current price"
+                    },
+                    "merchant": {
+                      "type": "string",
+                      "description": "Merchant name"
+                    },
+                    "available": {
+                      "type": "boolean",
+                      "description": "Whether the product is currently available"
+                    },
+                    "imageUrls": {
+                      "type": "array",
+                      "description": "Product image URLs",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "numReviews": {
+                      "type": "number",
+                      "description": "Number of reviews (0 when none)"
+                    },
+                    "offers": {
+                      "type": "array",
+                      "description": "Shopping offers from individual merchants",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "description": "Offer URL with Perplexity referral parameters"
+                          },
+                          "price": {
+                            "type": "string",
+                            "description": "Offer price"
+                          },
+                          "merchant_name": {
+                            "type": "string",
+                            "description": "Merchant name"
+                          },
+                          "product_name": {
+                            "type": "string",
+                            "description": "Product name as listed by the merchant"
+                          },
+                          "available": {
+                            "type": "boolean",
+                            "description": "Whether the offer is in stock"
+                          },
+                          "price_details": {
+                            "type": "object",
+                            "description": "Detailed price breakdown",
+                            "properties": {
+                              "display_price": {
+                                "type": "string",
+                                "description": "Formatted display price"
+                              }
+                            }
+                          },
+                          "original_price": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "Original price before discount; null when not on sale"
+                          }
+                        }
+                      }
+                    },
+                    "position": {
+                      "type": "integer",
+                      "description": "1-indexed rank across all products in all shopping cards in the response (flat, not reset per card)"
+                    },
+                    "rating": {
+                      "type": "number",
+                      "description": "Product rating (0-5 scale)"
+                    },
+                    "original_price": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "Original price before discount; null when not on sale"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Product description"
+                    },
+                    "variants": {
+                      "type": "array",
+                      "description": "Product variants (size, color, etc.)",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "search_model_queries": {
+          "type": "array",
+          "description": "Internal search queries used to generate response",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rawResponse": {
+          "type": "array",
+          "description": "Raw upstream provider stream captured during the request. Each item is one chunk from the provider's wire protocol (SSE event, batchexecute frame, etc.). Format is provider-specific, undocumented, and may change without notice — use it for debugging or to access data not yet surfaced in the structured fields above.",
+          "items": {}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "HotelItem": {
+      "type": "object",
+      "description": "Hotel listing with detailed information",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Hotel name"
+        },
+        "url": {
+          "type": "string",
+          "description": "Hotel page URL"
+        },
+        "rating": {
+          "type": "number",
+          "description": "Hotel rating (0-5)"
+        },
+        "num_reviews": {
+          "type": "number",
+          "description": "Number of reviews"
+        },
+        "address": {
+          "type": "array",
+          "description": "Address lines",
+          "items": {
+            "type": "string"
+          }
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number"
+        },
+        "description": {
+          "type": "string",
+          "description": "Hotel description"
+        },
+        "image_url": {
+          "type": "string",
+          "description": "Main hotel image URL"
+        },
+        "images": {
+          "type": "array",
+          "description": "Additional hotel image URLs",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lat": {
+          "type": "number",
+          "description": "Latitude"
+        },
+        "lng": {
+          "type": "number",
+          "description": "Longitude"
+        },
+        "price_level": {
+          "type": "string",
+          "description": "Price level indicator"
+        },
+        "categories": {
+          "type": "array",
+          "description": "Hotel categories",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "MediaItem": {
+      "type": "object",
+      "description": "Media content (video or image) found in response",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Media title"
+        },
+        "url": {
+          "type": "string",
+          "description": "Media URL"
+        },
+        "thumbnail": {
+          "type": "string",
+          "description": "Thumbnail URL"
+        },
+        "medium": {
+          "type": "string",
+          "description": "Media type as Perplexity labels it, for example `video` or `image`"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source platform"
+        },
+        "image_width": {
+          "type": "number",
+          "description": "Original image width"
+        },
+        "image_height": {
+          "type": "number",
+          "description": "Original image height"
+        },
+        "thumbnail_width": {
+          "type": "number",
+          "description": "Thumbnail width"
+        },
+        "thumbnail_height": {
+          "type": "number",
+          "description": "Thumbnail height"
+        }
+      }
+    },
+    "PlaceItem": {
+      "type": "object",
+      "description": "General place or location information",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Place name"
+        },
+        "url": {
+          "type": "string",
+          "description": "Place page URL"
+        },
+        "rating": {
+          "type": "number",
+          "description": "Place rating (0-5)"
+        },
+        "address": {
+          "type": "array",
+          "description": "Address lines",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lat": {
+          "type": "number",
+          "description": "Latitude"
+        },
+        "lng": {
+          "type": "number",
+          "description": "Longitude"
+        },
+        "categories": {
+          "type": "array",
+          "description": "Place categories",
+          "items": {
+            "type": "string"
+          }
+        },
+        "map_url": {
+          "type": "string",
+          "description": "Map URL"
+        },
+        "images": {
+          "type": "array",
+          "description": "Place image URLs",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

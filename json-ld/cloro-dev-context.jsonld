@@ -1,0 +1,601 @@
+{
+  "@context": {
+    "@vocab": "https://cloro.dev/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "cloro": "https://cloro.dev/schema#",
+    "AsyncTaskSummary": "cloro:AsyncTaskSummary",
+    "id": {
+      "@id": "cloro:id",
+      "@type": "xsd:string"
+    },
+    "taskType": {
+      "@id": "cloro:taskType",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "cloro:status",
+      "@type": "xsd:string"
+    },
+    "priority": {
+      "@id": "cloro:priority",
+      "@type": "xsd:integer"
+    },
+    "createdAt": {
+      "@id": "cloro:createdAt",
+      "@type": "xsd:dateTime"
+    },
+    "latencyMs": {
+      "@id": "cloro:latencyMs",
+      "@type": "xsd:integer"
+    },
+    "idempotencyKey": {
+      "@id": "cloro:idempotencyKey",
+      "@type": "xsd:string"
+    },
+    "AsyncTaskCredits": "cloro:AsyncTaskCredits",
+    "creditsToCharge": {
+      "@id": "cloro:creditsToCharge",
+      "@type": "xsd:decimal"
+    },
+    "creditsCharged": {
+      "@id": "cloro:creditsCharged",
+      "@type": "xsd:decimal"
+    },
+    "AsyncTaskCreateResponse": "cloro:AsyncTaskCreateResponse",
+    "success": {
+      "@id": "cloro:success",
+      "@type": "xsd:boolean"
+    },
+    "task": {
+      "@id": "cloro:task",
+      "@type": "@id"
+    },
+    "credits": {
+      "@id": "cloro:credits",
+      "@type": "@id"
+    },
+    "TaskStatusResponse": "cloro:TaskStatusResponse",
+    "webhook": {
+      "@id": "cloro:webhook"
+    },
+    "response": {
+      "@id": "cloro:response"
+    },
+    "AsyncStatusResponse": "cloro:AsyncStatusResponse",
+    "queuedTasks": {
+      "@id": "cloro:queuedTasks",
+      "@type": "xsd:integer"
+    },
+    "processingTasks": {
+      "@id": "cloro:processingTasks",
+      "@type": "xsd:integer"
+    },
+    "priorityBreakdown": {
+      "@id": "cloro:priorityBreakdown",
+      "@container": "@list"
+    },
+    "concurrency": {
+      "@id": "cloro:concurrency"
+    },
+    "CreditsResponse": "cloro:CreditsResponse",
+    "remaining": {
+      "@id": "cloro:remaining",
+      "@type": "xsd:integer"
+    },
+    "perCycle": {
+      "@id": "cloro:perCycle",
+      "@type": "xsd:integer"
+    },
+    "cycleResetsAt": {
+      "@id": "cloro:cycleResetsAt",
+      "@type": "xsd:dateTime"
+    },
+    "ClearQueueResponse": "cloro:ClearQueueResponse",
+    "cleared": {
+      "@id": "cloro:cleared",
+      "@type": "xsd:integer"
+    },
+    "BatchTaskRequest": "cloro:BatchTaskRequest",
+    "payload": {
+      "@id": "cloro:payload"
+    },
+    "BatchTaskResponse": "cloro:BatchTaskResponse",
+    "summary": {
+      "@id": "cloro:summary"
+    },
+    "results": {
+      "@id": "cloro:results",
+      "@container": "@list"
+    },
+    "BatchTaskSuccessResult": "cloro:BatchTaskSuccessResult",
+    "index": {
+      "@id": "cloro:index",
+      "@type": "xsd:integer"
+    },
+    "BatchTaskFailureResult": "cloro:BatchTaskFailureResult",
+    "error": {
+      "@id": "cloro:error"
+    },
+    "QueueLimitError": "cloro:QueueLimitError",
+    "ChatGPTMonitorRequest": "cloro:ChatGPTMonitorRequest",
+    "prompt": {
+      "@id": "cloro:prompt",
+      "@type": "xsd:string"
+    },
+    "country": {
+      "@id": "cloro:country",
+      "@type": "@id"
+    },
+    "include": {
+      "@id": "cloro:include"
+    },
+    "legacy": {
+      "@id": "cloro:legacy",
+      "@type": "xsd:boolean"
+    },
+    "disableWebSearch": {
+      "@id": "cloro:disableWebSearch",
+      "@type": "xsd:boolean"
+    },
+    "state": {
+      "@id": "cloro:state",
+      "@type": "@id"
+    },
+    "GeminiMonitorRequest": "cloro:GeminiMonitorRequest",
+    "GeminiMonitorResponse": "cloro:GeminiMonitorResponse",
+    "result": {
+      "@id": "cloro:result"
+    },
+    "GrokMonitorRequest": "cloro:GrokMonitorRequest",
+    "GrokMonitorResponse": "cloro:GrokMonitorResponse",
+    "ChatGPTMonitorResponse": "cloro:ChatGPTMonitorResponse",
+    "Error": "cloro:Error",
+    "ValidationError": "cloro:ValidationError",
+    "AuthenticationError": "cloro:AuthenticationError",
+    "ForbiddenError": "cloro:ForbiddenError",
+    "NotFoundError": "cloro:NotFoundError",
+    "IdempotencyConflictError": "cloro:IdempotencyConflictError",
+    "ConcurrentLimitError": "cloro:ConcurrentLimitError",
+    "CanceledError": "cloro:CanceledError",
+    "InternalError": "cloro:InternalError",
+    "ExternalServiceError": "cloro:ExternalServiceError",
+    "GoogleMonitorRequest": "cloro:GoogleMonitorRequest",
+    "query": {
+      "@id": "cloro:query",
+      "@type": "xsd:string"
+    },
+    "url": {
+      "@id": "cloro:url",
+      "@type": "@id"
+    },
+    "gl": {
+      "@id": "cloro:gl",
+      "@type": "@id"
+    },
+    "hl": {
+      "@id": "cloro:hl",
+      "@type": "@id"
+    },
+    "location": {
+      "@id": "cloro:location",
+      "@type": "xsd:string"
+    },
+    "uule": {
+      "@id": "cloro:uule",
+      "@type": "xsd:string"
+    },
+    "device": {
+      "@id": "cloro:device",
+      "@type": "xsd:string"
+    },
+    "pages": {
+      "@id": "cloro:pages",
+      "@type": "xsd:integer"
+    },
+    "GoogleMonitorResponse": "cloro:GoogleMonitorResponse",
+    "GoogleGotoRequest": "cloro:GoogleGotoRequest",
+    "GoogleGotoResponse": "cloro:GoogleGotoResponse",
+    "GoogleNewsMonitorRequest": "cloro:GoogleNewsMonitorRequest",
+    "GoogleNewsMonitorResponse": "cloro:GoogleNewsMonitorResponse",
+    "CopilotMonitorRequest": "cloro:CopilotMonitorRequest",
+    "CopilotMonitorResponse": "cloro:CopilotMonitorResponse",
+    "PerplexityMonitorRequest": "cloro:PerplexityMonitorRequest",
+    "PerplexityMonitorResponse": "cloro:PerplexityMonitorResponse",
+    "AiModeMonitorRequest": "cloro:AiModeMonitorRequest",
+    "AiModeMonitorResponse": "cloro:AiModeMonitorResponse",
+    "MediaItem": "cloro:MediaItem",
+    "title": {
+      "@id": "cloro:title",
+      "@type": "xsd:string"
+    },
+    "thumbnail": {
+      "@id": "cloro:thumbnail",
+      "@type": "xsd:string"
+    },
+    "medium": {
+      "@id": "cloro:medium",
+      "@type": "xsd:string"
+    },
+    "source": {
+      "@id": "cloro:source",
+      "@type": "xsd:string"
+    },
+    "image_width": {
+      "@id": "cloro:image_width",
+      "@type": "xsd:decimal"
+    },
+    "image_height": {
+      "@id": "cloro:image_height",
+      "@type": "xsd:decimal"
+    },
+    "thumbnail_width": {
+      "@id": "cloro:thumbnail_width",
+      "@type": "xsd:decimal"
+    },
+    "thumbnail_height": {
+      "@id": "cloro:thumbnail_height",
+      "@type": "xsd:decimal"
+    },
+    "HotelItem": "cloro:HotelItem",
+    "name": {
+      "@id": "cloro:name",
+      "@type": "xsd:string"
+    },
+    "rating": {
+      "@id": "cloro:rating",
+      "@type": "xsd:decimal"
+    },
+    "num_reviews": {
+      "@id": "cloro:num_reviews",
+      "@type": "xsd:decimal"
+    },
+    "address": {
+      "@id": "cloro:address",
+      "@container": "@list"
+    },
+    "phone": {
+      "@id": "cloro:phone",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "cloro:description",
+      "@type": "xsd:string"
+    },
+    "image_url": {
+      "@id": "cloro:image_url",
+      "@type": "xsd:string"
+    },
+    "images": {
+      "@id": "cloro:images",
+      "@container": "@list"
+    },
+    "lat": {
+      "@id": "cloro:lat",
+      "@type": "xsd:decimal"
+    },
+    "lng": {
+      "@id": "cloro:lng",
+      "@type": "xsd:decimal"
+    },
+    "price_level": {
+      "@id": "cloro:price_level",
+      "@type": "xsd:string"
+    },
+    "categories": {
+      "@id": "cloro:categories",
+      "@container": "@list"
+    },
+    "PlaceItem": "cloro:PlaceItem",
+    "map_url": {
+      "@id": "cloro:map_url",
+      "@type": "xsd:string"
+    },
+    "ShoppingCard": "cloro:ShoppingCard",
+    "products": {
+      "@id": "cloro:products",
+      "@container": "@list"
+    },
+    "tags": {
+      "@id": "cloro:tags",
+      "@container": "@list"
+    },
+    "ImagePosition": "cloro:ImagePosition",
+    "x": {
+      "@id": "cloro:x",
+      "@type": "xsd:decimal"
+    },
+    "y": {
+      "@id": "cloro:y",
+      "@type": "xsd:decimal"
+    },
+    "SlotPlacement": "cloro:SlotPlacement",
+    "leftPercent": {
+      "@id": "cloro:leftPercent",
+      "@type": "xsd:decimal"
+    },
+    "topPercent": {
+      "@id": "cloro:topPercent",
+      "@type": "xsd:decimal"
+    },
+    "widthPercent": {
+      "@id": "cloro:widthPercent",
+      "@type": "xsd:decimal"
+    },
+    "heightPercent": {
+      "@id": "cloro:heightPercent",
+      "@type": "xsd:decimal"
+    },
+    "ShowcaseSlot": "cloro:ShowcaseSlot",
+    "fit": {
+      "@id": "cloro:fit",
+      "@type": "xsd:string"
+    },
+    "position": {
+      "@id": "cloro:position",
+      "@type": "@id"
+    },
+    "zoom": {
+      "@id": "cloro:zoom",
+      "@type": "xsd:decimal"
+    },
+    "placement": {
+      "@id": "cloro:placement",
+      "@type": "@id"
+    },
+    "imageBlendMode": {
+      "@id": "cloro:imageBlendMode",
+      "@type": "xsd:string"
+    },
+    "ShowcaseImage": "cloro:ShowcaseImage",
+    "width": {
+      "@id": "cloro:width",
+      "@type": "xsd:decimal"
+    },
+    "height": {
+      "@id": "cloro:height",
+      "@type": "xsd:decimal"
+    },
+    "ShowcaseBackground": "cloro:ShowcaseBackground",
+    "type": {
+      "@id": "cloro:type",
+      "@type": "xsd:string"
+    },
+    "primary": {
+      "@id": "cloro:primary",
+      "@type": "xsd:string"
+    },
+    "secondary": {
+      "@id": "cloro:secondary",
+      "@type": "xsd:string"
+    },
+    "ShowcaseMetadata": "cloro:ShowcaseMetadata",
+    "image": {
+      "@id": "cloro:image",
+      "@type": "@id"
+    },
+    "background": {
+      "@id": "cloro:background",
+      "@type": "@id"
+    },
+    "slots": {
+      "@id": "cloro:slots"
+    },
+    "debug": {
+      "@id": "cloro:debug"
+    },
+    "ShoppingProduct": "cloro:ShoppingProduct",
+    "price": {
+      "@id": "cloro:price",
+      "@type": "xsd:string"
+    },
+    "featured_tag": {
+      "@id": "cloro:featured_tag",
+      "@type": "xsd:string"
+    },
+    "image_urls": {
+      "@id": "cloro:image_urls",
+      "@container": "@list"
+    },
+    "variants": {
+      "@id": "cloro:variants"
+    },
+    "offers": {
+      "@id": "cloro:offers",
+      "@container": "@list"
+    },
+    "rating_grouped_citation": {
+      "@id": "cloro:rating_grouped_citation",
+      "@type": "@id"
+    },
+    "provider": {
+      "@id": "cloro:provider",
+      "@type": "xsd:string"
+    },
+    "providers": {
+      "@id": "cloro:providers",
+      "@container": "@list"
+    },
+    "product_lookup_key": {
+      "@id": "cloro:product_lookup_key"
+    },
+    "product_lookup_data": {
+      "@id": "cloro:product_lookup_data"
+    },
+    "showcase_metadata": {
+      "@id": "cloro:showcase_metadata",
+      "@type": "@id"
+    },
+    "show_price_disclosure": {
+      "@id": "cloro:show_price_disclosure",
+      "@type": "xsd:boolean"
+    },
+    "analytics_meta": {
+      "@id": "cloro:analytics_meta"
+    },
+    "metadata_sources": {
+      "@id": "cloro:metadata_sources",
+      "@container": "@list"
+    },
+    "product_event_uuid": {
+      "@id": "cloro:product_event_uuid",
+      "@type": "xsd:string"
+    },
+    "generatedProductQuery": {
+      "@id": "cloro:generatedProductQuery",
+      "@type": "xsd:string"
+    },
+    "ShoppingOffer": "cloro:ShoppingOffer",
+    "merchant_name": {
+      "@id": "cloro:merchant_name",
+      "@type": "xsd:string"
+    },
+    "merchant_subtitle": {
+      "@id": "cloro:merchant_subtitle",
+      "@type": "xsd:string"
+    },
+    "marketplace_seller": {
+      "@id": "cloro:marketplace_seller",
+      "@type": "xsd:string"
+    },
+    "seller_name": {
+      "@id": "cloro:seller_name",
+      "@type": "xsd:string"
+    },
+    "brand": {
+      "@id": "cloro:brand",
+      "@type": "xsd:string"
+    },
+    "product_name": {
+      "@id": "cloro:product_name",
+      "@type": "xsd:string"
+    },
+    "details": {
+      "@id": "cloro:details",
+      "@type": "xsd:string"
+    },
+    "original_price": {
+      "@id": "cloro:original_price",
+      "@type": "xsd:string"
+    },
+    "available": {
+      "@id": "cloro:available",
+      "@type": "xsd:boolean"
+    },
+    "checkoutable": {
+      "@id": "cloro:checkoutable",
+      "@type": "xsd:boolean"
+    },
+    "is_digital": {
+      "@id": "cloro:is_digital",
+      "@type": "xsd:boolean"
+    },
+    "checkout_payload": {
+      "@id": "cloro:checkout_payload",
+      "@type": "xsd:string"
+    },
+    "checkout_image_urls": {
+      "@id": "cloro:checkout_image_urls",
+      "@container": "@list"
+    },
+    "shop_id": {
+      "@id": "cloro:shop_id",
+      "@type": "xsd:string"
+    },
+    "price_details": {
+      "@id": "cloro:price_details",
+      "@type": "@id"
+    },
+    "tag": {
+      "@id": "cloro:tag",
+      "@type": "@id"
+    },
+    "PriceDetails": "cloro:PriceDetails",
+    "display_price": {
+      "@id": "cloro:display_price",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "cloro:base",
+      "@type": "xsd:string"
+    },
+    "shipping": {
+      "@id": "cloro:shipping",
+      "@type": "xsd:string"
+    },
+    "tax": {
+      "@id": "cloro:tax",
+      "@type": "xsd:string"
+    },
+    "total": {
+      "@id": "cloro:total",
+      "@type": "xsd:string"
+    },
+    "OfferTag": "cloro:OfferTag",
+    "text": {
+      "@id": "cloro:text",
+      "@type": "xsd:string"
+    },
+    "tooltip": {
+      "@id": "cloro:tooltip",
+      "@type": "xsd:string"
+    },
+    "RatingGroupedCitation": "cloro:RatingGroupedCitation",
+    "supporting_websites": {
+      "@id": "cloro:supporting_websites",
+      "@container": "@list"
+    },
+    "InlineProduct": "cloro:InlineProduct",
+    "product": {
+      "@id": "cloro:product",
+      "@type": "@id"
+    },
+    "render_as": {
+      "@id": "cloro:render_as",
+      "@type": "xsd:string"
+    },
+    "StateParameter": "cloro:StateParameter",
+    "CountryCode": "cloro:CountryCode",
+    "RateLimitError": "cloro:RateLimitError",
+    "GooglePlaceBase": "cloro:GooglePlaceBase",
+    "reviews": {
+      "@id": "cloro:reviews",
+      "@type": "xsd:integer"
+    },
+    "placeId": {
+      "@id": "cloro:placeId",
+      "@type": "xsd:string"
+    },
+    "website": {
+      "@id": "cloro:website",
+      "@type": "@id"
+    },
+    "ProductResult": "cloro:ProductResult",
+    "stores": {
+      "@id": "cloro:stores",
+      "@container": "@list"
+    },
+    "aboutTheProduct": {
+      "@id": "cloro:aboutTheProduct"
+    },
+    "specifications": {
+      "@id": "cloro:specifications"
+    },
+    "userReviews": {
+      "@id": "cloro:userReviews",
+      "@container": "@list"
+    },
+    "relatedProducts": {
+      "@id": "cloro:relatedProducts",
+      "@container": "@list"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "cloro API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects cloro's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-07) from openapi/cloro-dev-openapi.yml.",
+  "dcterms:created": "2026-10-07",
+  "dcterms:source": [
+    "openapi/cloro-dev-openapi.yml"
+  ]
+}

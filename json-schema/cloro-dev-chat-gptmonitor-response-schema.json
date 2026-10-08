@@ -1,0 +1,1014 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/cloro-dev/main/json-schema/cloro-dev-chat-gptmonitor-response-schema.json",
+  "title": "ChatGPTMonitorResponse",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/cloro-dev-openapi.yml#/components/schemas/ChatGPTMonitorResponse",
+  "required": [
+    "success",
+    "result"
+  ],
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "result": {
+      "description": "ChatGPT's response data",
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "ChatGPT's response text"
+        },
+        "sources": {
+          "type": "array",
+          "description": "Array of sources referenced in the response. Returns empty array when no sources are available.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "number",
+                "description": "The position index of the source in the response"
+              },
+              "url": {
+                "type": "string",
+                "description": "The URL of the source"
+              },
+              "label": {
+                "type": "string",
+                "description": "The article title of the source"
+              },
+              "description": {
+                "type": "string",
+                "description": "A snippet or summary of the source content"
+              },
+              "footnote": {
+                "type": "boolean",
+                "description": "Whether this source appears as a footnote (in a subsequent list in the sources modal)"
+              },
+              "datePublished": {
+                "type": "string",
+                "description": "The publication date of the source. Omitted from the response when the source has no publish date — never emitted as `null`."
+              }
+            }
+          }
+        },
+        "html": {
+          "type": "string",
+          "format": "uri",
+          "description": "A URL to the full HTML of the response (included when include.html is true)"
+        },
+        "markdown": {
+          "type": "string",
+          "description": "ChatGPT's response formatted in Markdown (included when include.markdown is true)"
+        },
+        "rawResponse": {
+          "type": "array",
+          "description": "Array of streaming events returned by ChatGPT (included when include.rawResponse is true). With `include.shopping` on as well, it includes the `product_update` events fetched for each inline product and shopping-card product.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Event type identifier"
+              },
+              "token": {
+                "type": "string",
+                "description": "Resume token used to continue the ChatGPT conversation"
+              },
+              "conversation_id": {
+                "type": "string",
+                "description": "ChatGPT conversation identifier"
+              },
+              "message": {
+                "type": "object",
+                "description": "Event payload describing the assistant message",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  }
+                }
+              },
+              "delta": {
+                "type": "object",
+                "description": "Streaming delta payload from ChatGPT",
+                "properties": {
+                  "content": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "text_delta": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "reason": {
+                "type": "string",
+                "description": "Why ChatGPT stopped streaming"
+              }
+            }
+          }
+        },
+        "searchQueries": {
+          "type": "array",
+          "description": "Array of query fan-out ChatGPT used to generate the response (included when include.searchQueries is true)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mapSearchQueries": {
+          "type": "array",
+          "description": "Queries ChatGPT sent to its maps tool to build the `map` entries, deduplicated in first-seen order (included when include.searchQueries is true). Distinct from `searchQueries`, the web-search fan-out. Empty on responses served through OpenAI's mobile-web format; see `legacy`.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The ChatGPT model used to generate the response. Empty on responses served through OpenAI's mobile-web format."
+        },
+        "shoppingCards": {
+          "type": "array",
+          "description": "Array of shopping/product cards extracted from the response. The field is omitted entirely from `result` when `include.shopping` is `false` or unset — clients should treat it as optional rather than expecting an empty array.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tags": {
+                "type": "array",
+                "description": "Category tags for the shopping card",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "products": {
+                "type": "array",
+                "description": "Array of product information",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "Product name"
+                    },
+                    "position": {
+                      "type": "integer",
+                      "description": "1-indexed rank across all products in all shopping cards in the response (flat, not reset per card)."
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "Product page URL with ChatGPT attribution"
+                    },
+                    "price": {
+                      "type": "string",
+                      "description": "Current price"
+                    },
+                    "featured_tag": {
+                      "type": "string",
+                      "description": "Product category or style tag"
+                    },
+                    "merchant": {
+                      "type": "string",
+                      "description": "Merchant information"
+                    },
+                    "image_urls": {
+                      "type": "array",
+                      "description": "Array of product image URLs",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "rating": {
+                      "type": "number",
+                      "description": "Product rating (0-5 scale)"
+                    },
+                    "num_reviews": {
+                      "type": "integer",
+                      "description": "Number of reviews"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "Unique product identifier"
+                    },
+                    "offers": {
+                      "type": "array",
+                      "description": "Array of shopping offers from different merchants",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "merchant_name": {
+                            "type": "string",
+                            "description": "Merchant name"
+                          },
+                          "marketplace_seller": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "Third-party seller on the marketplace"
+                          },
+                          "seller_name": {
+                            "type": "string",
+                            "description": "Seller name"
+                          },
+                          "brand": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "Product brand. Set on only some offers, so often `null` or absent."
+                          },
+                          "product_name": {
+                            "type": "string",
+                            "description": "Product name as listed by merchant"
+                          },
+                          "url": {
+                            "type": "string",
+                            "description": "Offer URL with ChatGPT attribution"
+                          },
+                          "price": {
+                            "type": "string",
+                            "description": "Offer price"
+                          },
+                          "details": {
+                            "type": "string",
+                            "description": "Stock and delivery information"
+                          },
+                          "available": {
+                            "type": "boolean",
+                            "description": "Offer availability status"
+                          },
+                          "checkoutable": {
+                            "type": "boolean",
+                            "description": "Whether offer can be checked out directly"
+                          },
+                          "price_details": {
+                            "type": "object",
+                            "description": "Detailed price breakdown",
+                            "properties": {
+                              "base": {
+                                "type": "string",
+                                "description": "Base product price"
+                              },
+                              "total": {
+                                "type": "string",
+                                "description": "Total price including any additional costs"
+                              }
+                            }
+                          },
+                          "tag": {
+                            "type": "object",
+                            "description": "Promotional tag",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "description": "Tag text"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "rating_grouped_citation": {
+                      "type": "object",
+                      "description": "Rating source information",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "description": "Source title"
+                        },
+                        "url": {
+                          "type": "string",
+                          "description": "Source URL"
+                        },
+                        "supporting_websites": {
+                          "type": "array",
+                          "description": "Array of supporting website references",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "description": "Website title"
+                              },
+                              "url": {
+                                "type": "string",
+                                "description": "Website URL"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "inlineProducts": {
+          "type": "array",
+          "description": "Array of inline products with pricing and offers. The field is omitted entirely from `result` when `include.shopping` is `false` or unset — clients should treat it as optional rather than expecting an empty array.",
+          "items": {
+            "$ref": "#/$defs/InlineProduct"
+          }
+        },
+        "entities": {
+          "type": "array",
+          "description": "Array of entities extracted from the response (when available)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Entity type identifier"
+              },
+              "name": {
+                "type": "string",
+                "description": "Entity name"
+              }
+            },
+            "required": [
+              "type",
+              "name"
+            ]
+          }
+        },
+        "map": {
+          "type": "array",
+          "description": "Array of business/place map entries extracted from the response (when available). Items come from ChatGPT's enriched providers (Yelp, Google Business) and use camelCase field names. The full field set is documented at /api-reference/endpoint/chatgpt/map; only the most commonly populated fields are listed here.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Business ID (Yelp ID or Google Place ID)"
+              },
+              "provider": {
+                "type": "string",
+                "description": "Data provider: \"yelp\", \"b1\"/\"b3\" (Google), or \"yelp-feed\""
+              },
+              "name": {
+                "type": "string",
+                "description": "Business name"
+              },
+              "position": {
+                "type": "integer",
+                "description": "Position/ranking in results (added by parser)"
+              },
+              "address": {
+                "type": "string",
+                "description": "Full street address"
+              },
+              "latitude": {
+                "type": "number",
+                "description": "GPS latitude coordinate"
+              },
+              "longitude": {
+                "type": "number",
+                "description": "GPS longitude coordinate"
+              },
+              "categories": {
+                "type": "array",
+                "description": "Business categories",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "rating": {
+                "type": "number",
+                "description": "Business rating (0-5 scale)"
+              },
+              "reviewCount": {
+                "type": "integer",
+                "description": "Number of reviews"
+              },
+              "description": {
+                "type": "string",
+                "description": "Business description"
+              },
+              "phone": {
+                "type": "string",
+                "description": "Contact phone number"
+              },
+              "websiteUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "Business website URL"
+              }
+            }
+          }
+        },
+        "citationPills": {
+          "type": "array",
+          "description": "Array of inline citation pills extracted from the response (when available). These are citations that appear inline within the text. Each entry is one (pill, source) pair; group by `citationPillId` to recover pill-level structure.",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "citationPillId",
+              "url",
+              "domain",
+              "type",
+              "position"
+            ],
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "The URL of the citation"
+              },
+              "label": {
+                "type": "string",
+                "description": "Per-source title of the citation. Always present; may be an empty string when the citation event ships no title — read `domain` / `url` for source identity in that case."
+              },
+              "description": {
+                "type": "string",
+                "description": "Description of the citation content. Omitted when the citation event carries no snippet (e.g. grouped-webpage title-only cards)."
+              },
+              "domain": {
+                "type": "string",
+                "description": "Domain of the citation source"
+              },
+              "datePublished": {
+                "type": "string",
+                "description": "ISO 8601 date string of when the source was published. Omitted when the citation event carries no publication date."
+              },
+              "citationPillId": {
+                "type": "integer",
+                "description": "0-based identifier shared by all entries from the same chip. Group by `citationPillId` to recover the pill-level structure. **Note:** unlike the other providers (Google AIO, AI Mode, Copilot, Perplexity, Gemini) which use 1-based `citationPillId`, ChatGPT's IDs start at 0 for historical reasons."
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "searchResult",
+                  "groupedWebpage"
+                ],
+                "description": "Discriminator for the underlying citation event: `searchResult` for inline search citations, `groupedWebpage` for grouped-webpage cards."
+              },
+              "position": {
+                "type": "integer",
+                "description": "1-based position of this source in the sibling `result.sources` array."
+              }
+            }
+          }
+        },
+        "ads": {
+          "type": "array",
+          "description": "Array of ads served in the ChatGPT response (included when include.ads is true). OpenAI serves candidate ads but the interface renders at most one; use `rendered` to identify which were actually shown.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "brand": {
+                "type": "object",
+                "description": "Advertiser brand information",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Advertiser brand name"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Advertiser brand URL"
+                  },
+                  "favicon": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Advertiser brand favicon URL"
+                  }
+                },
+                "required": [
+                  "name",
+                  "url"
+                ]
+              },
+              "cards": {
+                "type": "array",
+                "description": "Array of carousel cards in the ad",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "Card title"
+                    },
+                    "body": {
+                      "type": "string",
+                      "description": "Card description text"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Card destination URL"
+                    },
+                    "image": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Card image URL"
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "body",
+                    "url"
+                  ]
+                }
+              },
+              "visibility": {
+                "type": "string",
+                "description": "OpenAI serving status for the ad. `allowed` means the ad was eligible to serve; `hidden` means OpenAI filtered it (for example, an integrity check)."
+              },
+              "adsResponseIndex": {
+                "type": "integer",
+                "description": "The ad's slot position in OpenAI's served ad response. This reflects served order, not what was shown — use `rendered` for actual exposure."
+              },
+              "rendered": {
+                "type": "boolean",
+                "description": "Whether the ad was shown as a visible card in the response. OpenAI serves several candidates but the interface renders at most one; ads with `rendered: false` were served but not displayed."
+              }
+            },
+            "required": [
+              "brand",
+              "cards",
+              "visibility",
+              "adsResponseIndex",
+              "rendered"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ImagePosition": {
+      "type": "object",
+      "description": "Pixel offset for image positioning within a slot",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "InlineProduct": {
+      "type": "object",
+      "description": "Inline product reference that appeared in the response text, including pricing and offers",
+      "properties": {
+        "product": {
+          "$ref": "#/$defs/ShoppingProduct"
+        },
+        "render_as": {
+          "type": "string",
+          "description": "How the product is rendered in the response",
+          "enum": [
+            "inline",
+            "hero",
+            "block"
+          ]
+        }
+      }
+    },
+    "OfferTag": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Promotional tag on an offer",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Tag text"
+        },
+        "tooltip": {
+          "type": "string",
+          "description": "Tag tooltip text"
+        }
+      }
+    },
+    "PriceDetails": {
+      "type": "object",
+      "description": "Detailed price breakdown for an offer",
+      "properties": {
+        "display_price": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Formatted display price"
+        },
+        "base": {
+          "type": "string",
+          "description": "Base product price"
+        },
+        "shipping": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Shipping cost"
+        },
+        "tax": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Tax amount"
+        },
+        "total": {
+          "type": "string",
+          "description": "Total price"
+        }
+      }
+    },
+    "RatingGroupedCitation": {
+      "type": "object",
+      "description": "Rating source information with supporting websites",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Source title"
+        },
+        "url": {
+          "type": "string",
+          "description": "Source URL"
+        },
+        "supporting_websites": {
+          "type": "array",
+          "description": "Array of supporting website references",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "ShoppingOffer": {
+      "type": "object",
+      "description": "Shopping offer with pricing details from a specific merchant",
+      "properties": {
+        "merchant_name": {
+          "type": "string",
+          "description": "Merchant name"
+        },
+        "merchant_subtitle": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Merchant subtitle or additional info"
+        },
+        "marketplace_seller": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Third-party seller on the marketplace"
+        },
+        "seller_name": {
+          "type": "string",
+          "description": "Seller name"
+        },
+        "brand": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Product brand. Set on only some offers, so often `null` or absent."
+        },
+        "product_name": {
+          "type": "string",
+          "description": "Product name as listed by merchant"
+        },
+        "url": {
+          "type": "string",
+          "description": "Offer URL with attribution"
+        },
+        "price": {
+          "type": "string",
+          "description": "Offer price"
+        },
+        "details": {
+          "type": "string",
+          "description": "Stock and delivery information"
+        },
+        "original_price": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Original price before discount"
+        },
+        "available": {
+          "type": "boolean",
+          "description": "Whether the product is available"
+        },
+        "checkoutable": {
+          "type": "boolean",
+          "description": "Whether the product can be checked out directly"
+        },
+        "is_digital": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether this is a digital product"
+        },
+        "checkout_payload": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Checkout payload data"
+        },
+        "checkout_image_urls": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "Image URLs for checkout display",
+          "items": {
+            "type": "string"
+          }
+        },
+        "shop_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Shop identifier"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Data provider identifier"
+        },
+        "price_details": {
+          "$ref": "#/$defs/PriceDetails"
+        },
+        "tag": {
+          "$ref": "#/$defs/OfferTag"
+        }
+      }
+    },
+    "ShoppingProduct": {
+      "type": "object",
+      "description": "Individual product information",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Product name"
+        },
+        "position": {
+          "type": "integer",
+          "description": "1-indexed rank across all products in all shopping cards in the response (flat, not reset per card)."
+        },
+        "url": {
+          "type": "string",
+          "description": "Product page URL"
+        },
+        "description": {
+          "type": "string",
+          "description": "Product description"
+        },
+        "price": {
+          "type": "string",
+          "description": "Current price"
+        },
+        "featured_tag": {
+          "type": "string",
+          "description": "Product category or style tag"
+        },
+        "rating": {
+          "type": "number",
+          "description": "Product rating (0-5)"
+        },
+        "num_reviews": {
+          "type": "integer",
+          "description": "Number of reviews"
+        },
+        "image_urls": {
+          "type": "array",
+          "description": "Product image URLs",
+          "items": {
+            "type": "string"
+          }
+        },
+        "id": {
+          "type": "string",
+          "description": "Product identifier"
+        },
+        "variants": {
+          "description": "Product variants (size, color, etc.)"
+        },
+        "offers": {
+          "type": "array",
+          "description": "Shopping offers with pricing details from different merchants",
+          "items": {
+            "$ref": "#/$defs/ShoppingOffer"
+          }
+        },
+        "rating_grouped_citation": {
+          "$ref": "#/$defs/RatingGroupedCitation"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Data provider identifier"
+        },
+        "providers": {
+          "type": "array",
+          "description": "List of data providers",
+          "items": {
+            "type": "string"
+          }
+        },
+        "product_lookup_key": {
+          "type": "object",
+          "description": "Key used to look up product updates",
+          "properties": {
+            "data": {
+              "type": "string",
+              "description": "JSON-encoded product lookup data"
+            }
+          }
+        },
+        "product_lookup_data": {
+          "type": "object",
+          "description": "Structured product lookup query data",
+          "properties": {
+            "request_query": {
+              "type": "string",
+              "description": "Search query used for this product"
+            },
+            "all_ids": {
+              "type": "object",
+              "description": "Provider-to-ID mapping",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "metadata_sources": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "showcase_metadata": {
+          "$ref": "#/$defs/ShowcaseMetadata"
+        },
+        "show_price_disclosure": {
+          "type": "boolean",
+          "description": "Whether to show price disclosure"
+        },
+        "analytics_meta": {
+          "type": "object",
+          "description": "Analytics metadata",
+          "properties": {
+            "product_event_uuid": {
+              "type": "string",
+              "description": "UUID for product analytics event"
+            }
+          }
+        },
+        "metadata_sources": {
+          "type": "array",
+          "description": "Sources of product metadata",
+          "items": {
+            "type": "string"
+          }
+        },
+        "product_event_uuid": {
+          "type": "string",
+          "description": "UUID for product event tracking"
+        },
+        "generatedProductQuery": {
+          "type": "string",
+          "description": "Broad shopping query ChatGPT generated for this product (extracted from product_lookup_key.data). Useful for understanding the search intent behind the recommendation."
+        }
+      }
+    },
+    "ShowcaseBackground": {
+      "type": "object",
+      "description": "Background styling for a product showcase",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "primary": {
+          "type": "string"
+        },
+        "secondary": {
+          "type": "string"
+        }
+      }
+    },
+    "ShowcaseImage": {
+      "type": "object",
+      "description": "Image rendered as the hero of a product showcase",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "url"
+      ]
+    },
+    "ShowcaseMetadata": {
+      "type": "object",
+      "description": "Visual showcase metadata attached to a shopping product (image, background, and per-slot placement).",
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/ShowcaseImage"
+        },
+        "background": {
+          "$ref": "#/$defs/ShowcaseBackground"
+        },
+        "slots": {
+          "type": "object",
+          "description": "Slot map keyed by slot identifier",
+          "additionalProperties": {
+            "$ref": "#/$defs/ShowcaseSlot"
+          }
+        },
+        "debug": {
+          "type": "object",
+          "description": "Free-form debug metadata; opaque to clients",
+          "additionalProperties": true
+        }
+      }
+    },
+    "ShowcaseSlot": {
+      "type": "object",
+      "description": "Single visual slot inside a product showcase",
+      "properties": {
+        "fit": {
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/ImagePosition"
+        },
+        "zoom": {
+          "type": "number"
+        },
+        "placement": {
+          "$ref": "#/$defs/SlotPlacement"
+        },
+        "imageBlendMode": {
+          "type": "string"
+        }
+      }
+    },
+    "SlotPlacement": {
+      "type": "object",
+      "description": "Percent-based placement of a showcase slot within its container",
+      "properties": {
+        "leftPercent": {
+          "type": "number"
+        },
+        "topPercent": {
+          "type": "number"
+        },
+        "widthPercent": {
+          "type": "number"
+        },
+        "heightPercent": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

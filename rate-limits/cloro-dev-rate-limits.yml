@@ -1,0 +1,98 @@
+generated: '2026-10-07'
+method: searched
+source: https://cloro.dev/docs/guides/concurrency
+sources:
+- https://cloro.dev/docs/guides/concurrency
+- https://cloro.dev/docs/guides/error-handling
+- https://cloro.dev/docs/guides/making-requests/async
+- https://cloro.dev/pricing/
+name: cloro API rate and concurrency limits
+published: true
+limit_count: 2
+note: 'Quotes copied from the markdown twins (<page>.md) of the docs pages on 2026-10-07. Two limit types: a fixed per-endpoint per-key rate limit on every /v1/* path, and plan-based concurrency slots shared by sync monitor requests and async tasks. No 429 sends Retry-After. limits[] holds the rows quoted from the source page (https://cloro.dev/docs/guides/concurrency); other_documented_limits holds limits quoted from the pricing page, the async guide and the error-handling guide, each with its own source URL - split so every limit_text is verifiable on the one page named in source.'
+limits:
+- name: Per-endpoint rate limit
+  limit_text: 1,000 requests per second per endpoint
+  limit: 1000
+  window: second
+  scope: per API key, per endpoint (each /v1/* path has its own independent 1,000 RPS bucket)
+  endpoint: /v1/*
+  error_code: RATE_LIMIT_EXCEEDED
+  source: https://cloro.dev/docs/guides/concurrency
+- name: Free tier concurrency
+  limit_text: 1 concurrent request
+  limit: 1
+  scope: per organization (concurrent sync requests + processing async tasks)
+  plan: Free
+  endpoint: /v1/monitor/* (except /v1/monitor/google/goto)
+  kind: concurrency
+  error_code: CONCURRENCY_LIMIT_EXCEEDED
+  source: https://cloro.dev/docs/guides/concurrency
+headers:
+- X-RateLimit-Limit
+- X-RateLimit-Remaining
+- X-Concurrency-Limit
+- X-Concurrency-Current
+- X-Concurrency-Remaining
+- X-Credits-Remaining
+- X-Credits-Charged
+- X-Latency-Ms
+header_notes:
+  X-RateLimit-Limit: Maximum requests per second allowed (1,000); on every authenticated response
+  X-RateLimit-Remaining: Remaining requests available in this second
+  X-Concurrency-Limit: Total concurrent requests allowed by your plan; monitor responses that pass validation only
+  X-Concurrency-Remaining: Available concurrent slots when request was received
+  X-Credits-Charged: Credits charged for this request; successful sync monitor responses only
+  Retry-After: Not sent on any 429; sent on 503
+exceeded_status: 429
+exceeded_codes:
+- RATE_LIMIT_EXCEEDED
+- CONCURRENCY_LIMIT_EXCEEDED
+- QUEUE_LIMIT_EXCEEDED
+other_documented_limits:
+- name: Lite concurrency
+  limit: 10
+  scope: per organization
+  plan: Lite
+  kind: concurrency
+  source: https://cloro.dev/pricing/
+  quote: 10 concurrent jobs
+- name: Hobby concurrency
+  limit: 20
+  scope: per organization
+  plan: Hobby
+  kind: concurrency
+  source: https://cloro.dev/pricing/
+  quote: 20 concurrent jobs
+- name: Starter concurrency
+  limit: 50
+  scope: per organization
+  plan: Starter
+  kind: concurrency
+  source: https://cloro.dev/pricing/
+  quote: 50 concurrent jobs
+- name: Async queue limit
+  limit: 100000
+  scope: per organization (QUEUED tasks, counting tasks waiting to retry but not PROCESSING ones)
+  endpoint: /v1/async/task, /v1/async/task/batch
+  error_code: QUEUE_LIMIT_EXCEEDED
+  source: https://cloro.dev/docs/guides/making-requests/async
+  quote: your organization can hold up to 100,000 QUEUED tasks
+- name: Batch size
+  limit: 500
+  scope: tasks per POST /v1/async/task/batch request
+  endpoint: /v1/async/task/batch
+  source: https://cloro.dev/docs/guides/making-requests/async
+  quote: in batches of up to 500
+- name: Prompt length
+  limit: 10000
+  scope: prompt field per request
+  endpoint: /v1/monitor/*
+  error_code: VALIDATION_ERROR
+  source: https://cloro.dev/docs/guides/error-handling
+  quote: 1–10,000 characters
+- name: Server-side retry budget
+  limit: 5
+  scope: automatic attempts per request or task; a sync request starts no new attempt after 5 minutes
+  source: https://cloro.dev/docs/guides/error-handling
+  quote: up to 5 attempts, fewer on some providers

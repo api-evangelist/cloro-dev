@@ -1,0 +1,53 @@
+generated: '2026-10-07'
+method: searched
+source: https://cloro.dev/dpa/ (HTTP 200, 2026-10-07); https://cloro.dev/privacy/ (HTTP 200); https://cloro.dev/docs/guides/account (markdown twin); live probes of /accessibility, /accessibility/vpat, /legal/subprocessors, /subprocessors, /legal/dpa, /security, /trust, /transparency, /gdpr, /security/sbom, /docs/guides/data-residency (all HTTP 404 on 2026-10-07)
+signals:
+  data_subject_request:
+    url: https://cloro.dev/privacy/
+    section: Rights of Access and Portability / Right of Deletion
+    note: Privacy policy states access, portability and deletion rights; the docs describe self-serve user-account deletion (Account modal -> Security -> Delete account) and organization deletion via support.
+    evidence:
+    - source: https://cloro.dev/privacy/
+      http_status: 200
+      fetched: '2026-10-07'
+      quote: Rights of Access and Portability. You have the right to ask us for copies of your Personal Information and to receive it in both a human readable and portable, machine-readable form
+    - source: https://cloro.dev/privacy/
+      http_status: 200
+      fetched: '2026-10-07'
+      quote: Right of Deletion / Right of Erasure. You have the right to request that we delete your Personal Information in certain circumstances.
+    - source: https://cloro.dev/docs/guides/account
+      http_status: 200
+      fetched: '2026-10-07'
+      quote: Deleting your own user removes your profile, removes you from every organization you belong to, and takes your address off cloro's mailing list.
+  incident_notification:
+    url: https://cloro.dev/dpa/
+    section: Data Protection Agreement, processor obligations
+    stated_sla: without undue delay but in no event later than twenty four (24) hours after having become aware of it
+    note: Customer-facing personal-data-breach notification commitment in the DPA (last updated 19 July 2026); the DPA incorporates the EU Standard Contractual Clauses and the UK Addendum.
+    evidence:
+    - source: https://cloro.dev/dpa/
+      http_status: 200
+      fetched: '2026-10-07'
+      quote: cloro agrees to notify Customer of any Personal Data Breach involving Customer Personal Data without undue delay but in no event later than twenty four (24) hours after having become aware of it
+  subprocessors:
+    url: https://cloro.dev/dpa/
+    section: 'Clause 9: Use of sub-processors'
+    honored: null
+    note: The DPA grants general authorisation for sub-processors "from an agreed list" but no dated, named sub-processor table is published on cloro.dev (/legal/subprocessors and /subprocessors are 404); recorded as a reference to a list, not the list itself.
+    evidence:
+    - source: https://cloro.dev/dpa/
+      http_status: 200
+      fetched: '2026-10-07'
+      quote: The data importer has the data exporter's general authorisation for the engagement of sub-processor(s) from an agreed list.
+absent:
+  sbom: no /security/sbom, no SBOM named anywhere on the site
+  accessibility_conformance: /accessibility and /accessibility/vpat 404
+  data_residency: no data-residency page in the docs; privacy policy says data may be processed in countries other than the one you are resident in
+  training_data_summary: none
+  ai_transparency: none
+  global_privacy_control: no published statement
+  transparency_report: none
+  age_assurance: none
+  notice_and_action: none
+  support_lifetime: none beyond the six-month Deprecation-to-Sunset minimum recorded in lifecycle/
+  exit_assistance: none

@@ -1,0 +1,419 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/cloro-dev/main/json-schema/cloro-dev-copilot-monitor-response-schema.json",
+  "title": "CopilotMonitorResponse",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/cloro-dev-openapi.yml#/components/schemas/CopilotMonitorResponse",
+  "required": [
+    "success",
+    "result"
+  ],
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "result": {
+      "description": "Copilot response data",
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Copilot's response text"
+        },
+        "html": {
+          "type": "string",
+          "format": "uri",
+          "description": "A URL to the full HTML of the response."
+        },
+        "sources": {
+          "type": "array",
+          "description": "Array of sources referenced in the response",
+          "items": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "number",
+                "description": "The position index of the source in the response"
+              },
+              "url": {
+                "type": "string",
+                "description": "The URL of the source"
+              },
+              "label": {
+                "type": "string",
+                "description": "The display label for the source"
+              },
+              "description": {
+                "type": "string",
+                "description": "A description of the source content"
+              }
+            }
+          }
+        },
+        "citationPills": {
+          "type": "array",
+          "description": "Inline citation pills extracted from the Copilot answer. Each entry is one (pill, source) pair: when a pill cites N sources (consecutive citation events grouped into a single chip), the array contains N entries sharing the same `citationPillId` but carrying per-source `label`, `url`, and `domain`. Group by `citationPillId` to recover the pill-level structure. Omitted from `result` when the answer carries no pills.",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "citationPillId",
+              "url",
+              "domain",
+              "position"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Per-source title from the citation event (e.g. `\"Microsoft 365 Documentation\"`, `\"Productivity Best Practices\"`). Always present; may be an empty string when the event ships no title — read `domain` / `url` for source identity in that case. Entries grouped under the same `citationPillId` carry different per-source labels."
+              },
+              "citationPillId": {
+                "type": "integer",
+                "description": "1-based ordinal shared by all entries from the same chip. Group by `citationPillId` to reconstruct the visible chip; the per-source `label` differs across entries within a chip."
+              },
+              "url": {
+                "type": "string",
+                "description": "Direct URL of the cited source."
+              },
+              "domain": {
+                "type": "string",
+                "description": "Host extracted from `url`, for grouping and display."
+              },
+              "description": {
+                "type": "string",
+                "description": "Source description from the sources rail when Copilot ships one. Omitted when absent."
+              },
+              "position": {
+                "type": "integer",
+                "description": "1-based position of this source in the sibling `result.sources` array."
+              }
+            }
+          }
+        },
+        "shoppingCards": {
+          "type": "array",
+          "description": "Array of shopping/product cards extracted from the response (when available)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Shopping card type"
+              },
+              "layout": {
+                "type": "string",
+                "description": "Layout style for the shopping card"
+              },
+              "products": {
+                "type": "array",
+                "description": "Array of product information",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "product": {
+                      "type": "object",
+                      "description": "Product identifier information",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Unique product ID"
+                        },
+                        "groupId": {
+                          "type": "string",
+                          "description": "Product group ID"
+                        },
+                        "brandGroupId": {
+                          "type": "string",
+                          "description": "Brand group ID (optional)"
+                        }
+                      }
+                    },
+                    "position": {
+                      "type": "integer",
+                      "description": "1-indexed rank across all products in all shopping cards in the response (flat, not reset per card)."
+                    },
+                    "offerId": {
+                      "type": "string",
+                      "description": "Unique offer identifier"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "Product page URL"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Product name"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Product description"
+                    },
+                    "images": {
+                      "type": "array",
+                      "description": "Product images with titles and URLs",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "description": "Image title"
+                          },
+                          "url": {
+                            "type": "string",
+                            "description": "Image URL"
+                          }
+                        }
+                      }
+                    },
+                    "specifications": {
+                      "type": "array",
+                      "description": "Product specifications (e.g., Color, Size)",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "displayName": {
+                            "type": "string",
+                            "description": "Specification name"
+                          },
+                          "values": {
+                            "type": "array",
+                            "description": "Available values",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tags": {
+                      "type": "array",
+                      "description": "Product tags",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "price": {
+                      "type": "object",
+                      "description": "Product pricing information",
+                      "properties": {
+                        "amount": {
+                          "type": "number",
+                          "description": "Price amount"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "description": "Currency code (optional)"
+                        },
+                        "currencySymbol": {
+                          "type": "string",
+                          "description": "Currency symbol"
+                        }
+                      }
+                    },
+                    "discountPrice": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "description": "Discount price, same shape as `price`. May be null or absent.",
+                      "properties": {
+                        "amount": {
+                          "type": "number",
+                          "description": "Price amount"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "description": "Currency code (optional)"
+                        },
+                        "currencySymbol": {
+                          "type": "string",
+                          "description": "Currency symbol"
+                        }
+                      }
+                    },
+                    "seller": {
+                      "type": "string",
+                      "description": "Seller name"
+                    },
+                    "sellerLogoUrl": {
+                      "type": "string",
+                      "description": "Seller logo URL"
+                    },
+                    "brandName": {
+                      "type": "string",
+                      "description": "Product brand name"
+                    },
+                    "rating": {
+                      "type": "object",
+                      "description": "Product rating information",
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "description": "Rating value"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Number of ratings"
+                        },
+                        "maxRating": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "description": "Maximum rating scale. May be null or absent."
+                        }
+                      }
+                    },
+                    "canTrackPrice": {
+                      "type": "boolean",
+                      "description": "Whether price tracking is available"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "map": {
+          "type": "array",
+          "description": "Array of business/place map entries extracted from the response (when available)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Business name"
+              },
+              "position": {
+                "type": "integer",
+                "description": "Position in results (1-indexed)"
+              },
+              "placeId": {
+                "type": "string",
+                "description": "Google Place ID"
+              },
+              "location": {
+                "type": "object",
+                "description": "Business location",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "description": "Full street address"
+                  },
+                  "latitude": {
+                    "type": "number",
+                    "description": "GPS latitude"
+                  },
+                  "longitude": {
+                    "type": "number",
+                    "description": "GPS longitude"
+                  }
+                }
+              },
+              "phoneNumber": {
+                "type": "string",
+                "description": "Contact phone number"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "Business website URL"
+              },
+              "reviews": {
+                "type": "array",
+                "description": "Review aggregations from providers",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "description": "Number of reviews"
+                    },
+                    "rating": {
+                      "type": "number",
+                      "description": "Average rating"
+                    },
+                    "providerName": {
+                      "type": "string",
+                      "description": "Review provider name"
+                    },
+                    "providerIconUrl": {
+                      "type": "string",
+                      "description": "Provider icon URL"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Reviews page URL"
+                    }
+                  }
+                }
+              },
+              "photos": {
+                "type": "array",
+                "description": "Business photos",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Photo URL"
+                    },
+                    "altText": {
+                      "type": "string",
+                      "description": "Alt text for the photo"
+                    },
+                    "providerName": {
+                      "type": "string",
+                      "description": "Photo provider name"
+                    },
+                    "providerUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Photo provider URL"
+                    }
+                  }
+                }
+              },
+              "openState": {
+                "type": "string",
+                "description": "Current open/closed status"
+              },
+              "category": {
+                "type": "string",
+                "description": "Business category"
+              },
+              "price": {
+                "description": "Price level (if available)"
+              },
+              "layerLabel": {
+                "type": "string",
+                "description": "Map layer grouping label"
+              }
+            }
+          }
+        },
+        "searchQueries": {
+          "type": "array",
+          "description": "Array of query fan-out — the web search queries Copilot ran while generating the response. Automatically included when at least one is available, no surcharge.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "markdown": {
+          "type": "string",
+          "description": "Copilot's response formatted in Markdown (included when include.markdown is true)"
+        },
+        "rawResponse": {
+          "type": "array",
+          "description": "Raw upstream provider stream captured during the request. Each item is one chunk from the provider's wire protocol (SSE event, batchexecute frame, etc.). Format is provider-specific, undocumented, and may change without notice — use it for debugging or to access data not yet surfaced in the structured fields above.",
+          "items": {}
+        }
+      }
+    }
+  }
+}

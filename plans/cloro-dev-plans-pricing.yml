@@ -1,0 +1,273 @@
+generated: '2026-10-07'
+method: searched
+source: https://cloro.dev/pricing/
+sources:
+- https://cloro.dev/pricing/
+- https://cloro.dev/docs/guides/billing
+name: cloro pricing
+audience: developer-api
+pricing_basis: tiered-subscription
+published: true
+currency: USD
+plan_count: 11
+delivery:
+  delivery: managed
+  evidence: null
+  free_edition: null
+  managed_tier: null
+  open_source_license: null
+note: 'Credit-based monthly subscription: "cloro uses a credit-based subscription model, so there is no pay-as-you-go or per-request pricing." Credits do not roll over; standard and self-serve Enterprise tiers have a hard credit cap with no overages; annual Enterprise contracts add overages, 20% more credits and 1.3x concurrency. price_text for Free/Lite/Hobby/Starter is the plan card; Growth through Enterprise 5K come from the "Compare all 11 tiers" table where price, credits, per-1k rate and concurrency are bare cells. Per-request credit costs (async/batch; sync adds +2): ChatGPT (full response) 7 credits, ChatGPT (web search) 5 credits, Perplexity 4 credits, Grok 4 credits (unavailable), Copilot 5 credits, AI Mode 4 credits, AI Overview (incl. SERP) 5 credits, Gemini 4 credits, Google Search 3 credits +2/page, Google News 3 credits +2/page.'
+credit_costs:
+- provider: ChatGPT (full response)
+  price_text: 7 credits
+- provider: ChatGPT (web search)
+  price_text: 5 credits
+- provider: Perplexity
+  price_text: 4 credits
+- provider: Grok
+  price_text: 4 credits
+  note: Unavailable
+- provider: Copilot
+  price_text: 5 credits
+- provider: AI Mode
+  price_text: 4 credits
+- provider: AI Overview (incl. SERP)
+  price_text: 5 credits
+- provider: Gemini
+  price_text: 4 credits
+- provider: Google Search
+  price_text: 3 credits +2/page
+- provider: Google News
+  price_text: 3 credits +2/page
+- provider: sync surcharge
+  price_text: sync requests add a +2 credit surcharge
+plans:
+- name: Free
+  price_text: $0 /mo
+  price: 0
+  currency: USD
+  period: month
+  included_quota: 500 credits / month
+  features:
+  - 500 credits / month
+  - Added monthly
+  - 1 concurrent job
+  - 1 seat
+  - Documentation assistant
+  limits:
+  - name: credits
+    limit_text: 500 credits / month
+    limit: 500
+    window: month
+  - name: concurrency
+    limit_text: 1 concurrent job
+    limit: 1
+  - name: seats
+    limit_text: 1 seat
+    limit: 1
+- name: Lite
+  price_text: $30 /mo
+  price: 30
+  currency: USD
+  period: month
+  included_quota: 37,500 credits
+  unit_price_text: $0.80 per 1k credits
+  features:
+  - 37,500 credits
+  - $0.80 per 1k credits
+  - 10 concurrent jobs
+  - Unlimited seats
+  - Email support
+  limits:
+  - name: credits
+    limit_text: 37,500 credits
+    limit: 37500
+    window: month
+  - name: concurrency
+    limit_text: 10 concurrent jobs
+    limit: 10
+- name: Hobby
+  price_text: $100 /mo
+  price: 100
+  currency: USD
+  period: month
+  included_quota: 250,000 credits
+  unit_price_text: $0.40 per 1k credits
+  features:
+  - 250,000 credits
+  - $0.40 per 1k credits
+  - 20 concurrent jobs
+  - Unlimited seats
+  - Email support
+  limits:
+  - name: credits
+    limit_text: 250,000 credits
+    limit: 250000
+    window: month
+  - name: concurrency
+    limit_text: 20 concurrent jobs
+    limit: 20
+- name: Starter
+  price_text: $250 /mo
+  price: 250
+  currency: USD
+  period: month
+  included_quota: 650,000 credits
+  unit_price_text: $0.39 per 1k credits
+  features:
+  - 650,000 credits
+  - $0.39 per 1k credits
+  - 50 concurrent jobs
+  - Unlimited seats
+  - Email support
+  - Most Popular
+  limits:
+  - name: credits
+    limit_text: 650,000 credits
+    limit: 650000
+    window: month
+  - name: concurrency
+    limit_text: 50 concurrent jobs
+    limit: 50
+- name: Growth
+  price_text: $500
+  price: 500
+  currency: USD
+  period: month
+  included_quota: 1,350,000
+  unit_price_text: $0.37
+  features:
+  - 1,350,000 credits per month (compare table)
+  - $0.37 per 1k credits (compare table)
+  - 75 concurrent jobs (compare table)
+  - Unlimited seats
+  - Priority email
+  limits:
+  - name: credits
+    limit_text: 1,350,000
+    limit: 1350000
+    window: month
+  - name: concurrency
+    limit_text: '75'
+    limit: 75
+- name: Business
+  price_text: $1,000
+  price: 1000
+  currency: USD
+  period: month
+  included_quota: 2,800,000
+  unit_price_text: $0.36
+  features:
+  - 2,800,000 credits per month (compare table)
+  - $0.36 per 1k credits (compare table)
+  - 100 concurrent jobs (compare table)
+  - Unlimited seats
+  - Priority email
+  limits:
+  - name: credits
+    limit_text: 2,800,000
+    limit: 2800000
+    window: month
+  - name: concurrency
+    limit_text: '100'
+    limit: 100
+- name: Enterprise 2K
+  price_text: $2,000
+  price: 2000
+  currency: USD
+  period: month
+  included_quota: 5,871,025
+  unit_price_text: $0.34
+  features:
+  - 5,871,025 credits per month (compare table)
+  - $0.34 per 1k credits (compare table)
+  - 135 concurrent jobs (compare table)
+  - Unlimited seats
+  - Slack support
+  limits:
+  - name: credits
+    limit_text: 5,871,025
+    limit: 5871025
+    window: month
+  - name: concurrency
+    limit_text: '135'
+    limit: 135
+- name: Enterprise 3K
+  price_text: $3,000
+  price: 3000
+  currency: USD
+  period: month
+  included_quota: 9,306,606
+  unit_price_text: $0.32
+  features:
+  - 9,306,606 credits per month (compare table)
+  - $0.32 per 1k credits (compare table)
+  - 175 concurrent jobs (compare table)
+  - Unlimited seats
+  - Slack support
+  limits:
+  - name: credits
+    limit_text: 9,306,606
+    limit: 9306606
+    window: month
+  - name: concurrency
+    limit_text: '175'
+    limit: 175
+- name: Enterprise 4K
+  price_text: $4,000
+  price: 4000
+  currency: USD
+  period: month
+  included_quota: 12,756,261
+  unit_price_text: $0.31
+  features:
+  - 12,756,261 credits per month (compare table)
+  - $0.31 per 1k credits (compare table)
+  - 215 concurrent jobs (compare table)
+  - Unlimited seats
+  - Slack support
+  limits:
+  - name: credits
+    limit_text: 12,756,261
+    limit: 12756261
+    window: month
+  - name: concurrency
+    limit_text: '215'
+    limit: 215
+- name: Enterprise 5K
+  price_text: $5,000
+  price: 5000
+  currency: USD
+  period: month
+  included_quota: 16,391,783
+  unit_price_text: $0.31
+  features:
+  - 16,391,783 credits per month (compare table)
+  - $0.31 per 1k credits (compare table)
+  - 255 concurrent jobs (compare table)
+  - Unlimited seats
+  - Slack support
+  limits:
+  - name: credits
+    limit_text: 16,391,783
+    limit: 16391783
+    window: month
+  - name: concurrency
+    limit_text: '255'
+    limit: 255
+- name: Enterprise (annual contract)
+  price_text: $5,000 +
+  price: Contact sales
+  currency: USD
+  period: 12-month commitment
+  features:
+  - Increased concurrency, overages on credits and credit discounts for annual contracts
+  - 'Overages allowed: service continues after your monthly credit allocation is exhausted'
+  - 20% more credits per month
+  - 1.3x concurrency
+  limits: []
+  overage: overage credits are billed at your contracted per-credit rate in the following billing cycle
+  note: Above $5,000/mo, Enterprise is available through annual contracts.
+rate_limit_statements:
+- All endpoints are rate-limited to 1,000 requests per second
+- Concurrency limits depend on your subscription plan

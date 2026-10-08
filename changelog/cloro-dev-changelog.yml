@@ -1,0 +1,123 @@
+generated: '2026-10-07'
+method: searched
+source: https://cloro.dev/docs/changelog (markdown twin https://cloro.dev/docs/changelog.md, read 2026-10-07)
+url: https://cloro.dev/docs/changelog
+docs: https://cloro.dev/docs/guides/versioning
+scheme: Dated entries (no version numbers); the API version is the URL path segment /v1/ and additive changes ship inside it without a version bump. RSS feed advertised for Slack.
+current_version: v1
+entry_count_total: 105
+oldest_entry: '2025-10-09'
+window: 20 most recent of 105 dated entries (2026-08-21 to 2026-09-29)
+note: breaking is set true only where an entry says a field or parameter was removed or is now ignored; the provider states all changes inside /v1/ are additive.
+entries:
+- version: null
+  date: '2026-09-29'
+  breaking: false
+  highlights:
+  - Send requests from the dashboard Playground
+  - JSON
+  - HTML
+  - Code
+- version: null
+  date: '2026-09-24'
+  breaking: true
+  highlights:
+  - 'ChatGPT: Czech Republic (`CZ`) is supported again'
+- version: null
+  date: '2026-09-22'
+  breaking: false
+  highlights:
+  - Gemini product cards now ship as `shoppingCards`
+- version: null
+  date: '2026-09-21'
+  breaking: false
+  highlights:
+  - AI Mode product results report each market's own currency
+  - AI Mode ads carry the creative image as `imageUrl`
+- version: null
+  date: '2026-09-18'
+  breaking: false
+  highlights:
+  - Place cards carry `phone` and `website`, and `placeId` is now a Google ID
+- version: null
+  date: '2026-09-18'
+  breaking: false
+  highlights:
+  - Google AI Overview ships place cards as `places` and `map`
+- version: null
+  date: '2026-09-16'
+  breaking: false
+  highlights:
+  - Perplexity is back to normal success rates
+- version: null
+  date: '2026-09-14'
+  breaking: false
+  highlights:
+  - Google shopping cards ship the discount badge as `promoLabel`
+- version: null
+  date: '2026-09-09'
+  breaking: false
+  highlights:
+  - Gemini place cards now ship as `places`
+- version: null
+  date: '2026-09-08'
+  breaking: true
+  highlights:
+  - Every redirect link now ships beside its destination as `redirectLink`
+  - '`include.googleGoto` is now ignored.'
+- version: null
+  date: '2026-09-02'
+  breaking: false
+  highlights:
+  - 'ChatGPT: opt out of forced web search with `disableWebSearch`'
+- version: null
+  date: '2026-08-31'
+  breaking: false
+  highlights:
+  - 'Google and AI Mode: keep the raw `/goto` links, and a new endpoint to resolve one'
+- version: null
+  date: '2026-08-30'
+  breaking: true
+  highlights:
+  - 'Google Search: sponsored-ad coverage roughly doubled'
+- version: null
+  date: '2026-08-28'
+  breaking: false
+  highlights:
+  - 'ChatGPT: request the legacy interface with `legacy`'
+- version: null
+  date: '2026-08-27'
+  breaking: false
+  highlights:
+  - 'Google `/goto` tracking links: your results keep real URLs'
+- version: null
+  date: '2026-08-26'
+  breaking: false
+  highlights:
+  - 'ChatGPT: the mobile-web format now serves 98% of responses'
+  - 25 August 2026
+  - 98%
+- version: null
+  date: '2026-08-25'
+  breaking: false
+  highlights:
+  - 'Google family: interface language with `hl`'
+  - Perplexity pricing increases to 4 credits per request
+  - 4 credits per request
+- version: null
+  date: '2026-08-17'
+  breaking: false
+  highlights:
+  - 'Scheduled maintenance: 19 August 2026, 18:00 UTC'
+  - Wednesday 19 August 2026 from 18:00 UTC
+- version: null
+  date: '2026-08-14'
+  breaking: false
+  highlights:
+  - Request latency is now returned in responses
+- version: null
+  date: '2026-08-11'
+  breaking: false
+  highlights:
+  - 'Incident: `result.html` unavailable between 12:00 and 12:47 UTC'
+  - 12:00 and 12:47 UTC on 11 August 2026

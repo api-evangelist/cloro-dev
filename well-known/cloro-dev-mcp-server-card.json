@@ -1,0 +1,30 @@
+{
+  "$comment": "SEP-1649 server-card (modelcontextprotocol PR #2127). Schema still in flux; tool descriptions live in the hosted MCP server at the transport URL.",
+  "serverInfo": {
+    "name": "cloro",
+    "version": "0.2.0",
+    "title": "cloro MCP server",
+    "description": "Query cloro's AI scraping APIs (ChatGPT, Perplexity, Gemini, Google AI Mode, Copilot, Grok, Google Search, Google News) as agent tools via MCP. Each request forwards your own credential (a cloro API key or an OAuth access token), so billing, rate limits, and concurrency are enforced by the API.",
+    "documentation": "https://cloro.dev/docs/integrations/mcp",
+    "homepage": "https://cloro.dev"
+  },
+  "transport": {
+    "type": "http",
+    "url": "https://mcp.cloro.dev/mcp"
+  },
+  "authentication": {
+    "type": "bearer",
+    "description": "OAuth 2.1 access token from https://clerk.cloro.dev (discovered through resourceMetadata), or a cloro API key: as a Bearer token in the Authorization header, or in the URL path (https://mcp.cloro.dev/<api key>/mcp). Register at https://cloro.dev. The handshake and tools/list answer without a credential, so a client can inspect the tool set first; a tools/call without one returns 401 with a WWW-Authenticate challenge.",
+    "resourceMetadata": "https://mcp.cloro.dev/.well-known/oauth-protected-resource"
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    }
+  },
+  "links": {
+    "openapi": "https://cloro.dev/docs/api-reference/openapi.json",
+    "skills": "https://cloro.dev/.well-known/agent-skills/index.json",
+    "apiCatalog": "https://cloro.dev/.well-known/api-catalog"
+  }
+}

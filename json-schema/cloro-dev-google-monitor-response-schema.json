@@ -1,0 +1,1588 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/cloro-dev/main/json-schema/cloro-dev-google-monitor-response-schema.json",
+  "title": "GoogleMonitorResponse",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/cloro-dev-openapi.yml#/components/schemas/GoogleMonitorResponse",
+  "required": [
+    "success",
+    "result"
+  ],
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "result": {
+      "description": "Google search results data",
+      "type": "object",
+      "properties": {
+        "organicResults": {
+          "type": "array",
+          "description": "Organic search results from Google",
+          "items": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "number",
+                "description": "Position in search results (1-indexed)"
+              },
+              "title": {
+                "type": "string",
+                "description": "Title of the search result"
+              },
+              "link": {
+                "type": "string",
+                "description": "URL of the search result"
+              },
+              "displayedLink": {
+                "type": "string",
+                "description": "Formatted URL as displayed in search results"
+              },
+              "snippet": {
+                "type": "string",
+                "description": "Text snippet describing the page content"
+              },
+              "date": {
+                "type": "string",
+                "description": "Publication date if available"
+              },
+              "page": {
+                "type": "number",
+                "description": "Page number this result appeared on (1-indexed)"
+              },
+              "sitelinks": {
+                "type": "object",
+                "description": "Sitelinks displayed under the main result",
+                "properties": {
+                  "inline": {
+                    "type": "array",
+                    "description": "Inline sitelinks",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "link": {
+                          "type": "string"
+                        },
+                        "redirectLink": {
+                          "type": "string",
+                          "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "redirectLink": {
+                "type": "string",
+                "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+              }
+            }
+          }
+        },
+        "peopleAlsoAsk": {
+          "type": "array",
+          "description": "People Also Ask questions from Google",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": {
+                "type": "string",
+                "description": "The question text"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "AIOVERVIEW",
+                  "LINK",
+                  "UNKNOWN"
+                ],
+                "description": "Type of question result"
+              },
+              "snippet": {
+                "type": "string",
+                "description": "Answer snippet (for LINK type)"
+              },
+              "title": {
+                "type": "string",
+                "description": "Result title (for LINK type)"
+              },
+              "link": {
+                "type": "string",
+                "description": "Result URL (for LINK type)"
+              },
+              "markdown": {
+                "type": "string",
+                "description": "AI Overview markdown content (for AIOVERVIEW type, when include.paaAioverview is true)"
+              },
+              "sources": {
+                "type": "array",
+                "description": "Cited sources (for AIOVERVIEW type, when include.paaAioverview is true)",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "description": "Title of the source"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "URL of the source"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description of the source"
+                    },
+                    "position": {
+                      "type": "number",
+                      "description": "Position of source (1-indexed)"
+                    },
+                    "redirectLink": {
+                      "type": "string",
+                      "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                    }
+                  }
+                }
+              },
+              "redirectLink": {
+                "type": "string",
+                "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+              }
+            }
+          }
+        },
+        "peopleAreSaying": {
+          "type": "array",
+          "description": "Cards from Google's \"What people are saying\" / \"Trending posts and discussions\" SERP module. The field is omitted from `result` when no such module appears on the SERP, so clients should treat it as optional rather than expecting an empty array.",
+          "items": {
+            "type": "object",
+            "required": [
+              "position",
+              "title",
+              "link",
+              "date"
+            ],
+            "properties": {
+              "position": {
+                "type": "number",
+                "description": "Position within the module (1-indexed)"
+              },
+              "title": {
+                "type": "string",
+                "description": "Card title as displayed on the SERP"
+              },
+              "link": {
+                "type": "string",
+                "description": "Destination URL the card points to (often a Reddit, Quora, or community forum thread)"
+              },
+              "date": {
+                "type": "string",
+                "description": "Google's raw relative-time text (e.g., \"5 days ago\", \"2 weeks ago\"). Free-form string — not normalized to a timestamp."
+              },
+              "redirectLink": {
+                "type": "string",
+                "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+              }
+            }
+          }
+        },
+        "localResults": {
+          "type": "array",
+          "description": "Places from Google's local pack (the map-backed \"3-pack\" of local businesses on local-intent queries, e.g. \"best pizza in new york city\"). The field is omitted from `result` when no local pack appears on the SERP, so clients should treat it as optional rather than expecting an empty array. Desktop only; mobile and the separate hotels/travel pack are not surfaced.",
+          "items": {
+            "type": "object",
+            "required": [
+              "position",
+              "title"
+            ],
+            "properties": {
+              "position": {
+                "type": "number",
+                "description": "Position within the pack (1-indexed)"
+              },
+              "title": {
+                "type": "string",
+                "description": "Business name as displayed on the SERP"
+              },
+              "placeId": {
+                "type": "string",
+                "description": "Google entity id for the place"
+              },
+              "rating": {
+                "type": "number",
+                "description": "Average star rating (0–5)"
+              },
+              "reviews": {
+                "type": "string",
+                "description": "Review count as displayed by Google (e.g. \"26K\"). Free-form string — not normalized to a number."
+              },
+              "price": {
+                "type": "string",
+                "description": "Price band as displayed by Google (e.g. \"$10–20\"). Currency symbol matches the locale."
+              },
+              "type": {
+                "type": "string",
+                "description": "Business category (e.g. \"Pizza\", \"Plumber\")"
+              },
+              "yearsInBusiness": {
+                "type": "string",
+                "description": "Years-in-business badge, when shown (typical on service-style packs)"
+              },
+              "address": {
+                "type": "string",
+                "description": "Street address or locality as displayed on the SERP"
+              },
+              "phone": {
+                "type": "string",
+                "description": "Phone number, when shown (locale-formatted)"
+              },
+              "hours": {
+                "type": "string",
+                "description": "Opening-hours text as displayed (e.g. \"Open · Closes 11 PM\", \"Open 24 hours\")"
+              },
+              "description": {
+                "type": "string",
+                "description": "Trailing snippet — a review quote or a service-options line"
+              },
+              "links": {
+                "type": "object",
+                "description": "Action links rendered on the place, typically on business/service-style packs (plumbers, salons, …) and absent on restaurant packs whose places are plain buttons. Each key is present only when Google rendered that button.",
+                "properties": {
+                  "website": {
+                    "type": "string",
+                    "description": "The business's own website URL"
+                  },
+                  "directions": {
+                    "type": "string",
+                    "description": "Absolute Google Maps directions URL"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "localResultsMoreLink": {
+          "type": "string",
+          "description": "Absolute URL of the local pack's \"More places\" / \"More businesses\" control — Google's expanded Local Finder for the query. Returned only alongside `localResults` when the SERP renders the control."
+        },
+        "relatedSearches": {
+          "type": "array",
+          "description": "Related search suggestions",
+          "items": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "Related search query"
+              },
+              "link": {
+                "type": "string",
+                "description": "Google search URL for the related query"
+              }
+            }
+          }
+        },
+        "ads": {
+          "type": "array",
+          "description": "Sponsored ad results from Google search, including text ads (`type: RESULT`) and shopping-style sponsored cards (`type: SHOPPING_CARD`) from the right-hand-side and top-of-page carousels.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "number",
+                "description": "Position within the ad block (1-indexed)"
+              },
+              "blockPosition": {
+                "type": "string",
+                "enum": [
+                  "top",
+                  "bottom",
+                  "middle",
+                  "rhs"
+                ],
+                "description": "Where the ad appeared on the SERP. `top`/`bottom` are text-ad blocks, `middle` covers direct/in-content ads, `rhs` is the right-hand-side sponsored-products carousel."
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "RESULT",
+                  "SHOPPING_CARD"
+                ],
+                "description": "Discriminates plain text ads (`RESULT`) from shopping-style sponsored cards (`SHOPPING_CARD`). Shopping cards appear in the right-hand-side PLA carousel, the top-of-page PLA carousel, and the top-of-page sponsored shopping-card carousels (vehicles, products, hotels, …)."
+              },
+              "title": {
+                "type": "string",
+                "description": "Ad title"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "Destination URL of the ad. For `type: SHOPPING_CARD` items this is a Google `aclk?`-redirected URL."
+              },
+              "page": {
+                "type": "number",
+                "description": "Page number where the ad was found"
+              },
+              "displayedUrl": {
+                "type": "string",
+                "description": "Formatted URL as displayed in the ad"
+              },
+              "domain": {
+                "type": "string",
+                "description": "Domain name of the advertiser"
+              },
+              "description": {
+                "type": "string",
+                "description": "Ad description text. For `type: RESULT` items this is classic ad copy. For `type: SHOPPING_CARD` items it carries category-specific subtitle fragments joined with `·` (e.g. vehicle condition + city: `Used - 94k miles · Greeley`)."
+              },
+              "category": {
+                "type": "string",
+                "description": "Carousel header label for shopping-card ads. Examples observed today include `Sponsored products`, `Sponsored vehicles`, and `Sponsored hotels`. Omitted for `type: RESULT` text ads."
+              },
+              "price": {
+                "type": "object",
+                "description": "Product price for `type: SHOPPING_CARD` ads. `currency` and `raw` are always present; `value` is omitted when the number doesn't parse, and the whole object is omitted when no currency appears beside a number. `raw` carries the visible text verbatim (e.g. `\"$0 down with 24 monthly payments\"` on installment offers) so consumers can disambiguate genuine zero prices from down-payment labels.",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Numeric price value"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "Currency symbol"
+                  },
+                  "raw": {
+                    "type": "string",
+                    "description": "Visible price text verbatim"
+                  }
+                }
+              },
+              "oldPrice": {
+                "type": "object",
+                "description": "Original price before discount on `type: SHOPPING_CARD` ads that surface MSRP / sale messaging. Same shape as `price`.",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Numeric price value"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "Currency symbol"
+                  },
+                  "raw": {
+                    "type": "string",
+                    "description": "Visible price text verbatim"
+                  }
+                }
+              },
+              "store": {
+                "type": "string",
+                "description": "Merchant/dealer name attached to a `type: SHOPPING_CARD` ad."
+              },
+              "imageUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "Hero image URL served by Google's `encrypted-tbn` CDN for `type: SHOPPING_CARD` ads. Omitted when the lazy-image chain cannot resolve a non-placeholder source."
+              },
+              "sitelinks": {
+                "type": "array",
+                "description": "Sitelinks displayed under the ad",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Sitelink URL"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Sitelink title"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Sitelink description"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "aioverview": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Google AI Overview data (if requested). Omitted when Google shows no AI Overview for the query.",
+          "properties": {
+            "sources": {
+              "type": "array",
+              "description": "Sources referenced in the AI Overview",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "position": {
+                    "type": "number",
+                    "description": "1-based position index of the source"
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Source URL"
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Source title (the display label Google renders on the source rail)"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Source description / snippet"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "citationPills": {
+              "type": "array",
+              "description": "Inline citation pills extracted from the AI Overview answer. Each entry is one (pill, source) pair: when a pill cites N sources (Google's `[Label +N]` chips), the array contains N entries sharing the same `citationPillId` but carrying per-source `label`, `url`, and `domain`. Group by `citationPillId` to recover the pill-level structure. Omitted from `result.aioverview` when the answer carries no pills.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "citationPillId",
+                  "url",
+                  "domain",
+                  "position"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "Per-source title from the sources rail (for example `\"Chase Personal Credit Cards\"`). Empty string when the rail has no title for this source — consumers should read `domain` / `url` for source identity in that case. Entries grouped under the same `citationPillId` carry different per-source labels."
+                  },
+                  "citationPillId": {
+                    "type": "integer",
+                    "description": "1-based ordinal shared by all entries from the same chip. Group by `citationPillId` to reconstruct the visible chip; the per-source `label` differs across entries within a chip."
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Direct URL of the cited source."
+                  },
+                  "domain": {
+                    "type": "string",
+                    "description": "Host extracted from `url`, for grouping and display."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Source description from the sources rail when Google ships one. Omitted when the source carries no snippet."
+                  },
+                  "position": {
+                    "type": "integer",
+                    "description": "1-based position of this source in the sibling `result.aioverview.sources` array."
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "relatedLinks": {
+              "type": "array",
+              "description": "A citation chip's \"View related links\" flyout items — URLs Google groups under the chip that are NOT in the `sources` rail (for example a Google Shopping comparison link). Each entry shares the `citationPillId` of its chip so it can be grouped with that chip's `citationPills`, but carries no `position` (a related link is absent from `sources`). Related links also render inline in `markdown`, so `markdown` may contain more URLs than `sources` / `citationPills` — the extras are accounted for here. Omitted from `result.aioverview` when no chip carries related links.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "citationPillId",
+                  "url",
+                  "domain"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "The related page's own title. Empty string when Google ships none — read `domain` / `url` for identity in that case."
+                  },
+                  "citationPillId": {
+                    "type": "integer",
+                    "description": "Matches the `citationPillId` of the chip's `citationPills` entries, so a related link can be grouped with its pill."
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Direct URL of the related link."
+                  },
+                  "domain": {
+                    "type": "string",
+                    "description": "Host extracted from `url`, for grouping and display."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Snippet Google ships for the related link. Omitted when absent."
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "text": {
+              "type": "string",
+              "description": "AI Overview text content"
+            },
+            "markdown": {
+              "type": "string",
+              "description": "AI Overview content formatted as markdown (if requested)"
+            },
+            "videos": {
+              "type": "array",
+              "description": "Video content included in the AI Overview",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Direct URL to the video"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Video title"
+                  },
+                  "thumbnail": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Thumbnail image URL"
+                  },
+                  "source": {
+                    "type": "string",
+                    "description": "Channel or source name"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "Video platform"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Upload date"
+                  },
+                  "duration": {
+                    "type": "string",
+                    "description": "Video duration"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "places": {
+              "type": "array",
+              "description": "Place cards in the AI Overview answer. Omitted when the answer has none.",
+              "items": {
+                "$ref": "#/$defs/GooglePlace"
+              }
+            },
+            "map": {
+              "type": "array",
+              "description": "The place cards that Google geo-tagged, with coordinates. Omitted when the answer has none.",
+              "items": {
+                "$ref": "#/$defs/GoogleMapPlace"
+              }
+            },
+            "ads": {
+              "type": "array",
+              "description": "Sponsored ads injected by Google inside the AI Overview",
+              "items": {
+                "type": "object",
+                "required": [
+                  "position",
+                  "title",
+                  "url",
+                  "type"
+                ],
+                "properties": {
+                  "position": {
+                    "type": "number",
+                    "description": "Position of the ad (1-indexed)"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Ad title"
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Ad destination URL"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "TEXT",
+                      "SHOPPING"
+                    ],
+                    "description": "Sub-type discriminator. TEXT ads carry `domain` + `description`; SHOPPING ads carry `price` + `store` (+ optional `old_price`). Always present."
+                  },
+                  "domain": {
+                    "type": "string",
+                    "description": "Domain name of the advertiser (present when `type` is `TEXT`)"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Ad description text (present when `type` is `TEXT`)"
+                  },
+                  "price": {
+                    "type": "object",
+                    "description": "Product price (present when `type` is `SHOPPING`). `currency` and `raw` are always present; `value` is omitted when the number doesn't parse, and the whole object is omitted when no currency appears beside a number. `raw` carries the visible text verbatim.",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "description": "Numeric price value"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency symbol"
+                      },
+                      "raw": {
+                        "type": "string",
+                        "description": "Visible price text verbatim"
+                      }
+                    }
+                  },
+                  "old_price": {
+                    "type": "object",
+                    "description": "Original price before discount (present when `type` is `SHOPPING` and the ad has sale pricing). Same shape as `price`.",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "description": "Numeric price value"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency symbol"
+                      },
+                      "raw": {
+                        "type": "string",
+                        "description": "Visible price text verbatim"
+                      }
+                    }
+                  },
+                  "store": {
+                    "type": "string",
+                    "description": "Retailer name (present when `type` is `SHOPPING`)"
+                  },
+                  "image": {
+                    "type": "string",
+                    "description": "Ad image URL (product photo for shopping ads, hero image for text ads)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "shoppingCards": {
+          "type": "array",
+          "description": "Shopping product cards extracted from the SERP's organic shopping grids (\"Popular products\" / \"More products\"). The field is omitted from `result` when no shopping section is present, so clients should treat it as optional rather than expecting an empty array. Cards carry no product URL: they open a Google-side overlay rather than an external page.",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "position"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Product title"
+              },
+              "position": {
+                "type": "integer",
+                "description": "1-indexed rank across the whole `shoppingCards` array in DOM order (flat, does not reset per `category` section)."
+              },
+              "promoLabel": {
+                "type": "string",
+                "description": "Discount badge as displayed by Google, in the SERP language (for example \"LOW PRICE\", \"OFERTA\", \"PROMOÇÃO\", \"20% OFF\"). Google renders it above the product name on a discounted card. Present only on a card that carries the badge, and Google-only — AI Mode does not render it."
+              },
+              "category": {
+                "type": "string",
+                "description": "Parent section header text. Lets callers distinguish cards from coexisting shopping panels on the same SERP. Current Google-emitted values include \"Popular products\" and \"More products\"."
+              },
+              "price": {
+                "type": "object",
+                "description": "Structured pricing information. `currency` and `raw` are always present; `value` is omitted when the number doesn't parse, and the whole object is omitted when no currency appears beside a number. `raw` carries the visible text verbatim.",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Numeric price"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "Currency symbol"
+                  },
+                  "raw": {
+                    "type": "string",
+                    "description": "Visible price text verbatim"
+                  }
+                }
+              },
+              "oldPrice": {
+                "type": "object",
+                "description": "Original price before discount. Same shape as `price`.",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Numeric price"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "Currency symbol"
+                  },
+                  "raw": {
+                    "type": "string",
+                    "description": "Visible price text verbatim"
+                  }
+                }
+              },
+              "store": {
+                "type": "string",
+                "description": "Merchant/store name"
+              },
+              "rating": {
+                "type": "number",
+                "description": "Product rating"
+              },
+              "reviews": {
+                "type": "string",
+                "description": "Review count"
+              },
+              "thumbnail": {
+                "type": "string",
+                "format": "uri",
+                "description": "Product image URL"
+              }
+            }
+          }
+        },
+        "knowledgeGraph": {
+          "description": "Google's Knowledge Graph panel for the queried entity. Omitted from `result` when no Knowledge Graph panel appears on the SERP — treat it as optional rather than expecting null.",
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Entity name as shown in the panel header"
+            },
+            "type": {
+              "type": "string",
+              "description": "Entity category label as rendered by Google (e.g. \"American rapper\", \"French museum\"). Free-form string, not an enum."
+            },
+            "kgmid": {
+              "type": "string",
+              "description": "Google Knowledge Graph ID for the entity"
+            },
+            "description": {
+              "type": "string",
+              "description": "Short description of the entity (may be sourced from Wikipedia or Google's own knowledge base)"
+            },
+            "imageUrl": {
+              "type": "string",
+              "description": "URL of the entity's image as served by Google"
+            },
+            "website": {
+              "type": "string",
+              "description": "Official website URL for the entity"
+            },
+            "menu": {
+              "type": "string",
+              "description": "Menu URL — present for restaurants and food businesses"
+            },
+            "trailer": {
+              "type": "string",
+              "description": "Trailer URL — present for films and TV shows"
+            },
+            "source": {
+              "type": "object",
+              "description": "Attribution source for the entity description (typically Wikipedia)",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Display name of the source"
+                },
+                "link": {
+                  "type": "string",
+                  "description": "URL of the source page"
+                },
+                "redirectLink": {
+                  "type": "string",
+                  "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                }
+              }
+            },
+            "attributes": {
+              "type": "array",
+              "description": "Factual key-value pairs extracted from the panel (e.g. born, genre, label). Keys are free-form strings as rendered by Google.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "description": "Attribute label"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Attribute value"
+                  }
+                }
+              }
+            },
+            "profiles": {
+              "type": "array",
+              "description": "Social media and external profile links for the entity",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Platform or profile name"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "Profile URL"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "peopleAlsoSearchFor": {
+              "type": "array",
+              "description": "Related entities that users also search for",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Related entity name"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "Google search URL for this related entity"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "thingsToKnow": {
+              "type": "array",
+              "description": "\"Things to know\" topic clusters extracted from the panel",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "Topic cluster label"
+                  },
+                  "subtitle": {
+                    "type": "string",
+                    "description": "Subtitle or supporting text for the topic"
+                  }
+                }
+              }
+            },
+            "ratings": {
+              "type": "array",
+              "description": "Review platform ratings (e.g. Rotten Tomatoes, IMDb) — present for films and TV shows",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "platform": {
+                    "type": "string",
+                    "description": "Review platform name"
+                  },
+                  "rating": {
+                    "type": "string",
+                    "description": "Rating value as displayed"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "URL to the review page"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "streamingOptions": {
+              "type": "array",
+              "description": "Streaming platform links for films and TV shows",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "platform": {
+                    "type": "string",
+                    "description": "Streaming platform name"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "Link to the content on the platform"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "webRatings": {
+              "type": "array",
+              "description": "Web ratings from review platforms — present for local businesses (e.g. Google, Tripadvisor, Yelp)",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "platform": {
+                    "type": "string",
+                    "description": "Rating platform name"
+                  },
+                  "rating": {
+                    "type": "string",
+                    "description": "Rating value as displayed"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "URL to the platform's review page"
+                  },
+                  "votes": {
+                    "type": "string",
+                    "description": "Number of votes or reviews (omitted when not available)"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "statsCard": {
+              "type": "object",
+              "description": "Statistics card — present for sports teams, organizations, and similar entities",
+              "properties": {
+                "context": {
+                  "type": "string",
+                  "description": "Context label for the stats (e.g. season or year)"
+                },
+                "stats": {
+                  "type": "array",
+                  "description": "Individual stat items",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "type": "string",
+                        "description": "Stat label"
+                      },
+                      "value": {
+                        "type": "string",
+                        "description": "Stat value"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "socialPosts": {
+              "type": "array",
+              "description": "Recent social media posts from the entity's official accounts",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "platform": {
+                    "type": "string",
+                    "description": "Social platform name"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "Post text content"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "URL to the post"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Post date as displayed by Google"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "notableAlumni": {
+              "type": "array",
+              "description": "Notable alumni — present for universities and educational institutions",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Alumni name"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "Google search URL for this person"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "contact": {
+              "type": "array",
+              "description": "Contact and ordering links — present for local businesses",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "Link label"
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Link URL"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "weather": {
+              "type": "object",
+              "description": "Current weather — present for geographic entities (cities, regions)",
+              "properties": {
+                "temperature": {
+                  "type": "string",
+                  "description": "Temperature as displayed"
+                },
+                "condition": {
+                  "type": "string",
+                  "description": "Weather condition"
+                }
+              }
+            },
+            "rating": {
+              "type": "object",
+              "description": "Aggregate star rating — present for local businesses",
+              "properties": {
+                "rating": {
+                  "type": "string",
+                  "description": "Star rating value"
+                },
+                "count": {
+                  "type": "string",
+                  "description": "Number of reviews"
+                }
+              }
+            },
+            "admission": {
+              "type": "array",
+              "description": "Admission options — present for museums, parks, and ticketed venues",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "provider": {
+                    "type": "string",
+                    "description": "Ticket provider name"
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "Admission price as displayed"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "URL to purchase tickets"
+                  },
+                  "badge": {
+                    "type": "string",
+                    "description": "Optional badge text (e.g. \"Free\", \"Best price\") — omitted when not present"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "artworks": {
+              "type": "array",
+              "description": "Notable artworks — present for artists and art institutions",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Artwork title"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "Link to more information about the artwork"
+                  },
+                  "author": {
+                    "type": "string",
+                    "description": "Author or creator name — omitted when not present"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "has3dModel": {
+              "type": "boolean",
+              "description": "True when Google surfaces a 3D model viewer for the entity"
+            },
+            "hotelOptions": {
+              "type": "array",
+              "description": "Hotel booking options — present for hotel entities",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "provider": {
+                    "type": "string",
+                    "description": "Booking provider name"
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "Price as displayed"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "URL to book on this provider"
+                  },
+                  "note": {
+                    "type": "string",
+                    "description": "Optional note (e.g. \"Includes breakfast\") — omitted when not present"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "trendingProducts": {
+              "type": "array",
+              "description": "Trending products — present for retail brands",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Product title"
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "Price as displayed"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "Link to the product"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "merchantVideos": {
+              "type": "array",
+              "description": "Merchant or brand video content — present for retail businesses",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Video title"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "Video URL"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "Video platform — omitted when not available"
+                  },
+                  "duration": {
+                    "type": "string",
+                    "description": "Video duration as displayed — omitted when not available"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "listenOn": {
+              "type": "array",
+              "description": "Music streaming platform links — present for musicians and musical acts",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "platform": {
+                    "type": "string",
+                    "description": "Streaming platform name"
+                  },
+                  "link": {
+                    "type": "string",
+                    "description": "Link to the artist on the platform"
+                  },
+                  "redirectLink": {
+                    "type": "string",
+                    "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+                  }
+                }
+              }
+            },
+            "redirectLink": {
+              "type": "string",
+              "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+            }
+          }
+        },
+        "productResults": {
+          "type": "array",
+          "description": "Merchant offers from the right-rail product panel. At most one entry, present only when Google shows the panel; no request flag needed. See [product results](/api-reference/endpoint/google/product-results).",
+          "items": {
+            "$ref": "#/$defs/ProductResult"
+          }
+        },
+        "html": {
+          "type": "array",
+          "description": "Raw HTML from Google search page (if requested)",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "GoogleMapPlace": {
+      "description": "Place card from a Google AI answer that Google geo-tagged",
+      "allOf": [
+        {
+          "$ref": "#/$defs/GooglePlaceBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "placeId",
+            "link",
+            "gpsCoordinates"
+          ],
+          "properties": {
+            "link": {
+              "type": "string",
+              "format": "uri",
+              "description": "Google Maps URL for the place"
+            },
+            "gpsCoordinates": {
+              "type": "object",
+              "description": "Geographic coordinates of the place",
+              "properties": {
+                "latitude": {
+                  "type": "number",
+                  "description": "Latitude coordinate"
+                },
+                "longitude": {
+                  "type": "number",
+                  "description": "Longitude coordinate"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "GooglePlace": {
+      "description": "Place card from a Google AI answer",
+      "allOf": [
+        {
+          "$ref": "#/$defs/GooglePlaceBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "link": {
+              "type": "string",
+              "format": "uri",
+              "description": "Google viewer URL for the place. It is the URL of the place's entry in `sources`. Omitted when `sources` has no entry for the place."
+            },
+            "priceLevel": {
+              "type": "string",
+              "description": "Price level indicator"
+            }
+          }
+        }
+      ]
+    },
+    "GooglePlaceBase": {
+      "type": "object",
+      "description": "Fields shared by the place and map entries of a Google AI answer",
+      "required": [
+        "title",
+        "index"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Place name"
+        },
+        "index": {
+          "type": "integer",
+          "description": "Position index of the place in the results"
+        },
+        "thumbnail": {
+          "type": "string",
+          "format": "uri",
+          "description": "Place thumbnail image URL"
+        },
+        "rating": {
+          "type": "number",
+          "description": "Star rating (0-5)"
+        },
+        "reviews": {
+          "type": "integer",
+          "description": "Number of reviews"
+        },
+        "type": {
+          "type": "string",
+          "description": "Place type or category"
+        },
+        "address": {
+          "type": "string",
+          "description": "Full postal address, as Google gives it on the card's Directions link"
+        },
+        "status": {
+          "type": "string",
+          "description": "Operating status"
+        },
+        "placeId": {
+          "type": "string",
+          "description": "Google Knowledge Graph ID for the place. A place and its `map` entry share it. Omitted when Google did not geo-tag the card."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number from the card's Call button, formatted as Google ships it for the locale. Omitted when the card has no Call button."
+        },
+        "website": {
+          "type": "string",
+          "format": "uri",
+          "description": "Business website from the card's Website button. Omitted when the card has no Website button."
+        }
+      }
+    },
+    "ProductResult": {
+      "type": "object",
+      "description": "One product cluster and its merchant offers. Only `title` is guaranteed; anything Google's panel lacks is omitted, never sent as `null`.",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Product cluster title, as Google displayed it. Empty when the page has no product heading."
+        },
+        "stores": {
+          "type": "array",
+          "description": "Merchant offers. Always present on Google Search entries; omitted on AI Mode when Google lists none.",
+          "items": {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Merchant name"
+              },
+              "link": {
+                "type": "string",
+                "format": "uri",
+                "description": "Merchant product URL, passed through from Google verbatim"
+              },
+              "redirectLink": {
+                "type": "string",
+                "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to."
+              },
+              "price": {
+                "type": "object",
+                "description": "Offer price. Omitted when the displayed text can't be parsed.",
+                "required": [
+                  "value",
+                  "currency"
+                ],
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Parsed numeric price. On installment offers, the monthly payment."
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "ISO 4217 code, or the displayed token when it maps to none"
+                  },
+                  "raw": {
+                    "type": "string",
+                    "description": "Visible price text verbatim"
+                  }
+                }
+              },
+              "installments": {
+                "type": "string",
+                "description": "Installment terms as displayed"
+              },
+              "description": {
+                "type": "string",
+                "description": "Merchant's listing title, naming the exact SKU sold"
+              },
+              "buyingOptions": {
+                "type": "array",
+                "description": "Merchant badges in display order, such as stock status, delivery promise and returns window",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "logo": {
+                "type": "string",
+                "format": "uri",
+                "description": "Merchant logo URL"
+              },
+              "shipping": {
+                "type": "string",
+                "description": "Shipping cost or promise as displayed"
+              },
+              "condition": {
+                "type": "string",
+                "description": "Item condition"
+              },
+              "rating": {
+                "type": "number",
+                "description": "Merchant rating"
+              },
+              "reviews": {
+                "type": "string",
+                "description": "Merchant review count, abbreviated"
+              }
+            }
+          }
+        },
+        "aboutTheProduct": {
+          "type": "object",
+          "description": "Google's description of the product",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Prose blurb"
+            },
+            "features": {
+              "type": "array",
+              "description": "Feature bullets, when shown",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "specifications": {
+          "type": "object",
+          "description": "Spec tables: each category name maps to key/value pairs. Category names and keys arrive in the response language.",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "mainUrl"
+            ],
+            "properties": {
+              "mainUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "thumbnailUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "title": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "rating": {
+          "type": "number",
+          "description": "Product rating"
+        },
+        "reviews": {
+          "type": "string",
+          "description": "Product review count"
+        },
+        "variants": {
+          "type": "array",
+          "description": "Product variants Google offers",
+          "items": {
+            "type": "object"
+          }
+        },
+        "userReviews": {
+          "type": "array",
+          "description": "User reviews",
+          "items": {
+            "type": "object"
+          }
+        },
+        "relatedProducts": {
+          "type": "array",
+          "description": "Related products",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}
