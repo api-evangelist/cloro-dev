@@ -1,15 +1,15 @@
 openapi: 3.2.0
 info:
-  title: Cloro Dev States API
+  title: cloro States API
+  description: API for monitoring AI responses across different providers and regions.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
   version: 1.0.0
   contact:
     name: cloro support
     email: support@cloro.dev
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
   termsOfService: https://cloro.dev/terms/
-  description: 'Operations tagged States across 2 of this provider''s published API definitions: cloro-dev-openapi.json, cloro-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.cloro.dev
   description: Production server
@@ -114,87 +114,8 @@ paths:
                 $ref: '#/components/schemas/InternalError'
       tags:
       - States
-    servers:
-    - url: https://api.cloro.dev
-      description: Production server
 components:
-  headers:
-    XRateLimitRemaining:
-      description: Requests left in the current window.
-      schema:
-        type: integer
-        example: 997
-    XLatencyMs:
-      description: Milliseconds the API spent on the request, from arrival to the start of the response. Excludes network transit.
-      schema:
-        type: integer
-        example: 3420
-    XRequestId:
-      description: Unique ID for this request. Support uses it to find your request.
-      schema:
-        type: string
-        format: uuid
-        example: b0864943-5d45-4796-bc64-f052661256f0
-    XRateLimitLimit:
-      description: Requests allowed in the current window.
-      schema:
-        type: integer
-        example: 1000
   schemas:
-    ValidationError:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              example: VALIDATION_ERROR
-            message:
-              type: string
-              example: Request validation failed
-            details:
-              type: array
-              description: One entry per invalid field. Sent on request-body validation errors.
-              items:
-                type: object
-                properties:
-                  field:
-                    type: string
-                    example: prompt
-                  message:
-                    type: string
-                    example: Prompt cannot be empty
-            timestamp:
-              type: string
-              format: date-time
-              example: '2025-01-15T12:00:00.000Z'
-    AuthenticationError:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              enum:
-              - MISSING_API_KEY
-              - INVALID_API_KEY_FORMAT
-              - INVALID_OR_EXPIRED_API_KEY
-              example: MISSING_API_KEY
-            message:
-              type: string
-              example: Missing or invalid API key
-            timestamp:
-              type: string
-              format: date-time
-              example: '2025-01-15T12:00:00.000Z'
     InternalError:
       type: object
       properties:
@@ -234,11 +155,84 @@ components:
               type: string
               format: date-time
               example: '2025-01-15T12:00:00.000Z'
+    AuthenticationError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+              - MISSING_API_KEY
+              - INVALID_API_KEY_FORMAT
+              - INVALID_OR_EXPIRED_API_KEY
+              example: MISSING_API_KEY
+            message:
+              type: string
+              example: Missing or invalid API key
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+    ValidationError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: VALIDATION_ERROR
+            message:
+              type: string
+              example: Request validation failed
+            details:
+              type: array
+              description: One entry per invalid field. Sent on request-body validation errors.
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    example: prompt
+                  message:
+                    type: string
+                    example: Prompt cannot be empty
+            timestamp:
+              type: string
+              format: date-time
+              example: '2025-01-15T12:00:00.000Z'
+  headers:
+    XRateLimitLimit:
+      description: Requests allowed in the current window.
+      schema:
+        type: integer
+        example: 1000
+    XRateLimitRemaining:
+      description: Requests left in the current window.
+      schema:
+        type: integer
+        example: 997
+    XRequestId:
+      description: Unique ID for this request. Support uses it to find your request.
+      schema:
+        type: string
+        format: uuid
+        example: b0864943-5d45-4796-bc64-f052661256f0
+    XLatencyMs:
+      description: Milliseconds the API spent on the request, from arrival to the start of the response. Excludes network transit.
+      schema:
+        type: integer
+        example: 3420
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       description: cloro API key as a bearer token. One key grants every endpoint in this spec; per-key scopes are not available, so a client cannot request a narrower permission. Keys are created and revoked in the [dashboard](https://dashboard.cloro.dev/api-keys).
-x-refined-from:
-- cloro-dev-openapi.json
-- cloro-dev-openapi.yml

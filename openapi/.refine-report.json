@@ -1,8 +1,7 @@
 {
   "provider": "cloro-dev",
   "sources": [
-    "_original/cloro-dev-openapi.json",
-    "cloro-dev-openapi.yml"
+    "_original/cloro-dev-openapi.json"
   ],
   "outputs": [
     "cloro-dev-async-api-openapi.yml",
@@ -11,12 +10,11 @@
     "cloro-dev-monitor-api-openapi.yml",
     "cloro-dev-states-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/cloro-dev-openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "cloro-dev-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "cloro-dev-openapi.json: tagged paths POST /v1/monitor/chatgpt -> Monitor",
@@ -41,35 +39,14 @@
     "cloro-dev-openapi.json: declared missing tag: Credits",
     "cloro-dev-openapi.json: declared missing tag: Monitor",
     "cloro-dev-openapi.json: declared missing tag: States",
-    "cloro-dev-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/monitor/chatgpt -> Monitor",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/monitor/gemini -> Monitor",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/monitor/grok -> Monitor",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/monitor/google -> Monitor",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/monitor/google/goto -> Monitor",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/monitor/google/news -> Monitor",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/monitor/copilot -> Monitor",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/monitor/perplexity -> Monitor",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/monitor/aimode -> Monitor",
-    "cloro-dev-openapi.yml: tagged paths GET /v1/countries -> Countries",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/async/task -> Async",
-    "cloro-dev-openapi.yml: tagged paths POST /v1/async/task/batch -> Async",
-    "cloro-dev-openapi.yml: tagged paths GET /v1/async/task/{taskId} -> Async",
-    "cloro-dev-openapi.yml: tagged paths GET /v1/async/status -> Async",
-    "cloro-dev-openapi.yml: tagged paths DELETE /v1/async/queue -> Async",
-    "cloro-dev-openapi.yml: tagged paths GET /v1/credits -> Credits",
-    "cloro-dev-openapi.yml: tagged paths GET /v1/states -> States",
-    "cloro-dev-openapi.yml: declared missing tag: Async",
-    "cloro-dev-openapi.yml: declared missing tag: Countries",
-    "cloro-dev-openapi.yml: declared missing tag: Credits",
-    "cloro-dev-openapi.yml: declared missing tag: Monitor",
-    "cloro-dev-openapi.yml: declared missing tag: States",
-    "tag 'Async' spans 2 source specs (cloro-dev-openapi.json, cloro-dev-openapi.yml): per-path servers applied",
-    "tag 'Countries' spans 2 source specs (cloro-dev-openapi.json, cloro-dev-openapi.yml): per-path servers applied",
-    "tag 'Credits' spans 2 source specs (cloro-dev-openapi.json, cloro-dev-openapi.yml): per-path servers applied",
-    "tag 'Monitor' spans 2 source specs (cloro-dev-openapi.json, cloro-dev-openapi.yml): per-path servers applied",
-    "tag 'States' spans 2 source specs (cloro-dev-openapi.json, cloro-dev-openapi.yml): per-path servers applied",
-    "apis.yml register: written (+5 apis, 6 total)"
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "_original/cloro-dev-openapi.yml: archived document superseded by a larger archived document",
+    "cloro-dev-async-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cloro-dev-countries-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cloro-dev-credits-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cloro-dev-monitor-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cloro-dev-states-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
