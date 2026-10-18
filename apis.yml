@@ -12,6 +12,18 @@ modified: '2026-10-07'
 tags:
 - Company
 - Search
+- Artificial Intelligence
+- Web Scraping
+- SERP
+- Generative Engine Optimization
+- SEO
+- Brand Monitoring
+- Market Research
+- Data Extraction
+- MCP
+tags_raw:
+- Company
+- Search
 - AI
 - Web Scraping
 - SERP
@@ -147,6 +159,10 @@ apis:
   baseURL: https://mcp.cloro.dev/mcp
   tags:
   - MCP
+  - Artificial Intelligence
+  - Agents
+  tags_raw:
+  - MCP
   - AI
   - Agents
   properties:
@@ -238,6 +254,8 @@ apis:
   humanURL: https://cloro.dev/docs/api-reference/introduction
   baseURL: https://api.cloro.dev
   tags:
+  - Credit
+  tags_raw:
   - Credits
   properties:
   - type: OpenAPI
@@ -276,6 +294,8 @@ apis:
   humanURL: https://cloro.dev/docs/api-reference/introduction
   baseURL: https://api.cloro.dev
   tags:
+  - Monitors
+  tags_raw:
   - Monitor
   properties:
   - type: OpenAPI
