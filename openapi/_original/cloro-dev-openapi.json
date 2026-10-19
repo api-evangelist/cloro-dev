@@ -374,180 +374,6 @@
         }
       }
     },
-    "/v1/monitor/grok": {
-      "post": {
-        "summary": "Monitor Grok Responses",
-        "description": "Extract structured data from Grok — answer text and cited sources, including X/Twitter references — for any prompt across supported regions",
-        "operationId": "monitorGrok",
-        "requestBody": {
-          "description": "Request parameters for monitoring Grok responses",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GrokMonitorRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "successful Grok monitoring response",
-            "headers": {
-              "X-Concurrency-Limit": {
-                "description": "Maximum number of concurrent requests allowed",
-                "schema": {
-                  "type": "integer",
-                  "example": 10
-                }
-              },
-              "X-Concurrency-Current": {
-                "description": "Current number of concurrent requests",
-                "schema": {
-                  "type": "integer",
-                  "example": 3
-                }
-              },
-              "X-Concurrency-Remaining": {
-                "description": "Number of remaining concurrent slots available",
-                "schema": {
-                  "type": "integer",
-                  "example": 7
-                }
-              },
-              "X-Credits-Remaining": {
-                "description": "Number of credits remaining in user account",
-                "schema": {
-                  "type": "integer",
-                  "example": 4
-                }
-              },
-              "X-Credits-Charged": {
-                "description": "Number of credits charged for this request",
-                "schema": {
-                  "type": "integer",
-                  "example": 3
-                }
-              },
-              "X-RateLimit-Limit": {
-                "$ref": "#/components/headers/XRateLimitLimit"
-              },
-              "X-RateLimit-Remaining": {
-                "$ref": "#/components/headers/XRateLimitRemaining"
-              },
-              "X-Request-ID": {
-                "$ref": "#/components/headers/XRequestId"
-              },
-              "X-Latency-Ms": {
-                "$ref": "#/components/headers/XLatencyMs"
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GrokMonitorResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request - Validation error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidationError"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized - Authentication error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden - Insufficient credits",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ForbiddenError"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests",
-            "headers": {
-              "X-Concurrency-Limit": {
-                "description": "Maximum number of concurrent requests allowed",
-                "schema": {
-                  "type": "integer",
-                  "example": 10
-                }
-              },
-              "X-Concurrency-Current": {
-                "description": "Current number of concurrent requests",
-                "schema": {
-                  "type": "integer",
-                  "example": 11
-                }
-              },
-              "X-Concurrency-Remaining": {
-                "description": "Number of remaining concurrent slots available",
-                "schema": {
-                  "type": "integer",
-                  "example": 0
-                }
-              },
-              "X-RateLimit-Limit": {
-                "$ref": "#/components/headers/XRateLimitLimit"
-              },
-              "X-RateLimit-Remaining": {
-                "$ref": "#/components/headers/XRateLimitRemaining"
-              },
-              "X-Request-ID": {
-                "$ref": "#/components/headers/XRequestId"
-              },
-              "X-Latency-Ms": {
-                "$ref": "#/components/headers/XLatencyMs"
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConcurrentLimitError"
-                }
-              }
-            }
-          },
-          "499": {
-            "description": "Client Closed Request - Request was canceled",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CanceledError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/monitor/google": {
       "post": {
         "summary": "Monitor Google Search Results",
@@ -715,6 +541,176 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InternalError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/monitor/google/product": {
+      "post": {
+        "summary": "Get a Google shopping card product",
+        "description": "Return the product panel that a Google Search shopping card or a Google AI Mode product opens: merchant offers, description, specifications, reviews, images and related products. Send the `productResultToken` from a Google Search `result.shoppingCards` card, or from a Google AI Mode `result.shoppingCards` or `result.inlineProducts` entry.\n\nCosts 1 credit, plus the 2-credit sync surcharge, and only when the request succeeds. A token expires five minutes after the scrape that issued it. If you send the request async, set a high `priority`, so that the token does not expire in the queue.",
+        "operationId": "getGoogleProduct",
+        "requestBody": {
+          "description": "The token from a Google Search shopping card",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleProductRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The product panel for the token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoogleProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Insufficient credits or access denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - The token is not recognized (`error.details.errorType`: `productResultTokenUnknown`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Gone - The token has expired (`error.details.errorType`: `productResultTokenExpired`). Scrape again for a new token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "X-Concurrent-Limit": {
+                "description": "Maximum number of concurrent requests allowed",
+                "schema": {
+                  "type": "integer",
+                  "example": 10
+                }
+              },
+              "X-Concurrent-Current": {
+                "description": "Current number of concurrent requests",
+                "schema": {
+                  "type": "integer",
+                  "example": 11
+                }
+              },
+              "X-Concurrent-Remaining": {
+                "description": "Number of remaining concurrent slots available",
+                "schema": {
+                  "type": "integer",
+                  "example": 0
+                }
+              },
+              "X-Credits-Remaining": {
+                "description": "Number of credits remaining in user account",
+                "schema": {
+                  "type": "integer",
+                  "example": 4
+                }
+              },
+              "X-Credits-Charged": {
+                "description": "Number of credits charged for this request",
+                "schema": {
+                  "type": "integer",
+                  "example": 0
+                }
+              },
+              "X-Latency-Ms": {
+                "description": "Server-side processing time for this request, in milliseconds. Excludes network transit.",
+                "schema": {
+                  "type": "integer",
+                  "example": 12
+                }
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConcurrentLimitError"
+                }
+              }
+            }
+          },
+          "499": {
+            "description": "Client Closed Request - Request was canceled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CanceledError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway - Google returned no product data, or a layout cloro cannot parse",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalServiceError"
                 }
               }
             }
@@ -1545,7 +1541,6 @@
                 "copilot",
                 "gemini",
                 "google",
-                "grok",
                 "perplexity"
               ]
             },
@@ -2446,11 +2441,11 @@
               "AIMODE",
               "GOOGLE",
               "GOOGLE_NEWS",
+              "GOOGLE_PRODUCT",
               "GEMINI",
               "CHATGPT",
               "COPILOT",
-              "PERPLEXITY",
-              "GROK"
+              "PERPLEXITY"
             ],
             "description": "The AI provider for this task.",
             "example": "CHATGPT"
@@ -2718,18 +2713,18 @@
               "AIMODE",
               "GOOGLE",
               "GOOGLE_NEWS",
+              "GOOGLE_PRODUCT",
               "GEMINI",
               "CHATGPT",
               "COPILOT",
-              "PERPLEXITY",
-              "GROK"
+              "PERPLEXITY"
             ],
             "description": "The AI provider to use for this task.",
             "example": "CHATGPT"
           },
           "payload": {
             "type": "object",
-            "description": "The provider's request body, validated against the same schema as its sync endpoint (for example `ChatGPTMonitorRequest`). That makes `country` required here too, or `gl` on the Google endpoints.",
+            "description": "The provider's request body, validated against the same schema as its sync endpoint (for example `ChatGPTMonitorRequest`). That makes `country` required here too, or `gl` on the Google endpoints. For `GOOGLE_PRODUCT`, send only `productResultToken`.",
             "example": {
               "prompt": "What do you know about Acme Corp?",
               "country": "US"
@@ -2911,7 +2906,8 @@
                 "enum": [
                   "VALIDATION_ERROR",
                   "RESOURCE_ALREADY_EXISTS",
-                  "INSUFFICIENT_CREDITS"
+                  "INSUFFICIENT_CREDITS",
+                  "MODEL_UNAVAILABLE"
                 ],
                 "example": "VALIDATION_ERROR"
               },
@@ -2999,11 +2995,31 @@
         "type": "object",
         "properties": {
           "prompt": {
-            "description": "The prompt to send to ChatGPT",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 10000,
-            "example": "What do you know about Acme Corp?"
+            "description": "The prompt to send to ChatGPT, or an array of up to 5 prompts for a multi-turn conversation. With an array, ChatGPT answers the prompts in order, in the same conversation, and `result` is an array with one response for each prompt. Each prompt after the first costs +1 credit ([pricing](/guides/providers#chatgpt-additional-features)).",
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 10000,
+                "example": "What do you know about Acme Corp?",
+                "title": "Single prompt"
+              },
+              {
+                "title": "Multi-turn conversation",
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 5,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 10000
+                },
+                "example": [
+                  "What are the best running shoes for flat feet?",
+                  "Which of these costs less than $100?"
+                ]
+              }
+            ]
           },
           "country": {
             "$ref": "#/components/schemas/CountryCode",
@@ -3046,7 +3062,7 @@
                 "example": true
               },
               "ads": {
-                "description": "Include ads displayed in ChatGPT response. Paid add-on: one flat +2 credits covers any combination of `rawResponse`, `searchQueries`, `ads` and `shopping` ([pricing](/guides/providers#chatgpt-additional-features)).",
+                "description": "Include ads displayed in ChatGPT response. ChatGPT currently shows ads only in answers to a follow-up prompt, and far more often on the legacy interface: send `prompt` as an array with `legacy: true`. Paid add-on: one flat +2 credits covers any combination of `rawResponse`, `searchQueries`, `ads` and `shopping` ([pricing](/guides/providers#chatgpt-additional-features)).",
                 "type": "boolean",
                 "default": false,
                 "example": true
@@ -3070,7 +3086,7 @@
             "additionalProperties": false
           },
           "legacy": {
-            "description": "Serve ChatGPT's legacy desktop interface instead of the default mobile-web one. The legacy interface streams the answer as an event stream, so `result.model`, `result.searchQueries` and `result.mapSearchQueries` are populated. Best-effort and temporary: OpenAI controls which interface it serves and can retire the legacy one at any time, so a request can still come back in the mobile-web shape. Handle both. Defaults to false.",
+            "description": "Serve ChatGPT's legacy desktop interface instead of the default mobile-web one. The legacy interface streams the answer as an event stream, so `result.model`, `result.searchQueries` and `result.mapSearchQueries` are populated. ChatGPT shows ads far more often on this interface. Best-effort and temporary: OpenAI controls which interface it serves and can retire the legacy one at any time, so a request can still come back in the mobile-web shape. Handle both. Defaults to false.",
             "type": "boolean",
             "default": false,
             "example": true
@@ -3490,198 +3506,6 @@
           }
         }
       },
-      "GrokMonitorRequest": {
-        "required": [
-          "prompt",
-          "country"
-        ],
-        "type": "object",
-        "properties": {
-          "prompt": {
-            "description": "The prompt to send to Grok",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 10000,
-            "example": "What are the best laptops for programming?"
-          },
-          "country": {
-            "$ref": "#/components/schemas/CountryCode",
-            "description": "Country/region code for localized response, using ISO 3166-1 alpha-2 country codes."
-          },
-          "include": {
-            "description": "Optional flags for including additional response formats",
-            "type": "object",
-            "properties": {
-              "markdown": {
-                "description": "Include markdown-formatted response in the result",
-                "type": "boolean",
-                "default": false,
-                "example": true
-              },
-              "html": {
-                "description": "Include HTML-formatted response in the result",
-                "type": "boolean",
-                "default": false,
-                "example": true
-              },
-              "rawResponse": {
-                "description": "Include raw streaming response events",
-                "type": "boolean",
-                "default": false,
-                "example": true
-              }
-            },
-            "default": {
-              "markdown": false,
-              "html": false,
-              "rawResponse": false
-            },
-            "additionalProperties": false
-          },
-          "state": {
-            "$ref": "#/components/schemas/StateParameter"
-          }
-        },
-        "additionalProperties": false
-      },
-      "GrokMonitorResponse": {
-        "required": [
-          "success",
-          "result"
-        ],
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean",
-            "example": true
-          },
-          "result": {
-            "description": "Grok response data",
-            "type": "object",
-            "properties": {
-              "text": {
-                "type": "string",
-                "description": "Grok's response text",
-                "example": "Based on current information and real-time web search, here are excellent laptop options for programming..."
-              },
-              "html": {
-                "type": "string",
-                "format": "uri",
-                "description": "A URL to the full HTML of the response.",
-                "example": "https://cdn.cloro.dev/results/c45a5081-808d-4ed3-9c86-e4baf16c8ab8/page-1.html"
-              },
-              "sources": {
-                "type": "array",
-                "description": "Array of sources referenced in the response with enhanced metadata",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "position": {
-                      "type": "number",
-                      "description": "The position index of the source in the response",
-                      "example": 1
-                    },
-                    "url": {
-                      "type": "string",
-                      "description": "The URL of the source",
-                      "example": "https://example.com/article"
-                    },
-                    "label": {
-                      "type": "string",
-                      "description": "The display label for the source",
-                      "example": "Tech Source"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "A description of the source content",
-                      "example": "In-depth laptop guide for developers"
-                    },
-                    "preview": {
-                      "type": "string",
-                      "description": "Preview text snippet from the source",
-                      "example": "When choosing a laptop for programming, consider RAM, processor, storage..."
-                    },
-                    "searchEngineText": {
-                      "type": "string",
-                      "description": "Search engine display text",
-                      "example": "Best Programming Laptops 2025"
-                    },
-                    "siteName": {
-                      "type": "string",
-                      "description": "Website name",
-                      "example": "Tech Reviews"
-                    },
-                    "metadataTitle": {
-                      "type": "string",
-                      "description": "Source metadata title",
-                      "example": "Complete Guide to Development Laptops"
-                    },
-                    "creator": {
-                      "type": "string",
-                      "description": "Content creator/author",
-                      "example": "John Doe"
-                    },
-                    "image": {
-                      "type": "string",
-                      "format": "uri",
-                      "description": "Source image URL",
-                      "example": "https://example.com/preview.jpg"
-                    },
-                    "favicon": {
-                      "type": "string",
-                      "format": "uri",
-                      "description": "Website favicon URL",
-                      "example": "https://example.com/favicon.ico"
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "position": 1,
-                    "url": "https://techcrunch.com/programming-laptops",
-                    "label": "TechCrunch",
-                    "description": "Best laptops for coding and development",
-                    "preview": "When looking for a programming laptop, prioritize RAM and processor power...",
-                    "searchEngineText": "Top Development Laptops 2025",
-                    "siteName": "TechCrunch",
-                    "metadataTitle": "Ultimate Guide to Programming Laptops",
-                    "creator": "Tech Team",
-                    "image": "https://techcrunch.com/preview.jpg",
-                    "favicon": "https://techcrunch.com/favicon.ico"
-                  }
-                ]
-              },
-              "searchQueries": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "Array of search queries Grok used to gather information for the response",
-                "example": [
-                  "best laptops for programming 2026",
-                  "top developer laptops 2026"
-                ]
-              },
-              "model": {
-                "type": "string",
-                "nullable": true,
-                "description": "The model identifier used to generate the response",
-                "example": "grok-4-auto"
-              },
-              "markdown": {
-                "type": "string",
-                "description": "Grok's response formatted in Markdown (included when include.markdown is true)",
-                "example": "Based on current information and real-time web search, here are excellent laptop options for programming..."
-              },
-              "rawResponse": {
-                "type": "array",
-                "description": "Raw upstream provider stream captured during the request. Each item is one chunk from the provider's wire protocol (SSE event, batchexecute frame, etc.). Format is provider-specific, undocumented, and may change without notice — use it for debugging or to access data not yet surfaced in the structured fields above.",
-                "items": {}
-              }
-            }
-          }
-        }
-      },
       "ChatGPTMonitorResponse": {
         "required": [
           "success",
@@ -3694,405 +3518,421 @@
             "example": true
           },
           "result": {
-            "description": "ChatGPT's response data",
-            "type": "object",
-            "properties": {
-              "text": {
-                "type": "string",
-                "description": "ChatGPT's response text",
-                "example": "The name \"Acme Corporation\" is used in various contexts, both fictional and real. Here's an overview:\n\n🐾 Acme Corporation in Fiction\nThe Acme Corporation is a fictional company featured prominently in Warner Bros. cartoons, particularly the Road Runner/Wile E. Coyote series."
+            "description": "ChatGPT's response data. An array, with one response for each prompt in order, when `prompt` is an array.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ChatGPTResult",
+                "title": "Single prompt"
               },
-              "sources": {
+              {
+                "title": "Multi-turn conversation",
                 "type": "array",
-                "description": "Array of sources referenced in the response. Returns empty array when no sources are available.",
                 "items": {
+                  "$ref": "#/components/schemas/ChatGPTResult"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "ChatGPTResult": {
+        "description": "ChatGPT's response to one prompt",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "ChatGPT's response text",
+            "example": "The name \"Acme Corporation\" is used in various contexts, both fictional and real. Here's an overview:\n\n🐾 Acme Corporation in Fiction\nThe Acme Corporation is a fictional company featured prominently in Warner Bros. cartoons, particularly the Road Runner/Wile E. Coyote series."
+          },
+          "sources": {
+            "type": "array",
+            "description": "Array of sources referenced in the response. Returns empty array when no sources are available.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "position": {
+                  "type": "number",
+                  "description": "The position index of the source in the response",
+                  "example": 1
+                },
+                "url": {
+                  "type": "string",
+                  "description": "The URL of the source",
+                  "example": "https://www.rippling.com/blog/ai-recruiting?utm_source=chatgpt.com"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "The article title of the source",
+                  "example": "12 Best AI Recruiting Tools For HR in 2025"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "A snippet or summary of the source content",
+                  "example": "Discover the top AI recruiting tools that can help HR professionals streamline their hiring process..."
+                },
+                "footnote": {
+                  "type": "boolean",
+                  "description": "`false` for a page the answer cites inline, `true` for a page ChatGPT used but does not cite. Cited pages come first.",
+                  "example": false
+                },
+                "datePublished": {
+                  "type": "string",
+                  "description": "The publication date of the source. Omitted from the response when the source has no publish date — never emitted as `null`.",
+                  "example": "May 22, 2025"
+                }
+              }
+            },
+            "example": [
+              {
+                "position": 1,
+                "url": "https://www.rippling.com/blog/ai-recruiting?utm_source=chatgpt.com",
+                "label": "12 Best AI Recruiting Tools For HR in 2025",
+                "description": "Discover the top AI recruiting tools that can help HR professionals streamline their hiring process...",
+                "footnote": false,
+                "datePublished": "May 22, 2025"
+              },
+              {
+                "position": 2,
+                "url": "https://www.index.dev/blog/ai-recruiting-software-hiring-managers?utm_source=chatgpt.com",
+                "label": "7 Best AI Recruiting Software for Hiring Managers in 2025",
+                "description": "A comprehensive guide to the best AI recruiting software options available for hiring managers...",
+                "footnote": false,
+                "datePublished": "April 10, 2025"
+              },
+              {
+                "position": 3,
+                "url": "https://www.selectsoftwarereviews.com/buyer-guide/ai-recruiting?utm_source=chatgpt.com",
+                "label": "10+ Best AI Recruiting Software for 2025: Expert Reviews + Pricing",
+                "description": "Expert reviews and pricing information for the best AI recruiting software solutions...",
+                "footnote": true
+              }
+            ]
+          },
+          "html": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URL to the full HTML of the response (included when include.html is true)",
+            "example": "https://cdn.cloro.dev/results/c45a5081-808d-4ed3-9c86-e4baf16c8ab8/page-1.html"
+          },
+          "markdown": {
+            "type": "string",
+            "description": "ChatGPT's response formatted in Markdown (included when include.markdown is true)",
+            "example": "The name \"Acme Corporation\" is used in various contexts, both fictional and real. Here's an overview:\n\n🐾 Acme Corporation in Fiction\nThe Acme Corporation is a fictional company featured prominently in Warner Bros. cartoons, particularly the Road Runner/Wile E. Coyote series."
+          },
+          "rawResponse": {
+            "type": "array",
+            "description": "Array of streaming events returned by ChatGPT (included when include.rawResponse is true). With `include.shopping` on as well, it includes the `product_update` events fetched for each inline product and shopping-card product.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Event type identifier"
+                },
+                "token": {
+                  "type": "string",
+                  "description": "Resume token used to continue the ChatGPT conversation"
+                },
+                "conversation_id": {
+                  "type": "string",
+                  "description": "ChatGPT conversation identifier"
+                },
+                "message": {
                   "type": "object",
+                  "description": "Event payload describing the assistant message",
                   "properties": {
-                    "position": {
-                      "type": "number",
-                      "description": "The position index of the source in the response",
-                      "example": 1
+                    "id": {
+                      "type": "string"
                     },
-                    "url": {
-                      "type": "string",
-                      "description": "The URL of the source",
-                      "example": "https://www.rippling.com/blog/ai-recruiting?utm_source=chatgpt.com"
+                    "role": {
+                      "type": "string"
                     },
-                    "label": {
-                      "type": "string",
-                      "description": "The article title of the source",
-                      "example": "12 Best AI Recruiting Tools For HR in 2025"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "A snippet or summary of the source content",
-                      "example": "Discover the top AI recruiting tools that can help HR professionals streamline their hiring process..."
-                    },
-                    "footnote": {
-                      "type": "boolean",
-                      "description": "Whether this source appears as a footnote (in a subsequent list in the sources modal)",
-                      "example": false
-                    },
-                    "datePublished": {
-                      "type": "string",
-                      "description": "The publication date of the source. Omitted from the response when the source has no publish date — never emitted as `null`.",
-                      "example": "May 22, 2025"
+                    "model": {
+                      "type": "string"
                     }
                   }
                 },
-                "example": [
-                  {
-                    "position": 1,
-                    "url": "https://www.rippling.com/blog/ai-recruiting?utm_source=chatgpt.com",
-                    "label": "12 Best AI Recruiting Tools For HR in 2025",
-                    "description": "Discover the top AI recruiting tools that can help HR professionals streamline their hiring process...",
-                    "footnote": false,
-                    "datePublished": "May 22, 2025"
-                  },
-                  {
-                    "position": 2,
-                    "url": "https://www.index.dev/blog/ai-recruiting-software-hiring-managers?utm_source=chatgpt.com",
-                    "label": "7 Best AI Recruiting Software for Hiring Managers in 2025",
-                    "description": "A comprehensive guide to the best AI recruiting software options available for hiring managers...",
-                    "footnote": false,
-                    "datePublished": "April 10, 2025"
-                  },
-                  {
-                    "position": 3,
-                    "url": "https://www.selectsoftwarereviews.com/buyer-guide/ai-recruiting?utm_source=chatgpt.com",
-                    "label": "10+ Best AI Recruiting Software for 2025: Expert Reviews + Pricing",
-                    "description": "Expert reviews and pricing information for the best AI recruiting software solutions...",
-                    "footnote": true
-                  }
-                ]
-              },
-              "html": {
-                "type": "string",
-                "format": "uri",
-                "description": "A URL to the full HTML of the response (included when include.html is true)",
-                "example": "https://cdn.cloro.dev/results/c45a5081-808d-4ed3-9c86-e4baf16c8ab8/page-1.html"
-              },
-              "markdown": {
-                "type": "string",
-                "description": "ChatGPT's response formatted in Markdown (included when include.markdown is true)",
-                "example": "The name \"Acme Corporation\" is used in various contexts, both fictional and real. Here's an overview:\n\n🐾 Acme Corporation in Fiction\nThe Acme Corporation is a fictional company featured prominently in Warner Bros. cartoons, particularly the Road Runner/Wile E. Coyote series."
-              },
-              "rawResponse": {
-                "type": "array",
-                "description": "Array of streaming events returned by ChatGPT (included when include.rawResponse is true). With `include.shopping` on as well, it includes the `product_update` events fetched for each inline product and shopping-card product.",
-                "items": {
+                "delta": {
                   "type": "object",
+                  "description": "Streaming delta payload from ChatGPT",
                   "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "Event type identifier"
-                    },
-                    "token": {
-                      "type": "string",
-                      "description": "Resume token used to continue the ChatGPT conversation"
-                    },
-                    "conversation_id": {
-                      "type": "string",
-                      "description": "ChatGPT conversation identifier"
-                    },
-                    "message": {
-                      "type": "object",
-                      "description": "Event payload describing the assistant message",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "role": {
-                          "type": "string"
-                        },
-                        "model": {
-                          "type": "string"
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "text_delta": {
+                            "type": "string"
+                          }
                         }
                       }
-                    },
-                    "delta": {
-                      "type": "object",
-                      "description": "Streaming delta payload from ChatGPT",
-                      "properties": {
-                        "content": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "type": {
-                                "type": "string"
-                              },
-                              "text_delta": {
-                                "type": "string"
+                    }
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "description": "Why ChatGPT stopped streaming"
+                }
+              }
+            },
+            "example": [
+              {
+                "type": "resume_conversation_token",
+                "token": "eyJhbGciOiJFUzI1Ni...WaVoqQ",
+                "conversation_id": "68efc64b-2d74-8012-b87d-28e59f3b8a49"
+              },
+              {
+                "type": "message_start",
+                "message": {
+                  "id": "msg_01JD6Q7H1ZKWM9GD34V5ZW1TYM",
+                  "role": "assistant",
+                  "model": "gpt-5"
+                }
+              },
+              {
+                "type": "message_delta",
+                "delta": {
+                  "content": [
+                    {
+                      "type": "output_text_delta",
+                      "text_delta": "The name \"Acme Corporation\" is used in various contexts..."
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "message_stop",
+                "reason": "end_turn"
+              }
+            ]
+          },
+          "searchQueries": {
+            "type": "array",
+            "description": "Array of query fan-out ChatGPT used to generate the response (included when include.searchQueries is true)",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "What is Acme Corporation?",
+              "Acme Corp company overview",
+              "Acme Corporation products and services"
+            ]
+          },
+          "mapSearchQueries": {
+            "type": "array",
+            "description": "Queries ChatGPT sent to its maps tool to build the `map` entries, deduplicated in first-seen order (included when include.searchQueries is true). Distinct from `searchQueries`, the web-search fan-out. Empty on responses served through OpenAI's mobile-web format; see `legacy`.",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "coffee shops near Union Square San Francisco"
+            ]
+          },
+          "model": {
+            "type": "string",
+            "nullable": true,
+            "description": "The ChatGPT model used to generate the response. Empty on responses served through OpenAI's mobile-web format.",
+            "example": "gpt-5-5"
+          },
+          "shoppingCards": {
+            "type": "array",
+            "description": "Array of shopping/product cards extracted from the response. The field is omitted entirely from `result` when `include.shopping` is `false` or unset — clients should treat it as optional rather than expecting an empty array.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tags": {
+                  "type": "array",
+                  "description": "Category tags for the shopping card",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "stylish casual leather sneaker",
+                    "heritage retro leather sneaker"
+                  ]
+                },
+                "products": {
+                  "type": "array",
+                  "description": "Array of product information",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Product name",
+                        "example": "Adidas VL Court 3.0"
+                      },
+                      "position": {
+                        "type": "integer",
+                        "description": "1-indexed rank across all products in all shopping cards in the response (flat, not reset per card).",
+                        "example": 1
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "Product page URL with ChatGPT attribution",
+                        "example": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html?utm_source=chatgpt.com"
+                      },
+                      "price": {
+                        "type": "string",
+                        "description": "Current price",
+                        "example": "$57.00"
+                      },
+                      "featured_tag": {
+                        "type": "string",
+                        "description": "Product category or style tag",
+                        "example": "stylish casual leather sneaker"
+                      },
+                      "merchant": {
+                        "type": "string",
+                        "description": "Merchant information",
+                        "example": "adidas + others"
+                      },
+                      "image_urls": {
+                        "type": "array",
+                        "description": "Array of product image URLs",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": [
+                          "https://images.openai.com/static-rsc-1/example.jpg"
+                        ]
+                      },
+                      "rating": {
+                        "type": "number",
+                        "description": "Product rating (0-5 scale)",
+                        "example": 4.7
+                      },
+                      "num_reviews": {
+                        "type": "integer",
+                        "description": "Number of reviews",
+                        "example": 10394
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Unique product identifier",
+                        "example": "3250714974047560249"
+                      },
+                      "offers": {
+                        "type": "array",
+                        "description": "Array of shopping offers from different merchants",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "merchant_name": {
+                              "type": "string",
+                              "description": "Merchant name",
+                              "example": "adidas"
+                            },
+                            "marketplace_seller": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "Third-party seller on the marketplace"
+                            },
+                            "seller_name": {
+                              "type": "string",
+                              "description": "Seller name"
+                            },
+                            "brand": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "Product brand. Set on only some offers, so often `null` or absent."
+                            },
+                            "product_name": {
+                              "type": "string",
+                              "description": "Product name as listed by merchant",
+                              "example": "Adidas Women's VL Court 3.0"
+                            },
+                            "url": {
+                              "type": "string",
+                              "description": "Offer URL with ChatGPT attribution",
+                              "example": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html?utm_source=chatgpt.com"
+                            },
+                            "price": {
+                              "type": "string",
+                              "description": "Offer price",
+                              "example": "$57.00"
+                            },
+                            "details": {
+                              "type": "string",
+                              "description": "Stock and delivery information",
+                              "example": "In stock online and nearby, Delivery between Sat - Mon $4.99"
+                            },
+                            "available": {
+                              "type": "boolean",
+                              "description": "Offer availability status",
+                              "example": true
+                            },
+                            "checkoutable": {
+                              "type": "boolean",
+                              "description": "Whether offer can be checked out directly",
+                              "example": false
+                            },
+                            "price_details": {
+                              "type": "object",
+                              "description": "Detailed price breakdown",
+                              "properties": {
+                                "base": {
+                                  "type": "string",
+                                  "description": "Base product price",
+                                  "example": "$57.00"
+                                },
+                                "total": {
+                                  "type": "string",
+                                  "description": "Total price including any additional costs",
+                                  "example": "$57.00"
+                                }
+                              }
+                            },
+                            "tag": {
+                              "type": "object",
+                              "description": "Promotional tag",
+                              "properties": {
+                                "text": {
+                                  "type": "string",
+                                  "description": "Tag text",
+                                  "example": "Best price"
+                                }
                               }
                             }
                           }
                         }
-                      }
-                    },
-                    "reason": {
-                      "type": "string",
-                      "description": "Why ChatGPT stopped streaming"
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "type": "resume_conversation_token",
-                    "token": "eyJhbGciOiJFUzI1Ni...WaVoqQ",
-                    "conversation_id": "68efc64b-2d74-8012-b87d-28e59f3b8a49"
-                  },
-                  {
-                    "type": "message_start",
-                    "message": {
-                      "id": "msg_01JD6Q7H1ZKWM9GD34V5ZW1TYM",
-                      "role": "assistant",
-                      "model": "gpt-5"
-                    }
-                  },
-                  {
-                    "type": "message_delta",
-                    "delta": {
-                      "content": [
-                        {
-                          "type": "output_text_delta",
-                          "text_delta": "The name \"Acme Corporation\" is used in various contexts..."
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "message_stop",
-                    "reason": "end_turn"
-                  }
-                ]
-              },
-              "searchQueries": {
-                "type": "array",
-                "description": "Array of query fan-out ChatGPT used to generate the response (included when include.searchQueries is true)",
-                "items": {
-                  "type": "string"
-                },
-                "example": [
-                  "What is Acme Corporation?",
-                  "Acme Corp company overview",
-                  "Acme Corporation products and services"
-                ]
-              },
-              "mapSearchQueries": {
-                "type": "array",
-                "description": "Queries ChatGPT sent to its maps tool to build the `map` entries, deduplicated in first-seen order (included when include.searchQueries is true). Distinct from `searchQueries`, the web-search fan-out. Empty on responses served through OpenAI's mobile-web format; see `legacy`.",
-                "items": {
-                  "type": "string"
-                },
-                "example": [
-                  "coffee shops near Union Square San Francisco"
-                ]
-              },
-              "model": {
-                "type": "string",
-                "nullable": true,
-                "description": "The ChatGPT model used to generate the response. Empty on responses served through OpenAI's mobile-web format.",
-                "example": "gpt-5-5"
-              },
-              "shoppingCards": {
-                "type": "array",
-                "description": "Array of shopping/product cards extracted from the response. The field is omitted entirely from `result` when `include.shopping` is `false` or unset — clients should treat it as optional rather than expecting an empty array.",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "tags": {
-                      "type": "array",
-                      "description": "Category tags for the shopping card",
-                      "items": {
-                        "type": "string"
                       },
-                      "example": [
-                        "stylish casual leather sneaker",
-                        "heritage retro leather sneaker"
-                      ]
-                    },
-                    "products": {
-                      "type": "array",
-                      "description": "Array of product information",
-                      "items": {
+                      "rating_grouped_citation": {
                         "type": "object",
+                        "description": "Rating source information",
                         "properties": {
                           "title": {
                             "type": "string",
-                            "description": "Product name",
-                            "example": "Adidas VL Court 3.0"
-                          },
-                          "position": {
-                            "type": "integer",
-                            "description": "1-indexed rank across all products in all shopping cards in the response (flat, not reset per card).",
-                            "example": 1
+                            "description": "Source title",
+                            "example": "Adidas Women's VL Court 3.0"
                           },
                           "url": {
                             "type": "string",
-                            "description": "Product page URL with ChatGPT attribution",
-                            "example": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html?utm_source=chatgpt.com"
+                            "description": "Source URL",
+                            "example": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html"
                           },
-                          "price": {
-                            "type": "string",
-                            "description": "Current price",
-                            "example": "$57.00"
-                          },
-                          "featured_tag": {
-                            "type": "string",
-                            "description": "Product category or style tag",
-                            "example": "stylish casual leather sneaker"
-                          },
-                          "merchant": {
-                            "type": "string",
-                            "description": "Merchant information",
-                            "example": "adidas + others"
-                          },
-                          "image_urls": {
+                          "supporting_websites": {
                             "type": "array",
-                            "description": "Array of product image URLs",
-                            "items": {
-                              "type": "string"
-                            },
-                            "example": [
-                              "https://images.openai.com/static-rsc-1/example.jpg"
-                            ]
-                          },
-                          "rating": {
-                            "type": "number",
-                            "description": "Product rating (0-5 scale)",
-                            "example": 4.7
-                          },
-                          "num_reviews": {
-                            "type": "integer",
-                            "description": "Number of reviews",
-                            "example": 10394
-                          },
-                          "id": {
-                            "type": "string",
-                            "description": "Unique product identifier",
-                            "example": "3250714974047560249"
-                          },
-                          "offers": {
-                            "type": "array",
-                            "description": "Array of shopping offers from different merchants",
+                            "description": "Array of supporting website references",
                             "items": {
                               "type": "object",
                               "properties": {
-                                "merchant_name": {
+                                "title": {
                                   "type": "string",
-                                  "description": "Merchant name",
-                                  "example": "adidas"
-                                },
-                                "marketplace_seller": {
-                                  "type": [
-                                    "string",
-                                    "null"
-                                  ],
-                                  "description": "Third-party seller on the marketplace"
-                                },
-                                "seller_name": {
-                                  "type": "string",
-                                  "description": "Seller name"
-                                },
-                                "brand": {
-                                  "type": [
-                                    "string",
-                                    "null"
-                                  ],
-                                  "description": "Product brand. Set on only some offers, so often `null` or absent."
-                                },
-                                "product_name": {
-                                  "type": "string",
-                                  "description": "Product name as listed by merchant",
+                                  "description": "Website title",
                                   "example": "Adidas Women's VL Court 3.0"
                                 },
                                 "url": {
                                   "type": "string",
-                                  "description": "Offer URL with ChatGPT attribution",
-                                  "example": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html?utm_source=chatgpt.com"
-                                },
-                                "price": {
-                                  "type": "string",
-                                  "description": "Offer price",
-                                  "example": "$57.00"
-                                },
-                                "details": {
-                                  "type": "string",
-                                  "description": "Stock and delivery information",
-                                  "example": "In stock online and nearby, Delivery between Sat - Mon $4.99"
-                                },
-                                "available": {
-                                  "type": "boolean",
-                                  "description": "Offer availability status",
-                                  "example": true
-                                },
-                                "checkoutable": {
-                                  "type": "boolean",
-                                  "description": "Whether offer can be checked out directly",
-                                  "example": false
-                                },
-                                "price_details": {
-                                  "type": "object",
-                                  "description": "Detailed price breakdown",
-                                  "properties": {
-                                    "base": {
-                                      "type": "string",
-                                      "description": "Base product price",
-                                      "example": "$57.00"
-                                    },
-                                    "total": {
-                                      "type": "string",
-                                      "description": "Total price including any additional costs",
-                                      "example": "$57.00"
-                                    }
-                                  }
-                                },
-                                "tag": {
-                                  "type": "object",
-                                  "description": "Promotional tag",
-                                  "properties": {
-                                    "text": {
-                                      "type": "string",
-                                      "description": "Tag text",
-                                      "example": "Best price"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "rating_grouped_citation": {
-                            "type": "object",
-                            "description": "Rating source information",
-                            "properties": {
-                              "title": {
-                                "type": "string",
-                                "description": "Source title",
-                                "example": "Adidas Women's VL Court 3.0"
-                              },
-                              "url": {
-                                "type": "string",
-                                "description": "Source URL",
-                                "example": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html"
-                              },
-                              "supporting_websites": {
-                                "type": "array",
-                                "description": "Array of supporting website references",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "title": {
-                                      "type": "string",
-                                      "description": "Website title",
-                                      "example": "Adidas Women's VL Court 3.0"
-                                    },
-                                    "url": {
-                                      "type": "string",
-                                      "description": "Website URL",
-                                      "example": "https://www.macys.com/shop/product/adidas-womens-vl-court-3.0-casual-sneakers-from-finish-line?ID=21107988&pla_country=US&CAGPSPN=pla"
-                                    }
-                                  }
+                                  "description": "Website URL",
+                                  "example": "https://www.macys.com/shop/product/adidas-womens-vl-court-3.0-casual-sneakers-from-finish-line?ID=21107988&pla_country=US&CAGPSPN=pla"
                                 }
                               }
                             }
@@ -4101,393 +3941,534 @@
                       }
                     }
                   }
-                },
-                "example": [
+                }
+              }
+            },
+            "example": [
+              {
+                "tags": [
+                  "stylish casual leather sneaker",
+                  "heritage retro leather sneaker"
+                ],
+                "products": [
                   {
-                    "tags": [
-                      "stylish casual leather sneaker",
-                      "heritage retro leather sneaker"
+                    "title": "Adidas VL Court 3.0",
+                    "url": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html?utm_source=chatgpt.com",
+                    "price": "$57.00",
+                    "featured_tag": "stylish casual leather sneaker",
+                    "merchant": "adidas + others",
+                    "image_urls": [
+                      "https://images.openai.com/static-rsc-1/example.jpg"
                     ],
-                    "products": [
+                    "rating": 4.7,
+                    "num_reviews": 10394,
+                    "id": "3250714974047560249",
+                    "offers": [
                       {
-                        "title": "Adidas VL Court 3.0",
+                        "merchant_name": "adidas",
+                        "product_name": "Adidas Women's VL Court 3.0",
                         "url": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html?utm_source=chatgpt.com",
                         "price": "$57.00",
-                        "featured_tag": "stylish casual leather sneaker",
-                        "merchant": "adidas + others",
-                        "image_urls": [
-                          "https://images.openai.com/static-rsc-1/example.jpg"
-                        ],
-                        "rating": 4.7,
-                        "num_reviews": 10394,
-                        "id": "3250714974047560249",
-                        "offers": [
-                          {
-                            "merchant_name": "adidas",
-                            "product_name": "Adidas Women's VL Court 3.0",
-                            "url": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html?utm_source=chatgpt.com",
-                            "price": "$57.00",
-                            "details": "In stock online and nearby, Delivery between Sat - Mon $4.99",
-                            "available": true,
-                            "checkoutable": false,
-                            "price_details": {
-                              "base": "$57.00",
-                              "total": "$57.00"
-                            },
-                            "tag": {
-                              "text": "Best price"
-                            }
-                          }
-                        ],
-                        "rating_grouped_citation": {
-                          "title": "Adidas Women's VL Court 3.0",
-                          "url": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html",
-                          "supporting_websites": [
-                            {
-                              "title": "Adidas Women's VL Court 3.0",
-                              "url": "https://www.macys.com/shop/product/adidas-womens-vl-court-3.0-casual-sneakers-from-finish-line?ID=21107988&pla_country=US&CAGPSPN=pla"
-                            }
-                          ]
+                        "details": "In stock online and nearby, Delivery between Sat - Mon $4.99",
+                        "available": true,
+                        "checkoutable": false,
+                        "price_details": {
+                          "base": "$57.00",
+                          "total": "$57.00"
+                        },
+                        "tag": {
+                          "text": "Best price"
                         }
                       }
-                    ]
+                    ],
+                    "rating_grouped_citation": {
+                      "title": "Adidas Women's VL Court 3.0",
+                      "url": "https://www.adidas.com/us/vl-court-3.0-shoes/ID8797.html",
+                      "supporting_websites": [
+                        {
+                          "title": "Adidas Women's VL Court 3.0",
+                          "url": "https://www.macys.com/shop/product/adidas-womens-vl-court-3.0-casual-sneakers-from-finish-line?ID=21107988&pla_country=US&CAGPSPN=pla"
+                        }
+                      ]
+                    }
                   }
                 ]
-              },
-              "inlineProducts": {
-                "type": "array",
-                "description": "Array of inline products with pricing and offers. The field is omitted entirely from `result` when `include.shopping` is `false` or unset — clients should treat it as optional rather than expecting an empty array.",
-                "items": {
-                  "$ref": "#/components/schemas/InlineProduct"
+              }
+            ]
+          },
+          "inlineProducts": {
+            "type": "array",
+            "description": "Array of inline products with pricing and offers. The field is omitted entirely from `result` when `include.shopping` is `false` or unset — clients should treat it as optional rather than expecting an empty array.",
+            "items": {
+              "$ref": "#/components/schemas/InlineProduct"
+            }
+          },
+          "entities": {
+            "type": "array",
+            "description": "Array of entities extracted from the response (when available)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Entity type identifier",
+                  "example": "product"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Entity name",
+                  "example": "adidas Grand Court Lo"
+                },
+                "product": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ShoppingProduct"
+                    }
+                  ],
+                  "description": "The product listing that ChatGPT attached to the entity, without `position`. Present only with `include.shopping: true`, and only when ChatGPT attached a listing."
                 }
               },
-              "entities": {
-                "type": "array",
-                "description": "Array of entities extracted from the response (when available)",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "description": "Entity type identifier",
-                      "example": "product"
-                    },
-                    "name": {
-                      "type": "string",
-                      "description": "Entity name",
-                      "example": "adidas Grand Court Lo"
-                    }
+              "required": [
+                "type",
+                "name"
+              ]
+            },
+            "example": [
+              {
+                "type": "product",
+                "name": "adidas Grand Court Lo"
+              },
+              {
+                "type": "product",
+                "name": "Reebok Club C 85 Vintage"
+              },
+              {
+                "type": "product",
+                "name": "Nike Dunk Low Retro SE"
+              }
+            ]
+          },
+          "map": {
+            "type": "array",
+            "description": "Array of business/place map entries extracted from the response (when available). Items come from ChatGPT's enriched providers (Yelp, Google Business) and use camelCase field names. The full field set is documented at /api-reference/endpoint/chatgpt/map; only the most commonly populated fields are listed here.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Business ID (Yelp ID or Google Place ID)",
+                  "example": "rVKID2OBQMyVpraqSjz9sg"
+                },
+                "provider": {
+                  "type": "string",
+                  "description": "Data provider: \"yelp\", \"b1\"/\"b3\" (Google), or \"yelp-feed\"",
+                  "example": "yelp"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Business name",
+                  "example": "Blue Bottle Coffee"
+                },
+                "position": {
+                  "type": "integer",
+                  "description": "Position/ranking in results (added by parser)",
+                  "example": 1
+                },
+                "address": {
+                  "type": "string",
+                  "description": "Full street address",
+                  "example": "66 Mint St, San Francisco, CA 94103"
+                },
+                "latitude": {
+                  "type": "number",
+                  "description": "GPS latitude coordinate",
+                  "example": 37.7811
+                },
+                "longitude": {
+                  "type": "number",
+                  "description": "GPS longitude coordinate",
+                  "example": -122.4076
+                },
+                "categories": {
+                  "type": "array",
+                  "description": "Business categories",
+                  "items": {
+                    "type": "string"
                   },
-                  "required": [
-                    "type",
-                    "name"
+                  "example": [
+                    "Coffee shop"
                   ]
                 },
-                "example": [
-                  {
-                    "type": "product",
-                    "name": "adidas Grand Court Lo"
-                  },
-                  {
-                    "type": "product",
-                    "name": "Reebok Club C 85 Vintage"
-                  },
-                  {
-                    "type": "product",
-                    "name": "Nike Dunk Low Retro SE"
-                  }
-                ]
-              },
-              "map": {
-                "type": "array",
-                "description": "Array of business/place map entries extracted from the response (when available). Items come from ChatGPT's enriched providers (Yelp, Google Business) and use camelCase field names. The full field set is documented at /api-reference/endpoint/chatgpt/map; only the most commonly populated fields are listed here.",
-                "items": {
+                "rating": {
+                  "type": "number",
+                  "description": "Business rating (0-5 scale)",
+                  "example": 4.5
+                },
+                "reviewCount": {
+                  "type": "integer",
+                  "description": "Number of reviews",
+                  "example": 1234
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Business description",
+                  "example": "Specialty coffee roaster known for their meticulous pour-over preparations"
+                },
+                "phone": {
+                  "type": "string",
+                  "description": "Contact phone number",
+                  "example": "+1-415-555-0123"
+                },
+                "websiteUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Business website URL",
+                  "example": "https://bluebottlecoffee.com"
+                }
+              }
+            },
+            "example": [
+              {
+                "id": "rVKID2OBQMyVpraqSjz9sg",
+                "provider": "yelp",
+                "name": "Blue Bottle Coffee",
+                "position": 1,
+                "address": "66 Mint St, San Francisco, CA 94103",
+                "latitude": 37.7811,
+                "longitude": -122.4076,
+                "categories": [
+                  "Coffee shop"
+                ],
+                "rating": 4.5,
+                "reviewCount": 1234,
+                "description": "Specialty coffee roaster known for their meticulous pour-over preparations",
+                "phone": "+1-415-555-0123",
+                "websiteUrl": "https://bluebottlecoffee.com"
+              }
+            ]
+          },
+          "citationPills": {
+            "type": "array",
+            "description": "Array of inline citation pills extracted from the response (when available). These are citations that appear inline within the text. Each entry is one (pill, source) pair; group by `citationPillId` to recover pill-level structure.",
+            "items": {
+              "type": "object",
+              "required": [
+                "label",
+                "citationPillId",
+                "url",
+                "domain",
+                "type",
+                "position"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "The URL of the citation",
+                  "example": "https://example.com/article"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "Per-source title of the citation. Always present; may be an empty string when the citation event ships no title — read `domain` / `url` for source identity in that case.",
+                  "example": "Example Article Title"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of the citation content. Omitted when the citation event carries no snippet (e.g. grouped-webpage title-only cards).",
+                  "example": "A detailed description of the cited content"
+                },
+                "domain": {
+                  "type": "string",
+                  "description": "Domain of the citation source",
+                  "example": "example.com"
+                },
+                "datePublished": {
+                  "type": "string",
+                  "description": "ISO 8601 date string of when the source was published. Omitted when the citation event carries no publication date.",
+                  "example": "2025-01-01"
+                },
+                "citationPillId": {
+                  "type": "integer",
+                  "description": "0-based identifier shared by all entries from the same chip. Group by `citationPillId` to recover the pill-level structure. **Note:** unlike the other providers (Google AIO, AI Mode, Copilot, Perplexity, Gemini) which use 1-based `citationPillId`, ChatGPT's IDs start at 0 for historical reasons.",
+                  "example": 0
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "searchResult",
+                    "groupedWebpage"
+                  ],
+                  "description": "Discriminator for the underlying citation event: `searchResult` for inline search citations, `groupedWebpage` for grouped-webpage cards.",
+                  "example": "searchResult"
+                },
+                "position": {
+                  "type": "integer",
+                  "description": "1-based position of this source in the sibling `result.sources` array.",
+                  "example": 1
+                }
+              }
+            },
+            "example": [
+              {
+                "url": "https://example.com/article",
+                "label": "Example Article Title",
+                "description": "A detailed description of the cited content",
+                "domain": "example.com",
+                "datePublished": "2025-01-01",
+                "citationPillId": 0,
+                "type": "searchResult",
+                "position": 1
+              }
+            ]
+          },
+          "ads": {
+            "type": "array",
+            "description": "Array of ads served in the ChatGPT response (included when include.ads is true). OpenAI serves candidate ads but the interface renders at most one; use `rendered` to identify which were actually shown.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "brand": {
                   "type": "object",
+                  "description": "Advertiser brand information",
                   "properties": {
-                    "id": {
-                      "type": "string",
-                      "description": "Business ID (Yelp ID or Google Place ID)",
-                      "example": "rVKID2OBQMyVpraqSjz9sg"
-                    },
-                    "provider": {
-                      "type": "string",
-                      "description": "Data provider: \"yelp\", \"b1\"/\"b3\" (Google), or \"yelp-feed\"",
-                      "example": "yelp"
-                    },
                     "name": {
                       "type": "string",
-                      "description": "Business name",
-                      "example": "Blue Bottle Coffee"
+                      "description": "Advertiser brand name",
+                      "example": "Acme Shoes"
                     },
-                    "position": {
-                      "type": "integer",
-                      "description": "Position/ranking in results (added by parser)",
-                      "example": 1
-                    },
-                    "address": {
-                      "type": "string",
-                      "description": "Full street address",
-                      "example": "66 Mint St, San Francisco, CA 94103"
-                    },
-                    "latitude": {
-                      "type": "number",
-                      "description": "GPS latitude coordinate",
-                      "example": 37.7811
-                    },
-                    "longitude": {
-                      "type": "number",
-                      "description": "GPS longitude coordinate",
-                      "example": -122.4076
-                    },
-                    "categories": {
-                      "type": "array",
-                      "description": "Business categories",
-                      "items": {
-                        "type": "string"
-                      },
-                      "example": [
-                        "Coffee shop"
-                      ]
-                    },
-                    "rating": {
-                      "type": "number",
-                      "description": "Business rating (0-5 scale)",
-                      "example": 4.5
-                    },
-                    "reviewCount": {
-                      "type": "integer",
-                      "description": "Number of reviews",
-                      "example": 1234
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "Business description",
-                      "example": "Specialty coffee roaster known for their meticulous pour-over preparations"
-                    },
-                    "phone": {
-                      "type": "string",
-                      "description": "Contact phone number",
-                      "example": "+1-415-555-0123"
-                    },
-                    "websiteUrl": {
-                      "type": "string",
-                      "format": "uri",
-                      "description": "Business website URL",
-                      "example": "https://bluebottlecoffee.com"
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "id": "rVKID2OBQMyVpraqSjz9sg",
-                    "provider": "yelp",
-                    "name": "Blue Bottle Coffee",
-                    "position": 1,
-                    "address": "66 Mint St, San Francisco, CA 94103",
-                    "latitude": 37.7811,
-                    "longitude": -122.4076,
-                    "categories": [
-                      "Coffee shop"
-                    ],
-                    "rating": 4.5,
-                    "reviewCount": 1234,
-                    "description": "Specialty coffee roaster known for their meticulous pour-over preparations",
-                    "phone": "+1-415-555-0123",
-                    "websiteUrl": "https://bluebottlecoffee.com"
-                  }
-                ]
-              },
-              "citationPills": {
-                "type": "array",
-                "description": "Array of inline citation pills extracted from the response (when available). These are citations that appear inline within the text. Each entry is one (pill, source) pair; group by `citationPillId` to recover pill-level structure.",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "label",
-                    "citationPillId",
-                    "url",
-                    "domain",
-                    "type",
-                    "position"
-                  ],
-                  "properties": {
                     "url": {
                       "type": "string",
                       "format": "uri",
-                      "description": "The URL of the citation",
-                      "example": "https://example.com/article"
+                      "description": "Advertiser brand URL",
+                      "example": "https://www.acmeshoes.com?utm_source=chatgpt.com"
                     },
+                    "favicon": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Advertiser brand favicon URL",
+                      "example": "https://images.openai.com/favicon.ico"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "url"
+                  ]
+                },
+                "cards": {
+                  "type": "array",
+                  "description": "Array of carousel cards in the ad",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Card title",
+                        "example": "Premium Running Shoes"
+                      },
+                      "body": {
+                        "type": "string",
+                        "description": "Card description text",
+                        "example": "Lightweight performance running shoes with advanced cushioning technology"
+                      },
+                      "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Card destination URL",
+                        "example": "https://www.acmeshoes.com/running?utm_source=chatgpt.com"
+                      },
+                      "image": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Card image URL",
+                        "example": "https://images.openai.com/product.jpg"
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "body",
+                      "url"
+                    ]
+                  }
+                },
+                "visibility": {
+                  "type": "string",
+                  "description": "OpenAI serving status for the ad. `allowed` means the ad was eligible to serve; `hidden` means OpenAI filtered it (for example, an integrity check).",
+                  "example": "allowed"
+                },
+                "adsResponseIndex": {
+                  "type": "integer",
+                  "description": "The ad's slot position in OpenAI's served ad response. This reflects served order, not what was shown — use `rendered` for actual exposure.",
+                  "example": 0
+                },
+                "rendered": {
+                  "type": "boolean",
+                  "description": "Whether the ad was shown as a visible card in the response. OpenAI serves several candidates but the interface renders at most one; ads with `rendered: false` were served but not displayed.",
+                  "example": true
+                }
+              },
+              "required": [
+                "brand",
+                "cards",
+                "visibility",
+                "adsResponseIndex",
+                "rendered"
+              ]
+            },
+            "example": [
+              {
+                "brand": {
+                  "name": "Acme Shoes",
+                  "url": "https://www.acmeshoes.com?utm_source=chatgpt.com",
+                  "favicon": "https://images.openai.com/favicon.ico"
+                },
+                "cards": [
+                  {
+                    "title": "Premium Running Shoes",
+                    "body": "Lightweight performance running shoes with advanced cushioning technology",
+                    "url": "https://www.acmeshoes.com/running?utm_source=chatgpt.com",
+                    "image": "https://images.openai.com/product.jpg"
+                  },
+                  {
+                    "title": "Trail Running Shoes",
+                    "body": "Durable shoes designed for off-road running with superior grip",
+                    "url": "https://www.acmeshoes.com/trail?utm_source=chatgpt.com",
+                    "image": "https://images.openai.com/product2.jpg"
+                  }
+                ]
+              }
+            ]
+          },
+          "followUpForm": {
+            "type": "object",
+            "nullable": true,
+            "description": "The form that ChatGPT shows at the end of an answer to refine the prompt: questions with options, and a button that sends a follow-up prompt. `null` when the answer has no form. The form is not part of `text` or `markdown`. Schema at /api-reference/endpoint/chatgpt/follow-up-form.",
+            "properties": {
+              "questions": {
+                "type": "array",
+                "description": "The questions, in the order ChatGPT shows them.",
+                "items": {
+                  "type": "object",
+                  "properties": {
                     "label": {
                       "type": "string",
-                      "description": "Per-source title of the citation. Always present; may be an empty string when the citation event ships no title — read `domain` / `url` for source identity in that case.",
-                      "example": "Example Article Title"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "Description of the citation content. Omitted when the citation event carries no snippet (e.g. grouped-webpage title-only cards).",
-                      "example": "A detailed description of the cited content"
-                    },
-                    "domain": {
-                      "type": "string",
-                      "description": "Domain of the citation source",
-                      "example": "example.com"
-                    },
-                    "datePublished": {
-                      "type": "string",
-                      "description": "ISO 8601 date string of when the source was published. Omitted when the citation event carries no publication date.",
-                      "example": "2025-01-01"
-                    },
-                    "citationPillId": {
-                      "type": "integer",
-                      "description": "0-based identifier shared by all entries from the same chip. Group by `citationPillId` to recover the pill-level structure. **Note:** unlike the other providers (Google AIO, AI Mode, Copilot, Perplexity, Gemini) which use 1-based `citationPillId`, ChatGPT's IDs start at 0 for historical reasons.",
-                      "example": 0
+                      "description": "The question text. Empty when ChatGPT shows the control with no label.",
+                      "example": "What's your budget?"
                     },
                     "type": {
                       "type": "string",
                       "enum": [
-                        "searchResult",
-                        "groupedWebpage"
+                        "radio",
+                        "checkbox",
+                        "select",
+                        "text",
+                        "textarea",
+                        "date"
                       ],
-                      "description": "Discriminator for the underlying citation event: `searchResult` for inline search citations, `groupedWebpage` for grouped-webpage cards.",
-                      "example": "searchResult"
+                      "description": "The control that ChatGPT shows for the question.",
+                      "example": "radio"
                     },
-                    "position": {
-                      "type": "integer",
-                      "description": "1-based position of this source in the sibling `result.sources` array.",
-                      "example": 1
-                    }
-                  }
-                },
-                "example": [
-                  {
-                    "url": "https://example.com/article",
-                    "label": "Example Article Title",
-                    "description": "A detailed description of the cited content",
-                    "domain": "example.com",
-                    "datePublished": "2025-01-01",
-                    "citationPillId": 0,
-                    "type": "searchResult",
-                    "position": 1
-                  }
-                ]
-              },
-              "ads": {
-                "type": "array",
-                "description": "Array of ads served in the ChatGPT response (included when include.ads is true). OpenAI serves candidate ads but the interface renders at most one; use `rendered` to identify which were actually shown.",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "brand": {
-                      "type": "object",
-                      "description": "Advertiser brand information",
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "description": "Advertiser brand name",
-                          "example": "Acme Shoes"
-                        },
-                        "url": {
-                          "type": "string",
-                          "format": "uri",
-                          "description": "Advertiser brand URL",
-                          "example": "https://www.acmeshoes.com?utm_source=chatgpt.com"
-                        },
-                        "favicon": {
-                          "type": "string",
-                          "format": "uri",
-                          "description": "Advertiser brand favicon URL",
-                          "example": "https://images.openai.com/favicon.ico"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "url"
-                      ]
+                    "name": {
+                      "type": "string",
+                      "description": "The variable that `followUpPrompt` refers to as `{name}`.",
+                      "example": "budget"
                     },
-                    "cards": {
+                    "placeholder": {
+                      "type": "string",
+                      "description": "The placeholder of a `text`, `textarea` or `date` question, when ChatGPT gives one.",
+                      "example": "e.g. Babolat"
+                    },
+                    "options": {
                       "type": "array",
-                      "description": "Array of carousel cards in the ad",
+                      "description": "The choices of a `radio`, `checkbox` or `select` question. Empty for `text`, `textarea` and `date`.",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "title": {
+                          "label": {
                             "type": "string",
-                            "description": "Card title",
-                            "example": "Premium Running Shoes"
+                            "description": "The text ChatGPT shows for the option.",
+                            "example": "€80–150"
                           },
-                          "body": {
-                            "type": "string",
-                            "description": "Card description text",
-                            "example": "Lightweight performance running shoes with advanced cushioning technology"
+                          "value": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ],
+                            "description": "The value that the option puts in the follow-up prompt. It can differ from `label`. `true` for a checkbox that stands alone.",
+                            "example": "€80–150"
                           },
-                          "url": {
-                            "type": "string",
-                            "format": "uri",
-                            "description": "Card destination URL",
-                            "example": "https://www.acmeshoes.com/running?utm_source=chatgpt.com"
-                          },
-                          "image": {
-                            "type": "string",
-                            "format": "uri",
-                            "description": "Card image URL",
-                            "example": "https://images.openai.com/product.jpg"
+                          "selected": {
+                            "type": "boolean",
+                            "description": "Whether ChatGPT selects the option by default.",
+                            "example": true
                           }
                         },
                         "required": [
-                          "title",
-                          "body",
-                          "url"
+                          "label",
+                          "value",
+                          "selected"
                         ]
                       }
-                    },
-                    "visibility": {
-                      "type": "string",
-                      "description": "OpenAI serving status for the ad. `allowed` means the ad was eligible to serve; `hidden` means OpenAI filtered it (for example, an integrity check).",
-                      "example": "allowed"
-                    },
-                    "adsResponseIndex": {
-                      "type": "integer",
-                      "description": "The ad's slot position in OpenAI's served ad response. This reflects served order, not what was shown — use `rendered` for actual exposure.",
-                      "example": 0
-                    },
-                    "rendered": {
-                      "type": "boolean",
-                      "description": "Whether the ad was shown as a visible card in the response. OpenAI serves several candidates but the interface renders at most one; ads with `rendered: false` were served but not displayed.",
-                      "example": true
                     }
                   },
                   "required": [
-                    "brand",
-                    "cards",
-                    "visibility",
-                    "adsResponseIndex",
-                    "rendered"
+                    "label",
+                    "type",
+                    "options"
+                  ]
+                }
+              },
+              "submitLabel": {
+                "type": "string",
+                "description": "The label of the button that sends the follow-up prompt.",
+                "example": "Find my racket"
+              },
+              "followUpPrompt": {
+                "type": "string",
+                "description": "The prompt that the button sends, with `{name}` where ChatGPT puts the answer to the question of that `name`. Absent when cloro cannot read it as a template.",
+                "example": "Recommend the best tennis racket for a beginner. Budget: {budget}. Preferred brand: {brand}."
+              }
+            },
+            "required": [
+              "questions"
+            ],
+            "example": {
+              "questions": [
+                {
+                  "label": "What's your budget?",
+                  "type": "radio",
+                  "name": "budget",
+                  "options": [
+                    {
+                      "label": "Under €80",
+                      "value": "Under €80",
+                      "selected": false
+                    },
+                    {
+                      "label": "€80–150",
+                      "value": "€80–150",
+                      "selected": true
+                    },
+                    {
+                      "label": "Over €150",
+                      "value": "Over €150",
+                      "selected": false
+                    }
                   ]
                 },
-                "example": [
-                  {
-                    "brand": {
-                      "name": "Acme Shoes",
-                      "url": "https://www.acmeshoes.com?utm_source=chatgpt.com",
-                      "favicon": "https://images.openai.com/favicon.ico"
-                    },
-                    "cards": [
-                      {
-                        "title": "Premium Running Shoes",
-                        "body": "Lightweight performance running shoes with advanced cushioning technology",
-                        "url": "https://www.acmeshoes.com/running?utm_source=chatgpt.com",
-                        "image": "https://images.openai.com/product.jpg"
-                      },
-                      {
-                        "title": "Trail Running Shoes",
-                        "body": "Durable shoes designed for off-road running with superior grip",
-                        "url": "https://www.acmeshoes.com/trail?utm_source=chatgpt.com",
-                        "image": "https://images.openai.com/product2.jpg"
-                      }
-                    ]
-                  }
-                ]
-              }
+                {
+                  "label": "Brand you already like (optional)",
+                  "type": "text",
+                  "name": "brand",
+                  "placeholder": "e.g. Babolat",
+                  "options": []
+                }
+              ],
+              "submitLabel": "Find my racket",
+              "followUpPrompt": "Recommend the best tennis racket for a beginner. Budget: {budget}. Preferred brand: {brand}."
             }
           }
         }
@@ -5181,9 +5162,80 @@
                   }
                 }
               },
+              "recipes": {
+                "type": "array",
+                "description": "Cards from Google's Recipes carousel, on desktop and mobile. Only the cards in the page as first loaded are returned. The field is omitted from `result` when no Recipes carousel appears on the SERP, so clients should treat it as optional rather than expecting an empty array.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "position",
+                    "title",
+                    "link"
+                  ],
+                  "properties": {
+                    "position": {
+                      "type": "number",
+                      "description": "Position within the carousel (1-indexed)",
+                      "example": 1
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Recipe title as displayed on the SERP",
+                      "example": "Starbucks Pink Drink"
+                    },
+                    "link": {
+                      "type": "string",
+                      "description": "URL of the recipe page",
+                      "example": "https://bellyfull.net/starbucks-pink-drink/"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "Name of the site that publishes the recipe",
+                      "example": "Belly Full"
+                    },
+                    "rating": {
+                      "type": "number",
+                      "description": "Average star rating (0–5)",
+                      "example": 5.0
+                    },
+                    "reviews": {
+                      "type": "string",
+                      "description": "Review count as displayed by Google (e.g. \"7.1K\"). Free-form string — not normalized to a number.",
+                      "example": "74"
+                    },
+                    "totalTime": {
+                      "type": "string",
+                      "description": "Total time as displayed by Google, in the language of the SERP (e.g. \"1 hr 10 min\", \"15 Min.\"). Free-form string — not normalized to a duration.",
+                      "example": "5 min"
+                    },
+                    "ingredients": {
+                      "type": "array",
+                      "description": "The ingredients Google shows on the card. This is a short selection, not the full list of the recipe.",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "Coconut milk",
+                        "simple syrup",
+                        "fresh strawberries"
+                      ]
+                    },
+                    "thumbnail": {
+                      "type": "string",
+                      "description": "Recipe image: an image URL or an inline `data:` URI",
+                      "example": "https://encrypted-tbn0.gstatic.com/images?q=tbn:example"
+                    },
+                    "redirectLink": {
+                      "type": "string",
+                      "description": "Google's `/goto` redirect for this link, in the absolute form `POST /v1/monitor/google/goto` accepts. Present only when Google served the link as a redirect — the sibling link field holds the destination cloro resolved it to.",
+                      "example": "https://www.google.com/goto?url=CAESaAHrOzAVev0pi_wnTxm1qpiZTmMyAllabLr1or10ZCfvJKPk"
+                    }
+                  }
+                }
+              },
               "localResults": {
                 "type": "array",
-                "description": "Places from Google's local pack (the map-backed \"3-pack\" of local businesses on local-intent queries, e.g. \"best pizza in new york city\"). The field is omitted from `result` when no local pack appears on the SERP, so clients should treat it as optional rather than expecting an empty array. Desktop only; mobile and the separate hotels/travel pack are not surfaced.",
+                "description": "Places from Google's local pack (the map-backed \"3-pack\" of local businesses on local-intent queries, e.g. \"best pizza in new york city\"). The field is omitted from `result` when no local pack appears on the SERP, so clients should treat it as optional rather than expecting an empty array. Returned on desktop and mobile. Google's separate hotels/travel pack is not surfaced.",
                 "items": {
                   "type": "object",
                   "required": [
@@ -5238,7 +5290,7 @@
                     },
                     "phone": {
                       "type": "string",
-                      "description": "Phone number, when shown (locale-formatted)",
+                      "description": "Phone number, when shown. Desktop gives the number as Google displays it (e.g. \"(702) 777-3777\"). Mobile gives the number from the card's Call button (e.g. \"+17027773777\").",
                       "example": "(212) 555-0100"
                     },
                     "hours": {
@@ -5810,6 +5862,11 @@
                       "type": "integer",
                       "description": "1-indexed rank across the whole `shoppingCards` array in DOM order (flat, does not reset per `category` section).",
                       "example": 1
+                    },
+                    "productResultToken": {
+                      "type": "string",
+                      "description": "Token for `POST /v1/monitor/google/product`, which returns the product panel that this card opens. Expires five minutes after the scrape. Present only on `device: \"desktop\"` requests, on first-page cards that Google serves with a panel reference.",
+                      "example": "nuzK-QgAV8BqrZdwQJYZopzdoFhpvKr-N2_YDZevwzg"
                     },
                     "promoLabel": {
                       "type": "string",
@@ -7697,12 +7754,6 @@
                 "default": false,
                 "example": true
               },
-              "expandProducts": {
-                "description": "Fetch merchant offers for the product clusters in the response and return them as 'result.productResults'. Clusters are deduplicated across shopping cards and inline products, and expansion covers at most 6 per scrape. Paid add-on: +1 credit per cluster returned, up to +6 ([pricing](/guides/providers#ai-mode-additional-features)). Off by default.",
-                "type": "boolean",
-                "default": false,
-                "example": true
-              },
               "googleGoto": {
                 "description": "Ignored since 8th September 2026. Every redirect link now ships as `redirectLink` beside its destination, so both are returned without this flag. Requests still sending it behave as if it were absent.",
                 "type": "boolean",
@@ -7713,8 +7764,7 @@
             },
             "default": {
               "html": false,
-              "markdown": false,
-              "expandProducts": false
+              "markdown": false
             },
             "additionalProperties": false
           }
@@ -7939,6 +7989,14 @@
                       "description": "Direct product URL",
                       "example": "https://www.google.com/example"
                     },
+                    "productResultToken": {
+                      "type": "string",
+                      "description": "Token for [`POST /v1/monitor/google/product`](/api-reference/endpoint/google/product), which returns the product panel that this product opens. Expires five minutes after the scrape. Present only when the product links to a Google product panel.",
+                      "example": "nuzK-QgAV8BqrZdwQJYZopzdoFhpvKr-N2_YDZevwzg"
+                    },
+                    "productDocid": {
+                      "$ref": "#/components/schemas/ProductDocid"
+                    },
                     "oldPrice": {
                       "type": "object",
                       "description": "Original price before discount. Same shape as `price`.",
@@ -8149,6 +8207,14 @@
                       "format": "uri",
                       "description": "Direct product URL",
                       "example": "https://www.google.com/shopping/product/example"
+                    },
+                    "productResultToken": {
+                      "type": "string",
+                      "description": "Token for [`POST /v1/monitor/google/product`](/api-reference/endpoint/google/product), which returns the product panel that this product opens. Expires five minutes after the scrape. Present only when the product links to a Google product panel.",
+                      "example": "nuzK-QgAV8BqrZdwQJYZopzdoFhpvKr-N2_YDZevwzg"
+                    },
+                    "productDocid": {
+                      "$ref": "#/components/schemas/ProductDocid"
                     }
                   }
                 }
@@ -8208,13 +8274,6 @@
                 "description": "GPS-enriched location data extracted from the response",
                 "items": {
                   "$ref": "#/components/schemas/GoogleMapPlace"
-                }
-              },
-              "productResults": {
-                "type": "array",
-                "description": "Merchant offers per product cluster, up to 6. Returned only when `include.expandProducts` is true. See [product results](/api-reference/endpoint/aimode/product-results).",
-                "items": {
-                  "$ref": "#/components/schemas/ProductResult"
                 }
               }
             }
@@ -9395,6 +9454,55 @@
           }
         ]
       },
+      "GoogleProductRequest": {
+        "required": [
+          "productResultToken"
+        ],
+        "type": "object",
+        "properties": {
+          "productResultToken": {
+            "description": "The `productResultToken` from a Google Search shopping card, or from a Google AI Mode shopping card or inline product. The token carries the query, locale and location of the request that issued it, so the request takes no other field.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "example": "nuzK-QgAV8BqrZdwQJYZopzdoFhpvKr-N2_YDZevwzg"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GoogleProductResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "result"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "result": {
+            "type": "object",
+            "required": [
+              "productResults"
+            ],
+            "properties": {
+              "productResults": {
+                "type": "array",
+                "description": "One entry: the product panel of the card that issued the token. Same shape as Google Search and AI Mode `productResults`. Only `title` is always present.",
+                "items": {
+                  "$ref": "#/components/schemas/ProductResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ProductDocid": {
+        "type": "string",
+        "description": "Google's ID for the product, read from `productLink`. The same product has the same value in `shoppingCards`, `inlineProducts` and `productResults` of one response. Google can change the value between responses, so do not use it to identify a product over time. Absent when the link from Google has no ID.",
+        "example": "3625873292990915110"
+      },
       "ProductResult": {
         "type": "object",
         "description": "One product cluster and its merchant offers. Only `title` is guaranteed; anything Google's panel lacks is omitted, never sent as `null`.",
@@ -9582,6 +9690,10 @@
             "items": {
               "type": "object"
             }
+          },
+          "productDocid": {
+            "$ref": "#/components/schemas/ProductDocid",
+            "description": "Google's ID for the product, equal to the `productDocid` of the shopping card or inline product that this entry came from. Present only when the product came from a Google AI Mode shopping card or inline product. A product from a Google Search shopping card does not have it."
           }
         }
       }

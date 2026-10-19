@@ -1,7 +1,40 @@
 openapi: 3.2.0
 info:
   title: cloro Credits API
-  description: API for monitoring AI responses across different providers and regions.
+  description: 'API for monitoring AI responses across different providers and regions. One request returns the engine''s answer as structured JSON: parsed text, cited sources, brand entities, shopping results, and ads, geo-targeted by country; coverage varies by provider (`GET /v1/countries?model=` lists it).
+
+
+    ## Authentication
+
+
+    Send your API key as `Authorization: Bearer `. Keys are self-serve from the dashboard and every account starts on a free tier of 500 monthly credits. One key grants every endpoint; there are no per-key scopes today.
+
+
+    ## Versioning and deprecation
+
+
+    The version is in the URL path. Every endpoint lives under `/v1/`; there is no version header or query parameter.
+
+
+    Within a version, changes are additive: new endpoints, new optional request fields, and new response fields can appear at any time. A client must ignore response fields it does not recognize. A breaking change gets a new version path (`/v2/`) rather than reusing an existing one.
+
+
+    A deprecated endpoint says so in its own responses, not only in a changelog: `Deprecation` (RFC 9745) carries the date the deprecation took effect, `Sunset` (RFC 8594) the date the endpoint stops responding, and a `Link` header with `rel="deprecation"` points at the replacement. There is a minimum of six months between the two dates for any generally available endpoint. Nothing is deprecated today.
+
+
+    ## Rate limits
+
+
+    Every authenticated response carries `X-RateLimit-Limit` and `X-RateLimit-Remaining`, so a client can self-throttle from the response it already has. Scrape endpoints (`/v1/monitor/*` except `/v1/monitor/google/goto`) also send the `X-Concurrency-*` headers once a request passes validation, and the `X-Credits-*` headers on a `200`. Every response carries `X-Request-ID` and `X-Latency-Ms`.
+
+
+    A `429` has one of three codes: `RATE_LIMIT_EXCEEDED` (one-second window, clears almost immediately), `CONCURRENCY_LIMIT_EXCEEDED` (scrape endpoints; clears when your in-flight jobs finish) or `QUEUE_LIMIT_EXCEEDED` (async submission; clears as queued tasks start processing). None carries `Retry-After`, and the IETF `RateLimit-*` header names are not sent.
+
+
+    ## Errors
+
+
+    Every 4xx and 5xx response uses the `Error` envelope: `{ "success": false, "error": { "code", "message", "details", "timestamp" } }`. `error` is always an object. Branch on `error.code`, a stable machine-readable identifier; `message` is for a human reading a log, and `details` appears only when there is extra context. A `503` (`SERVICE_UNAVAILABLE`) is temporary: retry after the number of seconds in its `Retry-After` header.'
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
@@ -71,6 +104,28 @@ paths:
       tags:
       - Credits
 components:
+  headers:
+    XRequestId:
+      description: Unique ID for this request. Support uses it to find your request.
+      schema:
+        type: string
+        format: uuid
+        example: b0864943-5d45-4796-bc64-f052661256f0
+    XRateLimitRemaining:
+      description: Requests left in the current window.
+      schema:
+        type: integer
+        example: 997
+    XLatencyMs:
+      description: Milliseconds the API spent on the request, from arrival to the start of the response. Excludes network transit.
+      schema:
+        type: integer
+        example: 3420
+    XRateLimitLimit:
+      description: Requests allowed in the current window.
+      schema:
+        type: integer
+        example: 1000
   schemas:
     InternalError:
       type: object
@@ -92,6 +147,30 @@ components:
               type: string
               format: date-time
               example: '2025-01-15T12:00:00.000Z'
+    CreditsResponse:
+      type: object
+      required:
+      - remaining
+      - perCycle
+      - cycleResetsAt
+      properties:
+        remaining:
+          type: integer
+          description: Credits currently remaining for your organization.
+          example: 48210
+        perCycle:
+          type:
+          - integer
+          - 'null'
+          description: Credits granted per billing cycle. Null for free-tier organizations with no active subscription.
+          example: 1562500
+        cycleResetsAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the current billing cycle ends and credits reset. Null for free-tier organizations with no active subscription.
+          example: '2026-08-10T17:35:27.000Z'
     RateLimitError:
       type: object
       properties:
@@ -134,52 +213,6 @@ components:
               type: string
               format: date-time
               example: '2025-01-15T12:00:00.000Z'
-    CreditsResponse:
-      type: object
-      required:
-      - remaining
-      - perCycle
-      - cycleResetsAt
-      properties:
-        remaining:
-          type: integer
-          description: Credits currently remaining for your organization.
-          example: 48210
-        perCycle:
-          type:
-          - integer
-          - 'null'
-          description: Credits granted per billing cycle. Null for free-tier organizations with no active subscription.
-          example: 1562500
-        cycleResetsAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When the current billing cycle ends and credits reset. Null for free-tier organizations with no active subscription.
-          example: '2026-08-10T17:35:27.000Z'
-  headers:
-    XRateLimitLimit:
-      description: Requests allowed in the current window.
-      schema:
-        type: integer
-        example: 1000
-    XRateLimitRemaining:
-      description: Requests left in the current window.
-      schema:
-        type: integer
-        example: 997
-    XRequestId:
-      description: Unique ID for this request. Support uses it to find your request.
-      schema:
-        type: string
-        format: uuid
-        example: b0864943-5d45-4796-bc64-f052661256f0
-    XLatencyMs:
-      description: Milliseconds the API spent on the request, from arrival to the start of the response. Excludes network transit.
-      schema:
-        type: integer
-        example: 3420
   securitySchemes:
     bearerAuth:
       type: http

@@ -14,13 +14,12 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "1 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "cloro-dev-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "cloro-dev-openapi.json: tagged paths POST /v1/monitor/chatgpt -> Monitor",
     "cloro-dev-openapi.json: tagged paths POST /v1/monitor/gemini -> Monitor",
-    "cloro-dev-openapi.json: tagged paths POST /v1/monitor/grok -> Monitor",
     "cloro-dev-openapi.json: tagged paths POST /v1/monitor/google -> Monitor",
+    "cloro-dev-openapi.json: tagged paths POST /v1/monitor/google/product -> Monitor",
     "cloro-dev-openapi.json: tagged paths POST /v1/monitor/google/goto -> Monitor",
     "cloro-dev-openapi.json: tagged paths POST /v1/monitor/google/news -> Monitor",
     "cloro-dev-openapi.json: tagged paths POST /v1/monitor/copilot -> Monitor",
@@ -41,12 +40,5 @@
     "cloro-dev-openapi.json: declared missing tag: States",
     "apis.yml register: already-registered"
   ],
-  "skipped": [
-    "_original/cloro-dev-openapi.yml: archived document superseded by a larger archived document",
-    "cloro-dev-async-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloro-dev-countries-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloro-dev-credits-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloro-dev-monitor-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cloro-dev-states-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }
