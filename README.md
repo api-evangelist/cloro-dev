@@ -64,5 +64,169 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-cloro is a company surfaced via the API Evangelist harvest backlog (source: monid-connectors) and added to the network as a stub for full-pipeline profiling.
-- https://cloro.dev
+cloro is one API for Google Search and AI answer engines: a REST surface at api.cloro.dev that submits a prompt to ChatGPT, Gemini, Perplexity, Microsoft Copilot, Grok, Google AI Mode, Google Search, Google AI Overview and Google News from a chosen country (and US state) and returns the engine's answer as structured JSON with parsed text, markdown, cited sources, brand entities, shopping cards and ads. Sync monitor endpoints answer in-line; async tasks and batches of up to 500 run in the background with polling or signed webhooks. Credit-based subscription billing, a free tier of 500 monthly credits, a hosted MCP server at mcp.cloro.dev with OAuth, official Python and TypeScript SDKs, n8n, Zapier and LangChain integrations.
+
+**Areas:** Company · Search · Artificial Intelligence · Web Scraping · SERP · Generative Engine Optimization · SEO · Brand Monitoring · Market Research · Data Extraction · MCP
+
+## cloro on APIs.io
+
+Everything profiled for cloro is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cloro-dev/](https://apis.io/providers/cloro-dev/)** — or go straight to one of the APIs or properties below.
+
+### APIs (6)
+
+- [cloro MCP server](https://apis.io/apis/cloro-dev/cloro-mcp-server/) — Hosted Model Context Protocol server (Streamable HTTP) wrapping the sync monitor endpoints of api.cloro.dev as ten tools: scrape_chatgpt, scrape_gemini,…
+- [cloro Async API](https://apis.io/apis/cloro-dev/cloro-dev-async-api/) — The Async API from cloro — 5 operation(s) for async.
+- [cloro Countries API](https://apis.io/apis/cloro-dev/cloro-dev-countries-api/) — The Countries API from cloro — 1 operation(s) for countries.
+- [cloro Credits API](https://apis.io/apis/cloro-dev/cloro-dev-credits-api/) — The Credits API from cloro — 1 operation(s) for credits.
+- [cloro Monitor API](https://apis.io/apis/cloro-dev/cloro-dev-monitor-api/) — The Monitor API from cloro — 9 operation(s) for monitor.
+- [cloro States API](https://apis.io/apis/cloro-dev/cloro-dev-states-api/) — The States API from cloro — 1 operation(s) for states.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Cloro Dev Webhooks](https://apis.io/asyncapis/cloro-dev/cloro-dev-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [cloro](https://apis.io/servers/cloro-dev/cloro/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Cloro Dev Agentic Access](https://apis.io/agentic-access/cloro-dev/cloro-dev-agentic-access/)
+
+#### JSON Schema (6)
+
+The data models the API reads and writes.
+
+- [AiModeMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-ai-mode-monitor-response/)
+- [ChatGPTMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-chat-gptmonitor-response/)
+- [CopilotMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-copilot-monitor-response/)
+- [GeminiMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-gemini-monitor-response/)
+- [GoogleMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-google-monitor-response/)
+- [PerplexityMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-perplexity-monitor-response/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Cloro Dev Context](https://apis.io/jsonld/cloro-dev/cloro-dev-context/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Cloro Dev Openapi Overlay](https://apis.io/overlays/cloro-dev/cloro-dev-openapi-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [cloro API Rules](https://apis.io/rules/cloro-dev/cloro-dev-rules/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Cloro Dev Authentication](https://apis.io/security/cloro-dev/cloro-dev-authentication/)
+- [Cloro Dev Domain Security](https://apis.io/security/cloro-dev/cloro-dev-domain-security/)
+- [Cloro Dev Vulnerability Disclosure](https://apis.io/security/cloro-dev/cloro-dev-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Cloro Dev Scopes](https://apis.io/scopes/cloro-dev/cloro-dev-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Cloro Dev Plans Pricing](https://apis.io/plans/cloro-dev/cloro-dev-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Cloro Dev Rate Limits](https://apis.io/rate-limits/cloro-dev/cloro-dev-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://cloro.dev)
+- [Documentation](https://cloro.dev/docs)
+- [Getting started](https://cloro.dev/docs/introduction/quickstart)
+- [API reference](https://cloro.dev/docs/api-reference/introduction)
+- [Pricing](https://cloro.dev/pricing/)
+- [Sign up](https://dashboard.cloro.dev/sign-up)
+- [Support](https://cloro.dev/contact/)
+- [Changelog](https://cloro.dev/docs/changelog)
+- [Blog](https://cloro.dev/blog/)
+- [Terms of service](https://cloro.dev/terms/)
+- [Privacy policy](https://cloro.dev/privacy/)
+- [GitHub](https://github.com/cloro-dev)
+- [Status](https://status.cloro.dev)
+
+## API Evangelist rating
+
+**Kin Score 74.6** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 76.7 |
+| Contract quality | 74.9 |
+| Contract governance | 35.6 |
+| Operational transparency | 84.2 |
+| Developer ergonomics | 75.6 |
+| Access clarity | 76.3 |
+
+**Agent readiness 67.0** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | verified |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | verified |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | conformant |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 37.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/cloro-dev/](https://apis.io/providers/cloro-dev/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for cloro: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/cloro-dev/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
