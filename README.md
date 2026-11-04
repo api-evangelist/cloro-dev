@@ -1,4 +1,4 @@
-# Cloro Incorporation Ltd.
+# cloro
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -68,13 +68,13 @@ cloro is one API for Google Search and AI answer engines: a REST surface at api.
 
 **Areas:** Company · Search · Artificial Intelligence · Web Scraping · SERP · Generative Engine Optimization · SEO · Brand Monitoring · Market Research · Data Extraction · MCP
 
-## Cloro Incorporation Ltd. on APIs.io
+## cloro on APIs.io
 
-Everything profiled for Cloro Incorporation Ltd. is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cloro-dev/](https://apis.io/providers/cloro-dev/)** — or go straight to one of the APIs or properties below.
+Everything profiled for cloro is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cloro-dev/](https://apis.io/providers/cloro-dev/)** — or go straight to one of the APIs or properties below.
 
 ### APIs (6)
 
-- [cloro MCP server](https://apis.io/apis/cloro-dev/cloro-mcp-server/) — Hosted Model Context Protocol server (Streamable HTTP) wrapping the sync monitor endpoints of api.cloro.dev as nine tools: scrape_chatgpt, scrape_gemini,…
+- [cloro MCP server](https://apis.io/apis/cloro-dev/cloro-mcp-server/) — Hosted Model Context Protocol server (Streamable HTTP) wrapping the sync monitor endpoints of api.cloro.dev as ten tools: scrape_chatgpt, scrape_gemini,…
 - [cloro Async API](https://apis.io/apis/cloro-dev/cloro-dev-async-api/) — The Async API from cloro — 5 operation(s) for async.
 - [cloro Countries API](https://apis.io/apis/cloro-dev/cloro-dev-countries-api/) — The Countries API from cloro — 1 operation(s) for countries.
 - [cloro Credits API](https://apis.io/apis/cloro-dev/cloro-dev-credits-api/) — The Credits API from cloro — 1 operation(s) for credits.
@@ -103,7 +103,7 @@ Which operations an agent can call, which act, and which need a human in the loo
 
 - [Cloro Dev Agentic Access](https://apis.io/agentic-access/cloro-dev/cloro-dev-agentic-access/)
 
-#### JSON Schema (7)
+#### JSON Schema (6)
 
 The data models the API reads and writes.
 
@@ -111,7 +111,6 @@ The data models the API reads and writes.
 - [ChatGPTMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-chat-gptmonitor-response/)
 - [CopilotMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-copilot-monitor-response/)
 - [GeminiMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-gemini-monitor-response/)
-- [GoogleMonitorRequest](https://apis.io/schemas/cloro-dev/cloro-dev-google-monitor-request/)
 - [GoogleMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-google-monitor-response/)
 - [PerplexityMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-perplexity-monitor-response/)
 
@@ -131,7 +130,7 @@ OpenAPI overlays, including conversational phrasing for each operation.
 
 Spectral rulesets for the provider's contracts.
 
-- [Cloro Incorporation Ltd. API Rules](https://apis.io/rules/cloro-dev/cloro-dev-rules/)
+- [cloro API Rules](https://apis.io/rules/cloro-dev/cloro-dev-rules/)
 
 #### Security (3)
 
@@ -186,7 +185,7 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 74.6** — exemplar · rubric 0.25.0 · scored 2026-10-23
+**Kin Score 76.2** — exemplar · rubric 0.26.0 · scored 2026-11-02
 
 | Facet | Score |
 |---|---|
@@ -195,7 +194,7 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Contract governance | 35.6 |
 | Operational transparency | 84.2 |
 | Developer ergonomics | 75.6 |
-| Access clarity | 76.3 |
+| Access clarity | 84.2 |
 
 **Agent readiness 67.0** — agent-native
 
@@ -222,6 +221,7 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Agentic Commerce | — |
 | Pagination Ratio | — |
 | Operation Distinctiveness | distinct |
+| MCP Tool Quality | na |
 
 **Regulatory alignment 37.3** — Horizontal (data, software, accessibility, platform)
 
@@ -231,7 +231,7 @@ The rubric is published at [github.com/api-evangelist/kin-score](https://github.
 
 API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
 
-The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Cloro Incorporation Ltd.: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for cloro: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
 
 ## Open an issue
 
