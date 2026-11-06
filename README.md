@@ -64,7 +64,7 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-cloro is one API for Google Search and AI answer engines: a REST surface at api.cloro.dev that submits a prompt to ChatGPT, Gemini, Perplexity, Microsoft Copilot, Google AI Mode, Google Search, Google AI Overview and Google News from a chosen country (and US state) and returns the engine's answer as structured JSON with parsed text, markdown, cited sources, brand entities, shopping cards and ads. Sync monitor endpoints answer in-line; async tasks and batches of up to 500 run in the background with polling or signed webhooks. Credit-based subscription billing, a free tier of 500 monthly credits, a hosted MCP server at mcp.cloro.dev with OAuth, official Python and TypeScript SDKs, n8n, Zapier and LangChain integrations.
+cloro is one API for Google Search and AI answer engines: a REST surface at api.cloro.dev that submits a prompt to ChatGPT, Gemini, Google AI Mode, Google Search, Google AI Overview and Google News from a chosen country (and US state) and returns the engine's answer as structured JSON with parsed text, markdown, cited sources, brand entities, shopping cards and ads. Sync monitor endpoints answer in-line; async tasks and batches of up to 500 run in the background with polling or signed webhooks. Credit-based subscription billing, a free tier of 500 monthly credits, a hosted MCP server at mcp.cloro.dev with OAuth, official Python and TypeScript SDKs, n8n, Zapier and LangChain integrations.
 
 **Areas:** Company · Search · Artificial Intelligence · Web Scraping · SERP · Generative Engine Optimization · SEO · Brand Monitoring · Market Research · Data Extraction · MCP
 
@@ -103,16 +103,14 @@ Which operations an agent can call, which act, and which need a human in the loo
 
 - [Cloro Dev Agentic Access](https://apis.io/agentic-access/cloro-dev/cloro-dev-agentic-access/)
 
-#### JSON Schema (6)
+#### JSON Schema (4)
 
 The data models the API reads and writes.
 
 - [AiModeMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-ai-mode-monitor-response/)
 - [ChatGPTMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-chat-gptmonitor-response/)
-- [CopilotMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-copilot-monitor-response/)
 - [GeminiMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-gemini-monitor-response/)
 - [GoogleMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-google-monitor-response/)
-- [PerplexityMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-perplexity-monitor-response/)
 
 #### JSON-LD (1)
 
