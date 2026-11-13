@@ -1,4 +1,4 @@
-# cloro
+# Cloro Incorporation Ltd.
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,17 +64,18 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-cloro is one API for Google Search and AI answer engines: a REST surface at api.cloro.dev that submits a prompt to ChatGPT, Gemini, Perplexity, Microsoft Copilot, Google AI Mode, Google Search, Google AI Overview and Google News from a chosen country (and US state) and returns the engine's answer as structured JSON with parsed text, markdown, cited sources, brand entities, shopping cards and ads. Sync monitor endpoints answer in-line; async tasks and batches of up to 500 run in the background with polling or signed webhooks. Credit-based subscription billing, a free tier of 500 monthly credits, a hosted MCP server at mcp.cloro.dev with OAuth, official Python and TypeScript SDKs, n8n, Zapier and LangChain integrations.
+cloro is one API for Google Search and AI answer engines: a REST surface at api.cloro.dev that submits a prompt to ChatGPT, Gemini, Google AI Mode, Google Search, Google AI Overview and Google News from a chosen country (and US state) and returns the engine's answer as structured JSON with parsed text, markdown, cited sources, brand entities, shopping cards and ads. Sync monitor endpoints answer in-line; async tasks and batches of up to 500 run in the background with polling or signed webhooks. Credit-based subscription billing, a free tier of 500 monthly credits, a hosted MCP server at mcp.cloro.dev with OAuth, official Python and TypeScript SDKs, n8n, Zapier and LangChain integrations.
 
 **Areas:** Company · Search · Artificial Intelligence · Web Scraping · SERP · Generative Engine Optimization · SEO · Brand Monitoring · Market Research · Data Extraction · MCP
 
-## cloro on APIs.io
+## Cloro Incorporation Ltd. on APIs.io
 
-Everything profiled for cloro is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cloro-dev/](https://apis.io/providers/cloro-dev/)** — or go straight to one of the APIs or properties below.
+Everything profiled for Cloro Incorporation Ltd. is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cloro-dev/](https://apis.io/providers/cloro-dev/)** — or go straight to one of the APIs or properties below.
 
-### APIs (6)
+### APIs (7)
 
-- [cloro MCP server](https://apis.io/apis/cloro-dev/cloro-mcp-server/) — Hosted Model Context Protocol server (Streamable HTTP) wrapping the sync monitor endpoints of api.cloro.dev as ten tools: scrape_chatgpt, scrape_gemini,…
+- [cloro MCP server](https://apis.io/apis/cloro-dev/mcp-server/)
+- [cloro REST API](https://apis.io/apis/cloro-dev/cloro-mcp-server/) — Hosted Model Context Protocol server (Streamable HTTP) wrapping the sync monitor endpoints of api.cloro.dev as seven tools: scrape_chatgpt, scrape_gemini,…
 - [cloro Async API](https://apis.io/apis/cloro-dev/cloro-dev-async-api/) — The Async API from cloro — 5 operation(s) for async.
 - [cloro Countries API](https://apis.io/apis/cloro-dev/cloro-dev-countries-api/) — The Countries API from cloro — 1 operation(s) for countries.
 - [cloro Credits API](https://apis.io/apis/cloro-dev/cloro-dev-credits-api/) — The Credits API from cloro — 1 operation(s) for credits.
@@ -101,18 +102,26 @@ Model Context Protocol servers that expose the API to agents.
 
 Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Cloro Dev Agentic Access](https://apis.io/agentic-access/cloro-dev/cloro-dev-agentic-access/)
+- [Cloro Incorporation Ltd. Agentic Access](https://apis.io/agentic-access/cloro-dev/cloro-dev-agentic-access/)
 
-#### JSON Schema (6)
+#### JSON Schema (14)
 
 The data models the API reads and writes.
 
 - [AiModeMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-ai-mode-monitor-response/)
+- [AsyncStatusResponse](https://apis.io/schemas/cloro-dev/cloro-dev-async-status-response/)
+- [AsyncTaskCreateResponse](https://apis.io/schemas/cloro-dev/cloro-dev-async-task-create-response/)
+- [BatchTaskRequest](https://apis.io/schemas/cloro-dev/cloro-dev-batch-task-request/)
+- [BatchTaskResponse](https://apis.io/schemas/cloro-dev/cloro-dev-batch-task-response/)
 - [ChatGPTMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-chat-gptmonitor-response/)
+- [ClearQueueResponse](https://apis.io/schemas/cloro-dev/cloro-dev-clear-queue-response/)
 - [CopilotMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-copilot-monitor-response/)
+- [CreditsResponse](https://apis.io/schemas/cloro-dev/cloro-dev-credits-response/)
 - [GeminiMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-gemini-monitor-response/)
+- [GoogleMonitorRequest](https://apis.io/schemas/cloro-dev/cloro-dev-google-monitor-request/)
 - [GoogleMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-google-monitor-response/)
 - [PerplexityMonitorResponse](https://apis.io/schemas/cloro-dev/cloro-dev-perplexity-monitor-response/)
+- [TaskStatusResponse](https://apis.io/schemas/cloro-dev/cloro-dev-task-status-response/)
 
 #### JSON-LD (1)
 
@@ -124,46 +133,46 @@ Linked-data contexts for the provider's vocabulary.
 
 OpenAPI overlays, including conversational phrasing for each operation.
 
-- [Cloro Dev Openapi Overlay](https://apis.io/overlays/cloro-dev/cloro-dev-openapi-overlay/)
+- [Cloro Incorporation Ltd. Openapi Overlay](https://apis.io/overlays/cloro-dev/cloro-dev-openapi-overlay/)
 
 #### Governance rules (1)
 
 Spectral rulesets for the provider's contracts.
 
-- [cloro API Rules](https://apis.io/rules/cloro-dev/cloro-dev-rules/)
+- [Cloro Incorporation Ltd. API Rules](https://apis.io/rules/cloro-dev/cloro-dev-rules/)
 
 #### Security (3)
 
 Authentication, trust centre, and vulnerability disclosure.
 
-- [Cloro Dev Authentication](https://apis.io/security/cloro-dev/cloro-dev-authentication/)
-- [Cloro Dev Domain Security](https://apis.io/security/cloro-dev/cloro-dev-domain-security/)
-- [Cloro Dev Vulnerability Disclosure](https://apis.io/security/cloro-dev/cloro-dev-vulnerability-disclosure/)
+- [Cloro Incorporation Ltd. Authentication](https://apis.io/security/cloro-dev/cloro-dev-authentication/)
+- [Cloro Incorporation Ltd. Domain Security](https://apis.io/security/cloro-dev/cloro-dev-domain-security/)
+- [Cloro Incorporation Ltd. Vulnerability Disclosure](https://apis.io/security/cloro-dev/cloro-dev-vulnerability-disclosure/)
 
 #### OAuth scopes (1)
 
 The permissions the API asks for.
 
-- [Cloro Dev Scopes](https://apis.io/scopes/cloro-dev/cloro-dev-scopes/)
+- [Cloro Incorporation Ltd. Scopes](https://apis.io/scopes/cloro-dev/cloro-dev-scopes/)
 
 #### Plans and pricing (2)
 
 Published plans, tiers and prices.
 
-- [Cloro Dev Plans Pricing](https://apis.io/plans/cloro-dev/cloro-dev-plans-pricing/)
-- [Cloro Dev Price Estimates](https://apis.io/plans/cloro-dev/cloro-dev-price-estimates/)
+- [Cloro Incorporation Ltd. Plans Pricing](https://apis.io/plans/cloro-dev/cloro-dev-plans-pricing/)
+- [Cloro Incorporation Ltd. Price Estimates](https://apis.io/plans/cloro-dev/cloro-dev-price-estimates/)
 
 #### Rate limits (1)
 
 Published request limits.
 
-- [Cloro Dev Rate Limits](https://apis.io/rate-limits/cloro-dev/cloro-dev-rate-limits/)
+- [Cloro Incorporation Ltd. Rate Limits](https://apis.io/rate-limits/cloro-dev/cloro-dev-rate-limits/)
 
 #### FinOps (1)
 
 What the API costs to run, by operation.
 
-- [Cloro Dev Finops](https://apis.io/finops/cloro-dev/cloro-dev-finops/)
+- [Cloro Incorporation Ltd. Finops](https://apis.io/finops/cloro-dev/cloro-dev-finops/)
 
 ## Where to find this API
 
@@ -231,7 +240,7 @@ The rubric is published at [github.com/api-evangelist/kin-score](https://github.
 
 API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
 
-The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for cloro: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Cloro Incorporation Ltd.: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
 
 ## Open an issue
 
